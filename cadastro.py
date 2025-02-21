@@ -124,3 +124,10 @@ class Ui_Tela_Cadastro(object):
         self.pushButton_Cadastrar.setText(QCoreApplication.translate("Tela_Cadastro", u"Cadastrar", None))
     # retranslateUi
 
+if __name__ == "__main__":
+    app = QApplication([]) 
+    mainWindow = QMainWindow()  
+    ui = Ui_Tela_Cadastro ()
+    ui.setupUi(mainWindow)  
+    mainWindow.show()  
+    app.exec()  
