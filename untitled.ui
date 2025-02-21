@@ -17,8 +17,8 @@
    <widget class="QFrame" name="frame">
     <property name="geometry">
      <rect>
-      <x>0</x>
-      <y>0</y>
+      <x>-10</x>
+      <y>-10</y>
       <width>821</width>
       <height>611</height>
      </rect>
@@ -73,26 +73,6 @@
      </property>
      <property name="text">
       <string>CADASTRE-SE</string>
-     </property>
-    </widget>
-    <widget class="QLabel" name="txt_email">
-     <property name="geometry">
-      <rect>
-       <x>100</x>
-       <y>410</y>
-       <width>121</width>
-       <height>16</height>
-      </rect>
-     </property>
-     <property name="font">
-      <font>
-       <pointsize>10</pointsize>
-       <italic>true</italic>
-       <bold>true</bold>
-      </font>
-     </property>
-     <property name="text">
-      <string>Email:</string>
      </property>
     </widget>
     <widget class="QLineEdit" name="line_email">
@@ -184,9 +164,42 @@ background-color: rgb(0, 0, 255);</string>
       <string/>
      </property>
     </widget>
+    <widget class="QLabel" name="label">
+     <property name="geometry">
+      <rect>
+       <x>190</x>
+       <y>100</y>
+       <width>341</width>
+       <height>331</height>
+      </rect>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">background-image: url(:/FOTO/imagem.webp);</string>
+     </property>
+     <property name="text">
+      <string/>
+     </property>
+     <property name="pixmap">
+      <pixmap resource="TEST.qrc">:/newPrefix/pngtree-avatar-icon-profile-icon-member-login-vector-isolated-png-image_1978396.jpg</pixmap>
+     </property>
+     <property name="scaledContents">
+      <bool>false</bool>
+     </property>
+    </widget>
+    <zorder>label</zorder>
+    <zorder>txt_Entrar</zorder>
+    <zorder>link_cadastrar</zorder>
+    <zorder>line_email</zorder>
+    <zorder>txt_senha</zorder>
+    <zorder>line_senha</zorder>
+    <zorder>pushButton_Entrar</zorder>
+    <zorder>link_cadastrar_2</zorder>
    </widget>
   </widget>
  </widget>
- <resources/>
+ <resources>
+  <include location="imagem.webp"/>
+  <include location="TEST.qrc"/>
+ </resources>
  <connections/>
 </ui>

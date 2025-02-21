@@ -1,0 +1,8 @@
+<RCC>
+  <qresource prefix="FOTO">
+    <file>imagem.webp</file>
+  </qresource>
+  <qresource prefix="newPrefix">
+    <file>pngtree-avatar-icon-profile-icon-member-login-vector-isolated-png-image_1978396.jpg</file>
+  </qresource>
+</RCC>
