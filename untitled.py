@@ -130,10 +130,14 @@ class Ui_Tela_Login(object):
         
         self.label = QLabel(self.frame)
         self.label.setObjectName(u"label")
-        self.label.setGeometry(QRect(250, 150, 200, 200))
-        self.label.setPixmap(QPixmap(u":/newPrefix/pngtree-avatar-icon-profile-icon-member-login-vector-isolated-png-image_1978396.jpg"))
-        self.label.setScaledContents(True)
+        self.label.setGeometry(QRect(190, 100, 341, 331))
+        pixmap = QPixmap(u":/newPrefix/pngtree-avatar-icon-profile-icon-member-login-vector-isolated-png-image_1978396.jpg")
+        scaled_pixmap = pixmap.scaled(150, 150, Qt.AspectRatioMode.KeepAspectRatio, Qt.TransformationMode.SmoothTransformation)  
 
+        self.label.setPixmap(scaled_pixmap)
+        self.label.setGeometry(QRect(330, 150, 150, 150))  
+        self.label.setScaledContents(True)  
+        
         Tela_Login.setCentralWidget(self.centralwidget)
         self.retranslateUi(Tela_Login)
         QMetaObject.connectSlotsByName(Tela_Login)
