@@ -18,7 +18,7 @@ from PySide6.QtGui import (QBrush, QColor, QConicalGradient, QCursor,
 from PySide6.QtWidgets import (QApplication, QDateEdit, QFrame, QLabel,
     QLineEdit, QMainWindow, QPushButton, QSizePolicy,
     QWidget)
-
+from PySide6.QtWidgets import QTextEdit
 class Ui_tela_add_contato(object):
     def setupUi(self, tela_add_contato):
         if not tela_add_contato.objectName():
@@ -75,9 +75,10 @@ class Ui_tela_add_contato(object):
         self.txt_notas.setObjectName(u"txt_notas")
         self.txt_notas.setGeometry(QRect(80, 420, 141, 16))
         self.txt_notas.setFont(font)
-        self.line_notas = QLineEdit(self.frame)
-        self.line_notas.setObjectName(u"line_notas")
-        self.line_notas.setGeometry(QRect(80, 450, 551, 141))
+
+        self.text_edit_notas = QTextEdit(self.frame)
+        self.text_edit_notas.setObjectName(u"text_edit_notas")
+        self.text_edit_notas.setGeometry(QRect(80, 450, 551, 141))
         self.pushButton_Entrar = QPushButton(self.frame)
         self.pushButton_Entrar.setObjectName(u"pushButton_Entrar")
         self.pushButton_Entrar.setGeometry(QRect(630, 610, 131, 41))
