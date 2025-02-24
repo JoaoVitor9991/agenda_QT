@@ -19,6 +19,11 @@ from PySide6.QtWidgets import (QApplication, QDateEdit, QFrame, QLabel,
     QLineEdit, QMainWindow, QPushButton, QSizePolicy,
     QWidget)
 from PySide6.QtWidgets import QTextEdit
+from PySide6.QtCore import Qt
+from PySide6.QtGui import QIntValidator
+
+
+
 class Ui_tela_add_contato(object):
     def setupUi(self, tela_add_contato):
         if not tela_add_contato.objectName():
@@ -50,6 +55,9 @@ class Ui_tela_add_contato(object):
         self.line_contato = QLineEdit(self.frame)
         self.line_contato.setObjectName(u"line_contato")
         self.line_contato.setGeometry(QRect(80, 150, 551, 22))
+        self.line_contato.setInputMask("(00) 00000-0000")  # Máscara para DD + telefone
+        validator = QIntValidator(0, 99999999999, self)  # Validador para permitir apenas números
+        self.line_contato.setValidator(validator)
         self.txt_email = QLabel(self.frame)
         self.txt_email.setObjectName(u"txt_email")
         self.txt_email.setGeometry(QRect(80, 200, 121, 16))
