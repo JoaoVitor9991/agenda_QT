@@ -57,11 +57,6 @@ class Ui_tela_add_contato(object):
         self.line_contato.setObjectName(u"line_contato")
         self.line_contato.setGeometry(QRect(80, 150, 551, 22))
         self.line_contato.setInputMask("(00) 00000-0000")  # Máscara para DD + telefone
-
-# Validador para permitir apenas números
-        
-        
-
         self.txt_email = QLabel(self.frame)
         self.txt_email.setObjectName(u"txt_email")
         self.txt_email.setGeometry(QRect(80, 200, 121, 16))
