@@ -105,6 +105,12 @@ class Ui_Tela_Cadastro(object):
         self.pushButton_Cadastrar.setFont(font3)
         self.pushButton_Cadastrar.setStyleSheet(u"color: rgb(255, 255, 255);\n"
 "background-color: rgb(0, 0, 255);")
+        self.pushButton_Voltar = QPushButton(self.frame)
+        self.pushButton_Voltar.setObjectName(u"pushButton_Voltar")
+        self.pushButton_Voltar.setGeometry(QRect(100, 480, 131, 51))
+        self.pushButton_Voltar.setFont(font3)
+        self.pushButton_Voltar.setStyleSheet(u"color: rgb(255, 255, 255); \n" "background-color: rgb(0, 0, 255);")
+        self.pushButton_Voltar.setText("Voltar")
         Tela_Cadastro.setCentralWidget(self.centralwidget)
 
         self.retranslateUi(Tela_Cadastro)
