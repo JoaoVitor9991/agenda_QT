@@ -11,7 +11,7 @@ class main_window(QMainWindow):
         self.tela_login.setupUi(self)
     def conectar(self):
         
-        self.window_login.setupUi()  
+        self.window_login.login()  
         self.window_contatos.show()
 
 
