@@ -9,7 +9,11 @@ class main_window(QMainWindow):
         self.tela_login = Ui_Tela_Login()
 
         self.tela_login.setupUi(self)
-    def conectar(self) 
+    def conectar(self):
+        
+        self.window_login.setupUi()  
+        self.window_contatos.show()
+
 
 
 if __name__ == '__main__':
