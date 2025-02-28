@@ -1,6 +1,6 @@
 from PySide6.QtCore import QCoreApplication, QMetaObject
 from PySide6.QtGui import QFont
-from PySide6.QtWidgets import QApplication, QMainWindow, QPushButton, QWidget, QFrame, QLineEdit, QLabel, QDateEdit, QVBoxLayout, QHBoxLayout
+from PySide6.QtWidgets import QApplication, QMainWindow, QPushButton, QWidget, QFrame, QLineEdit, QLabel, QDateEdit, QVBoxLayout, QHBoxLayout, QTextEdit
 
 class Ui_tela_add_contato(object):
     def setupUi(self, tela_add_contato, main_window):
@@ -38,6 +38,8 @@ class Ui_tela_add_contato(object):
         self.line_contato.setObjectName(u"line_contato")
         self.line_contato.setGeometry(80, 150, 551, 22)
 
+        self.line_contato.setInputMask("(99) 99999-9999")
+
         self.txt_email = QLabel(self.frame)
         self.txt_email.setObjectName(u"txt_email")
         self.txt_email.setGeometry(80, 200, 121, 16)
@@ -66,9 +68,9 @@ class Ui_tela_add_contato(object):
         self.txt_notas.setObjectName(u"txt_notas")
         self.txt_notas.setGeometry(80, 420, 141, 16)
         self.txt_notas.setFont(font)
-        self.line_notas = QLineEdit(self.frame)
-        self.line_notas.setObjectName(u"line_notas")
-        self.line_notas.setGeometry(80, 450, 551, 141)
+        self.textEdit_notas = QTextEdit(self.frame)
+        self.textEdit_notas.setObjectName(u"textEdit_notas")
+        self.textEdit_notas.setGeometry(80, 450, 551, 141) 
 
         self.pushButton_Entrar = QPushButton(self.frame)
         self.pushButton_Entrar.setObjectName(u"pushButton_Entrar")
