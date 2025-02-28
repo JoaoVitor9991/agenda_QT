@@ -19,7 +19,7 @@ class Ui_Tela_Cadastro(object):
         self.frame.setFrameShape(QFrame.Shape.StyledPanel)
         self.frame.setFrameShadow(QFrame.Shadow.Raised)
         
-        # Título "Criar Conta"
+       
         self.txt_Criar_Conta = QLabel(self.frame)
         self.txt_Criar_Conta.setObjectName(u"txt_Criar_Conta")
         self.txt_Criar_Conta.setGeometry(QRect(100, 30, 161, 31))
@@ -29,7 +29,7 @@ class Ui_Tela_Cadastro(object):
         font1.setItalic(True)
         self.txt_Criar_Conta.setFont(font1)
 
-        # Texto: "Já tem uma conta?"
+        
         self.txt_jtemconta = QLabel(self.frame)
         self.txt_jtemconta.setObjectName(u"txt_jtemconta")
         self.txt_jtemconta.setGeometry(QRect(100, 60, 121, 16))
@@ -39,15 +39,15 @@ class Ui_Tela_Cadastro(object):
         font2.setItalic(True)
         self.txt_jtemconta.setFont(font2)
 
-        # Link "Entrar"
+        
         self.link_entrar = QLabel(self.frame)
         self.link_entrar.setObjectName(u"link_entrar")
         self.link_entrar.setGeometry(QRect(230, 60, 71, 16))
         self.link_entrar.setFont(font2)
         self.link_entrar.setStyleSheet(u"color: rgb(0, 0, 255);")
-        self.link_entrar.mousePressEvent = self.abrir_tela_login  # Função para abrir a tela de login
+        self.link_entrar.mousePressEvent = self.abrir_tela_login  
 
-        # Campo de Nome
+        
         self.txt_nome = QLabel(self.frame)
         self.txt_nome.setObjectName(u"txt_nome")
         self.txt_nome.setGeometry(QRect(100, 140, 121, 16))
@@ -56,7 +56,7 @@ class Ui_Tela_Cadastro(object):
         self.line_nome.setObjectName(u"line_nome")
         self.line_nome.setGeometry(QRect(100, 160, 551, 22))
 
-        # Campo de Email
+        
         self.txt_email = QLabel(self.frame)
         self.txt_email.setObjectName(u"txt_email")
         self.txt_email.setGeometry(QRect(100, 200, 121, 16))
@@ -65,7 +65,7 @@ class Ui_Tela_Cadastro(object):
         self.line_email.setObjectName(u"line_email")
         self.line_email.setGeometry(QRect(100, 220, 551, 22))
 
-        # Campo de Contato
+        
         self.txt_contato = QLabel(self.frame)
         self.txt_contato.setObjectName(u"txt_contato")
         self.txt_contato.setGeometry(QRect(100, 260, 121, 16))
@@ -74,7 +74,7 @@ class Ui_Tela_Cadastro(object):
         self.line_contato.setObjectName(u"line_contato")
         self.line_contato.setGeometry(QRect(100, 280, 551, 22))
 
-        # Campo de Senha
+        
         self.txt_senha = QLabel(self.frame)
         self.txt_senha.setObjectName(u"txt_senha")
         self.txt_senha.setGeometry(QRect(100, 320, 121, 16))
@@ -82,9 +82,9 @@ class Ui_Tela_Cadastro(object):
         self.line_senha = QLineEdit(self.frame)
         self.line_senha.setObjectName(u"line_senha")
         self.line_senha.setGeometry(QRect(100, 340, 551, 22))
-        self.line_senha.setEchoMode(QLineEdit.Password)  # Ativando o EchoMode para ocultar a senha
+        self.line_senha.setEchoMode(QLineEdit.Password)  
 
-        # Campo de Confirmação de Senha
+        
         self.txt_confrimar_senha = QLabel(self.frame)
         self.txt_confrimar_senha.setObjectName(u"txt_confrimar_senha")
         self.txt_confrimar_senha.setGeometry(QRect(100, 380, 151, 16))
@@ -92,9 +92,9 @@ class Ui_Tela_Cadastro(object):
         self.line_Confirmar_senha = QLineEdit(self.frame)
         self.line_Confirmar_senha.setObjectName(u"line_Confirmar_senha")
         self.line_Confirmar_senha.setGeometry(QRect(100, 400, 551, 22))
-        self.line_Confirmar_senha.setEchoMode(QLineEdit.Password)  # Ativando o EchoMode para ocultar a confirmação de senha
+        self.line_Confirmar_senha.setEchoMode(QLineEdit.Password) 
 
-        # Botão de Cadastro
+        
         self.pushButton_Cadastrar = QPushButton(self.frame)
         self.pushButton_Cadastrar.setObjectName(u"pushButton_Cadastrar")
         self.pushButton_Cadastrar.setGeometry(QRect(390, 480, 131, 51))
@@ -103,17 +103,16 @@ class Ui_Tela_Cadastro(object):
         font3.setItalic(True)
         self.pushButton_Cadastrar.setFont(font3)
         self.pushButton_Cadastrar.setStyleSheet(u"color: rgb(255, 255, 255); background-color: rgb(0, 0, 255);")
-        self.pushButton_Cadastrar.clicked.connect(self.realizar_cadastro)  # Função para cadastrar
+        self.pushButton_Cadastrar.clicked.connect(self.realizar_cadastro)  
 
-        # Botão Voltar
+        
         self.pushButton_Voltar = QPushButton(self.frame)
         self.pushButton_Voltar.setObjectName(u"pushButton_Voltar")
         self.pushButton_Voltar.setGeometry(QRect(250, 480, 131, 51))
         self.pushButton_Voltar.setFont(font3)
         self.pushButton_Voltar.setStyleSheet(u"color: rgb(255, 255, 255); background-color: rgb(255, 0, 0);")
         self.pushButton_Voltar.setText(QCoreApplication.translate("Tela_Cadastro", u"Voltar", None))
-        self.pushButton_Voltar.clicked.connect(self.voltar_para_login)  # Função para voltar ao login
-
+        self.pushButton_Voltar.clicked.connect(self.voltar_para_login)  
         Tela_Cadastro.setCentralWidget(self.centralwidget)
         self.retranslateUi(Tela_Cadastro)
         QMetaObject.connectSlotsByName(Tela_Cadastro)
@@ -153,7 +152,7 @@ class Ui_Tela_Cadastro(object):
             QMessageBox.warning(None, "Erro", "Preencha todos os campos.")
         else:
             QMessageBox.information(None, "Sucesso", "Cadastro realizado com sucesso!")
-            self.voltar_para_login()  # Volta para a tela de login após o cadastro
+            self.voltar_para_login()  
 
 if __name__ == "__main__":
     app = QApplication([])  # Criação da aplicação

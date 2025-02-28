@@ -16,7 +16,7 @@ class Ui_tela_add_contato(object):
         self.frame.setFrameShape(QFrame.Shape.StyledPanel)
         self.frame.setFrameShadow(QFrame.Shadow.Raised)
         
-        # Setup dos campos de entrada
+        
         self.txt_nome = QLabel(self.frame)
         self.txt_nome.setObjectName(u"txt_nome")
         self.txt_nome.setGeometry(80, 60, 121, 16)
@@ -29,7 +29,7 @@ class Ui_tela_add_contato(object):
         self.line_nome.setObjectName(u"line_nome")
         self.line_nome.setGeometry(80, 80, 551, 22)
         
-        # Campos restantes
+        
         self.txt_contato = QLabel(self.frame)
         self.txt_contato.setObjectName(u"txt_contato")
         self.txt_contato.setGeometry(80, 130, 121, 16)
@@ -70,7 +70,6 @@ class Ui_tela_add_contato(object):
         self.line_notas.setObjectName(u"line_notas")
         self.line_notas.setGeometry(80, 450, 551, 141)
 
-        # Botões
         self.pushButton_Entrar = QPushButton(self.frame)
         self.pushButton_Entrar.setObjectName(u"pushButton_Entrar")
         self.pushButton_Entrar.setGeometry(630, 610, 131, 41)
@@ -90,7 +89,7 @@ class Ui_tela_add_contato(object):
 
         self.retranslateUi(tela_add_contato)
         
-        # Conectar o botão de voltar à função
+        
         self.pushButton_Entrar_2.clicked.connect(lambda: self.voltar_para_contatos(tela_add_contato, main_window))
 
         QMetaObject.connectSlotsByName(tela_add_contato)
