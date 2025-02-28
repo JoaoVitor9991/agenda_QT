@@ -108,7 +108,7 @@ class Ui_tela_add_contato(object):
 
     def voltar_para_contatos(self, tela_add_contato, main_window):
         tela_add_contato.close()  # Fecha a tela de adicionar contato
-        main_window.show()  # Exibe a tela principal (onde a lista de contatos seria mostrada)
+         
 
 if __name__ == "__main__":
     app = QApplication([])  # Criação da aplicação

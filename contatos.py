@@ -21,12 +21,13 @@ class Ui_Form(object):
         self.label_Cntt.setGeometry(QRect(30, 20, 71, 16))
         self.label_Cntt.setStyleSheet(u"font: 700 12pt \"Segoe Print\";")
 
-       
+        
         self.line_buscar_cntt = QLineEdit(self.frame_principal_cntt)
         self.line_buscar_cntt.setObjectName(u"line_buscar_cntt")
         self.line_buscar_cntt.setGeometry(QRect(30, 40, 181, 22))
         self.line_buscar_cntt.setPlaceholderText("Buscar Contatos...")
 
+        
         self.list_cntt = QListView(self.frame_principal_cntt)
         self.list_cntt.setObjectName(u"list_cntt")
         self.list_cntt.setGeometry(QRect(30, 80, 591, 291))
@@ -36,7 +37,7 @@ class Ui_Form(object):
         y_positions = [90, 130, 170, 210]
         self.labels_contatos = []
         self.labels_editar = []
-        self.lines = []  # Lista para armazenar as linhas
+        self.lines = []  
 
         for i, nome in enumerate(contatos):
             
@@ -46,7 +47,7 @@ class Ui_Form(object):
             label.setText(nome)
             self.labels_contatos.append(label)
 
-            
+           
             line = QFrame(self.frame_principal_cntt)
             line.setObjectName(f"line_{nome}")
             line.setGeometry(QRect(40, y_positions[i] + 18, 550, 1))  
@@ -68,7 +69,7 @@ class Ui_Form(object):
         self.label_add.setPixmap(QPixmap(u"xx.png"))
         self.label_add.setScaledContents(True)
 
-      
+        
         self.label_add.mousePressEvent = self.adicionar_contato
         for i, label_editar in enumerate(self.labels_editar):
             label_editar.mousePressEvent = lambda event, index=i: self.editar_contato(index)
@@ -81,7 +82,7 @@ class Ui_Form(object):
         self.label_Cntt.setText(QCoreApplication.translate("Form", u"Contatos", None))
 
     def editar_contato(self, index):
-        
+       
         print(f"Editando contato {index}")
     
     def adicionar_contato(self, event):
