@@ -107,7 +107,7 @@ class Ui_tela_add_contato(object):
         self.pushButton_Entrar_2.setText(QCoreApplication.translate("tela_add_contato", u"Voltar", None))
 
     def voltar_para_contatos(self, tela_add_contato, main_window):
-        tela_add_contato.close()  # Fecha a tela de adicionar contato
+        tela_add_contato.close()  
          
 
 if __name__ == "__main__":
