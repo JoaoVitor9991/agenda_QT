@@ -8,25 +8,25 @@ class MainWindow(QMainWindow):
         super().__init__()
         self.setWindowTitle("Tela Principal")
 
-        # Criação do widget principal que permitirá alternar entre as telas de login e cadastro
+        
         self.stacked_widget = QStackedWidget(self)
 
-        # Inicializando as telas de login e cadastro
+        
         self.login_window = Ui_Tela_Login()
         self.cadastro_window = Ui_Tela_Cadastro()
 
-        # Configuração da tela de login e tela de cadastro
-        self.login_window.setupUi(self)  # Configura a interface de login
-        self.cadastro_window.setupUi(self)  # Configura a interface de cadastro
+       
+        self.login_window.setupUi(self) 
+        self.cadastro_window.setupUi(self)  
 
-        # Adicionando as telas ao QStackedWidget
+        
         self.stacked_widget.addWidget(self.login_window.centralwidget)
         self.stacked_widget.addWidget(self.cadastro_window.centralwidget)
 
-        # Definindo a tela inicial (login)
+        
         self.setCentralWidget(self.stacked_widget)
 
-        # Conectar ações para alternar entre telas
+        
         self.login_window.abrir_tela_cadastro = self.show_cadastro_screen
         self.cadastro_window.voltar_para_login = self.show_login_screen
 
@@ -39,7 +39,7 @@ class MainWindow(QMainWindow):
         self.stacked_widget.setCurrentWidget(self.login_window.centralwidget)
 
 if __name__ == "__main__":
-    app = QApplication(sys.argv)  # Criação da aplicação
-    window = MainWindow()  # Criação da janela principal
-    window.show()  # Exibe a janela principal
-    sys.exit(app.exec())  # Inicia o loop de eventos da aplicação
+    app = QApplication(sys.argv)  
+    window = MainWindow()  
+    window.show()  
+    sys.exit(app.exec())  
