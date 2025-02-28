@@ -73,6 +73,7 @@ class Ui_Tela_Cadastro(object):
         self.line_contato = QLineEdit(self.frame)
         self.line_contato.setObjectName(u"line_contato")
         self.line_contato.setGeometry(QRect(100, 280, 551, 22))
+        self.line_contato.setInputMask("(99) 99999-9999")
 
         
         self.txt_senha = QLabel(self.frame)
