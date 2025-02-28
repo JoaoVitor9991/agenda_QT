@@ -29,25 +29,25 @@ class Ui_Form(object):
         self.list_cntt.setObjectName(u"list_cntt")
         self.list_cntt.setGeometry(QRect(30, 80, 591, 291))
 
-        # Criar a lista de contatos
-        self.contatos = ["Abgail", "Bento", "João", "Maria"]  # Lista de nomes
+        
+        self.contatos = ["Abgail", "Bento", "João", "Maria"]  
 
-        # Criar um modelo para armazenar os contatos
+        
         self.model = QStringListModel(self.contatos)
 
-        # Criar um modelo de filtro para permitir buscas
+        
         self.proxy_model = QSortFilterProxyModel()
-        self.proxy_model.setSourceModel(self.model)  # Conectar ao modelo original
-        self.proxy_model.setFilterCaseSensitivity(Qt.CaseInsensitive)  # Deixar a busca sem diferenciação de maiúsculas e minúsculas
-        self.proxy_model.setFilterKeyColumn(0)  # Aplicar filtro na coluna de nomes
+        self.proxy_model.setSourceModel(self.model)  
+        self.proxy_model.setFilterCaseSensitivity(Qt.CaseInsensitive)  
+        self.proxy_model.setFilterKeyColumn(0)  
 
-        # Associar a lista de contatos ao QListView
+        
         self.list_cntt.setModel(self.proxy_model)
 
-        # Conectar a barra de busca ao filtro
+        
         self.line_buscar_cntt.textChanged.connect(self.proxy_model.setFilterFixedString)
 
-        # Adicionar ação para o botão de adicionar contato
+        
         self.label_add = QLabel(self.frame_principal_cntt)
         self.label_add.setObjectName(u"label_add")
         self.label_add.setGeometry(QRect(580, 40, 31, 31))
@@ -55,7 +55,7 @@ class Ui_Form(object):
         self.label_add.setScaledContents(True)
         self.label_add.mousePressEvent = self.adicionar_contato
 
-        # Conectar ação de editar ao item da lista
+       
         self.list_cntt.clicked.connect(self.editar_contato)
 
         self.retranslateUi(Form)
@@ -66,12 +66,12 @@ class Ui_Form(object):
         self.label_Cntt.setText(QCoreApplication.translate("Form", u"Contatos", None))
 
     def editar_contato(self, index):
-        # Pega o contato selecionado e faz a edição
+        
         contato = self.proxy_model.data(index, Qt.DisplayRole)
         print(f"Editando contato: {contato}")
 
     def adicionar_contato(self, event):
-        # Ação de adicionar um novo contato
+        
         self.tela_add_contato = QMainWindow()
         self.ui_add_contato = Ui_tela_add_contato()
         self.ui_add_contato.setupUi(self.tela_add_contato, self.tela_add_contato)
