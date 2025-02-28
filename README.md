@@ -1,2 +1,0 @@
-# agenda_QT
- 
