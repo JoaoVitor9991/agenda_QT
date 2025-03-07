@@ -89,7 +89,7 @@ class Ui_Form(object):
             nome_contato = label.text().lower()
             
             if texto_busca in nome_contato:
-                # Torna os elementos visíveis
+               
                 self.labels_contatos[i].setVisible(True)
                 self.lines[i].setVisible(True)
                 self.labels_editar[i].setVisible(True)
