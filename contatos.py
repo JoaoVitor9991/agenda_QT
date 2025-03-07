@@ -102,7 +102,7 @@ class Ui_Form(object):
                 
                 y_offset += 40  
             else:
-                # Torna os elementos invisíveis se não corresponder à busca
+                
                 self.labels_contatos[i].setVisible(False)
                 self.lines[i].setVisible(False)
                 self.labels_editar[i].setVisible(False)
