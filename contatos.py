@@ -111,7 +111,7 @@ class Ui_Form(object):
         contato = self.contatos[i]
         print(f"Editando contato: {contato}")
         
-        # Passando as informações do contato selecionado para a tela de edição
+       
         contato_info = {
             "nome": contato,
             "contato": "(11) 99999-9999",  # Exemplo de contato
