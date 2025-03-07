@@ -87,7 +87,7 @@ class Ui_Form(object):
 
         for i, label in enumerate(self.labels_contatos):
             nome_contato = label.text().lower()
-            # Se o nome do contato corresponder ao texto da busca
+            
             if texto_busca in nome_contato:
                 # Torna os elementos visíveis
                 self.labels_contatos[i].setVisible(True)
