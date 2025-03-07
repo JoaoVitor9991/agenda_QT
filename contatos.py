@@ -44,7 +44,7 @@ class Ui_Form(object):
             label.setText(nome)
             self.labels_contatos.append(label)
 
-            # Adicionando uma linha abaixo do nome do contato
+           
             line = QFrame(self.frame_principal_cntt)
             line.setObjectName(f"line_{nome}")
             line.setGeometry(QRect(40, y_positions[i] + 18, 550, 1))  # A linha fica logo abaixo do nome
