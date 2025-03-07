@@ -37,7 +37,7 @@ class Ui_Form(object):
         self.lines = []
 
         for i, nome in enumerate(self.contatos):
-            # Criando as labels de nome dos contatos
+            
             label = QLabel(self.frame_principal_cntt)
             label.setObjectName(f"label_{nome}")
             label.setGeometry(QRect(40, y_positions[i], 50, 16))
