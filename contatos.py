@@ -83,7 +83,7 @@ class Ui_Form(object):
     def filtrar_contatos(self):
         texto_busca = self.line_buscar_cntt.text().lower()
         
-        y_offset = 90  # Começa com o primeiro item na posição Y
+        y_offset = 90  
 
         for i, label in enumerate(self.labels_contatos):
             nome_contato = label.text().lower()
