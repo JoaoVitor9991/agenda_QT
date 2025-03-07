@@ -51,7 +51,7 @@ class Ui_Form(object):
             line.setStyleSheet("background-color: black;")  
             self.lines.append(line)
 
-            # Criando o ícone de editar para cada contato
+            
             label_editar = QLabel(self.frame_principal_cntt)
             label_editar.setObjectName(f"label_editar{i+1}")
             label_editar.setGeometry(QRect(590, y_positions[i], 20, 20))
