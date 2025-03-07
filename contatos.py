@@ -114,13 +114,13 @@ class Ui_Form(object):
        
         contato_info = {
             "nome": contato,
-            "contato": "(11) 99999-9999",  # Exemplo de contato
+            "contato": "(11) 99999-9999",  
             "email": "exemplo@email.com",
             "rede_social": "@exemplo",
             "notas": "Notas do contato"
         }
         
-        # Abrindo a tela de edição
+    
         self.tela_editar_contato = QMainWindow()
         self.ui_editar_contato = Ui_EditarContato()
         self.ui_editar_contato.setupUi(self.tela_editar_contato, contato_info)  # Passando as informações
