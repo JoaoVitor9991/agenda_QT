@@ -99,8 +99,8 @@ class Ui_Form(object):
                 self.lines[i].move(40, y_offset + 18)
                 self.labels_editar[i].move(590, y_offset)
 
-                # Atualiza o valor de y_offset para o próximo item
-                y_offset += 40  # Define um espaçamento entre os itens
+                
+                y_offset += 40  
             else:
                 # Torna os elementos invisíveis se não corresponder à busca
                 self.labels_contatos[i].setVisible(False)
