@@ -59,7 +59,7 @@ class Ui_Form(object):
             label_editar.setScaledContents(True)
             self.labels_editar.append(label_editar)
 
-        # Ícone de adicionar contato
+        
         self.label_add = QLabel(self.frame_principal_cntt)
         self.label_add.setObjectName(u"label_add")
         self.label_add.setGeometry(QRect(580, 40, 31, 31))
