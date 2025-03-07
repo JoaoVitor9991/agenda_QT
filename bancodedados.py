@@ -1,19 +1,16 @@
 import mysql.connector
- 
+from mysql.connector import Error  
+
 def conectar():
-    return mysql.connector.connect(
-      host="localhost",
-      user="seu_usuario",
-      password="sua_senha",
-      database="seu_banco_de_dados"
-  )
- 
-def adicionar_user(login, senha):
-    conexao= conectar()
-    cursor= conexao.cursor ()
-    sql = "INSERT INTO usuarios (email, senha_hash) VALUES (%s, SHA2(%s, 256))"
-    valores = (login, senha)
-    cursor.execute(sql, valores)
-    conexao.commit()
-    cursor.close()
-    conexao.close()
+    """Estabelece conexão com o banco de dados MySQL e exibe o erro se falhar."""
+    try:
+        conexao = mysql.connector.connect(
+            host="localhost",
+            user="root",           
+            password="",  
+            database="meu_banco"   
+        )
+        return conexao
+    except Error as e:
+        print(f"❌ Erro ao conectar ao banco de dados: {e}")  
+        return None
