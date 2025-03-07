@@ -94,7 +94,7 @@ class Ui_Form(object):
                 self.lines[i].setVisible(True)
                 self.labels_editar[i].setVisible(True)
 
-                # Move o item para a posição Y "y_offset"
+               
                 self.labels_contatos[i].move(40, y_offset)
                 self.lines[i].move(40, y_offset + 18)
                 self.labels_editar[i].move(590, y_offset)
