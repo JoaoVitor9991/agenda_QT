@@ -1,6 +1,7 @@
 from PySide6.QtCore import QCoreApplication, QMetaObject, QRect
 from PySide6.QtGui import QFont
 from PySide6.QtWidgets import QApplication, QFrame, QLabel, QLineEdit, QMainWindow, QPushButton, QWidget, QMessageBox
+from bancodedados import salvar_usuario
 
 class Ui_Tela_Cadastro(object):
     def setupUi(self, Tela_Cadastro):
@@ -145,7 +146,8 @@ class Ui_Tela_Cadastro(object):
         self.pushButton_Cadastrar.setFont(font3)
         self.pushButton_Cadastrar.setStyleSheet(u"color: rgb(255, 255, 255); background-color: rgb(0, 0, 255);")
         self.pushButton_Cadastrar.clicked.connect(self.realizar_cadastro)  # Função para cadastrar
-
+   
+        self.pushButton_Cadastrar.clicked.connect(self.realizar_cadastro)
         
         self.pushButton_Voltar = QPushButton(self.frame)
         self.pushButton_Voltar.setObjectName(u"pushButton_Voltar")
@@ -181,6 +183,9 @@ class Ui_Tela_Cadastro(object):
     def voltar_para_login(self):
         self.abrir_tela_login(None)  
 
+    def realizar_cadastro(self):  
+        print("✅ O botão Cadastrar foi pressionado!")  # Teste para ver se a função está sendo chamada
+
     def realizar_cadastro(self):
         nome = self.line_nome.text()
         email = self.line_email.text()
@@ -194,12 +199,16 @@ class Ui_Tela_Cadastro(object):
        
         if senha != confirmar_senha:
             QMessageBox.warning(None, "Erro", "As senhas não coincidem. Tente novamente.")
-        elif nome == "" or email == "" or contato == "" or senha == "" or confirmar_senha == "":
-            QMessageBox.warning(None, "Erro", "Preencha todos os campos.")
-            self.validar_campos_vazios(nome, email, contato, senha, confirmar_senha)
+        elif nome == "" or email == "" or contato == "" or senha == "":
+             QMessageBox.warning(None, "Erro", "Preencha todos os campos.")
+             self.validar_campos_vazios(nome, email, contato, senha, confirmar_senha)   
         else:
-            QMessageBox.information(None, "Sucesso", "Cadastro realizado com sucesso!")
-            self.voltar_para_login()  
+            if salvar_usuario(email, senha):
+                QMessageBox.information(None, "Sucesso", "Cadastro realizado com sucesso!")
+                self.voltar_para_login()
+            else:
+                QMessageBox.warning(None, "Error", "Erro ao Cadastrar! Tente outro e-mail.")
+
 
     def limpar_bordas(self):
         self.line_nome.setStyleSheet("")
