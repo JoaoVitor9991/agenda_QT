@@ -47,8 +47,8 @@ class Ui_Form(object):
            
             line = QFrame(self.frame_principal_cntt)
             line.setObjectName(f"line_{nome}")
-            line.setGeometry(QRect(40, y_positions[i] + 18, 550, 1))  # A linha fica logo abaixo do nome
-            line.setStyleSheet("background-color: black;")  # Cor preta para a linha
+            line.setGeometry(QRect(40, y_positions[i] + 18, 550, 1))  
+            line.setStyleSheet("background-color: black;")  
             self.lines.append(line)
 
             # Criando o ícone de editar para cada contato
