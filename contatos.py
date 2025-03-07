@@ -72,7 +72,7 @@ class Ui_Form(object):
         self.retranslateUi(Form)
         QMetaObject.connectSlotsByName(Form)
 
-        # Conectando os ícones de editar para chamar a função de editar
+        
         for i, label_editar in enumerate(self.labels_editar):
             label_editar.mousePressEvent = lambda event, i=i: self.editar_contato(i)
 
