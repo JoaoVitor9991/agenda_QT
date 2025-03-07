@@ -123,7 +123,7 @@ class Ui_Form(object):
     
         self.tela_editar_contato = QMainWindow()
         self.ui_editar_contato = Ui_EditarContato()
-        self.ui_editar_contato.setupUi(self.tela_editar_contato, contato_info)  # Passando as informações
+        self.ui_editar_contato.setupUi(self.tela_editar_contato, contato_info)  
         self.tela_editar_contato.show()
 
     def adicionar_contato(self, event):
@@ -134,8 +134,8 @@ class Ui_Form(object):
         event.accept()
 
 if __name__ == "__main__":
-    app = QApplication([])  # Criação da aplicação
-    MainWindow = QMainWindow()  # Criação da janela principal
+    app = QApplication([]) 
+    MainWindow = QMainWindow()  
     ui = Ui_Form()  # Instancia a tela principal
     ui.setupUi(MainWindow)  # Configura a interface da tela principal
     MainWindow.show()  # Exibe a janela principal
