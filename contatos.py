@@ -137,6 +137,6 @@ if __name__ == "__main__":
     app = QApplication([]) 
     MainWindow = QMainWindow()  
     ui = Ui_Form()  
-    ui.setupUi(MainWindow)  # Configura a interface da tela principal
-    MainWindow.show()  # Exibe a janela principal
-    app.exec()  # Inicia o loop de eventos da aplicação
+    ui.setupUi(MainWindow)  
+    MainWindow.show()  
+    app.exec()  
