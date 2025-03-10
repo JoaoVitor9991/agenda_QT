@@ -114,9 +114,11 @@ class Ui_Tela_Login(object):
 
         if autenticado:
             QMessageBox.information(None, "Sucesso", f"Bem-vindo, {nome_usuario}!")
-            self.contatos()  # Abre a tela de contatos
+            self.centralwidget.parent().close()
+            self.open_contact_screen()  # Abre a tela de contatos
         else:
             QMessageBox.warning(None, "Erro", "Email ou senha incorretos. Tente novamente.")
+       
 
 
     def close_window(self):
