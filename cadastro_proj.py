@@ -147,7 +147,7 @@ class Ui_Tela_Cadastro(object):
         self.pushButton_Cadastrar.setStyleSheet(u"color: rgb(255, 255, 255); background-color: rgb(0, 0, 255);")
         self.pushButton_Cadastrar.clicked.connect(self.realizar_cadastro)  # Função para cadastrar
    
-        self.pushButton_Cadastrar.clicked.connect(self.realizar_cadastro)
+        
         
         self.pushButton_Voltar = QPushButton(self.frame)
         self.pushButton_Voltar.setObjectName(u"pushButton_Voltar")
@@ -183,8 +183,7 @@ class Ui_Tela_Cadastro(object):
     def voltar_para_login(self):
         self.abrir_tela_login(None)  
 
-    def realizar_cadastro(self):  
-        print("✅ O botão Cadastrar foi pressionado!")  # Teste para ver se a função está sendo chamada
+    
 
     def realizar_cadastro(self):
         nome = self.line_nome.text()
@@ -203,7 +202,7 @@ class Ui_Tela_Cadastro(object):
              QMessageBox.warning(None, "Erro", "Preencha todos os campos.")
              self.validar_campos_vazios(nome, email, contato, senha, confirmar_senha)   
         else:
-            if salvar_usuario(email, senha):
+            if salvar_usuario(nome, email, contato, senha):
                 QMessageBox.information(None, "Sucesso", "Cadastro realizado com sucesso!")
                 self.voltar_para_login()
             else:
