@@ -1,28 +1,35 @@
 import mysql.connector
-from mysql.connector import Error  
 
 def conectar():
-    """Estabelece conexão com o banco de dados MySQL."""
+    """Estabelece a conexão com o banco de dados MySQL."""
     try:
         conexao = mysql.connector.connect(
             host="localhost",
-            user="root",  # Altere se necessário
-            password="sua_senha",
-            database="meu_banco"
+            user="root",  # Troque pelo usuário correto se necessário
+            password="",  # Coloque a senha se houver
+            database="agenda"
         )
         return conexao
-    except Error as e:
-        print(f"❌ Erro ao conectar ao banco de dados: {e}")
+    except mysql.connector.Error as e:
+        print(f"❌ Erro ao conectar ao MySQL: {e}")
         return None
 
-def salvar_usuario(email, senha, nome, contato):
+def salvar_usuario(nome, email, contato, senha):
     """Insere um novo usuário no banco de dados."""
     conexao = conectar()
     if conexao is None:
+        print("⚠ Erro na conexão com o banco de dados.")
         return False
 
+    cursor = None
     try:
         cursor = conexao.cursor()
+
+        # Verifica se o email já está cadastrado antes de inserir
+        cursor.execute("SELECT id FROM usuarios WHERE email = %s", (email,))
+        if cursor.fetchone():
+            print("❌ Erro: Email já cadastrado!")
+            return False
 
         sql = "INSERT INTO usuarios (nome, email, contato, senha_hash) VALUES (%s, %s, %s, SHA2(%s, 256))"
         valores = (nome, email, contato, senha)
@@ -30,12 +37,16 @@ def salvar_usuario(email, senha, nome, contato):
         cursor.execute(sql, valores)
         conexao.commit()
 
-        cursor.close()
-        conexao.close()
+        print("✅ Usuário cadastrado com sucesso!")
         return True
     except mysql.connector.IntegrityError:
-        print("Erro: Email já cadastrado!")
+        print("❌ Erro: Email já cadastrado!")
         return False
-    except Error as e:
-        print(f"Erro ao salvar usuário: {e}")
+    except mysql.connector.Error as e:
+        print(f"❌ Erro ao salvar usuário: {e}")
         return False
+    finally:
+        if cursor:
+            cursor.close()
+        if conexao:
+            conexao.close()
