@@ -130,7 +130,7 @@ class Ui_Form(object):
         self.tela_add_contato = QMainWindow()
         self.ui_add_contato = Ui_tela_add_contato()
 
-        # 🔹 Passar o usuario_id para a tela de adicionar contato
+    # 🔹 Garante que o usuario_id seja passado
         self.ui_add_contato.setupUi(self.tela_add_contato, self.tela_add_contato, self.usuario_id)
     
         self.tela_add_contato.show()

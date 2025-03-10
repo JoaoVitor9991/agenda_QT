@@ -104,21 +104,19 @@ class Ui_Tela_Login(object):
         self.window.show()  
 
     def realizar_login(self):
-        
         email = self.line_email.text()
         senha = self.line_senha.text()
 
-        
-        # Verifica no banco se o usuário existe
-        autenticado, nome_usuario = autenticar_usuario(email, senha)
+    # 🔹 Obtém o usuario_id e o nome do usuário do banco de dados
+        autenticado, usuario_id, nome_usuario = autenticar_usuario(email, senha)
 
         if autenticado:
             QMessageBox.information(None, "Sucesso", f"Bem-vindo, {nome_usuario}!")
-            self.centralwidget.parent().close()
-            self.open_contact_screen()  # Abre a tela de contatos
+
+        # 🔹 Abre a tela de contatos e passa usuario_id
+            self.abrir_tela_contatos(usuario_id)
         else:
             QMessageBox.warning(None, "Erro", "Email ou senha incorretos. Tente novamente.")
-       
 
 
     def close_window(self):

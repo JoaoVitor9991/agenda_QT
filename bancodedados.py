@@ -52,11 +52,11 @@ def salvar_usuario(nome, email, contato, senha):
             conexao.close()
 
 def autenticar_usuario(email, senha):
-    """Verifica se o usuário existe e se a senha está correta no banco de dados."""
+    """Verifica se o usuário existe e retorna o ID e nome."""
     conexao = conectar()
     if conexao is None:
         print("⚠ Erro na conexão com o banco de dados.")
-        return False, None
+        return False, None, None
 
     cursor = None
     try:
@@ -69,18 +69,19 @@ def autenticar_usuario(email, senha):
 
         if usuario:
             print(f"✅ Usuário autenticado: {usuario[1]}")
-            return True, usuario[1]  # Retorna True e o nome do usuário
+            return True, usuario[0], usuario[1]  # 🔹 Retorna True, usuario_id e nome_usuario
         else:
             print("❌ Email ou senha incorretos.")
-            return False, None
+            return False, None, None
     except mysql.connector.Error as e:
         print(f"❌ Erro ao autenticar usuário: {e}")
-        return False, None
+        return False, None, None
     finally:
         if cursor:
             cursor.close()
         if conexao:
             conexao.close()
+
 
 def salvar_contato(usuario_id, nome, telefone, email, rede_social, data_nascimento):
     """Salva um novo contato no banco de dados vinculado ao usuário logado."""
