@@ -50,3 +50,30 @@ def salvar_usuario(nome, email, contato, senha):
             cursor.close()
         if conexao:
             conexao.close()
+
+def autenticar_usuario(email, senha):
+    conexao = conectar()
+    if conexao is None:
+        print("Erro")
+        return False, None
+    
+    cursor = None
+    try:
+        cursor = conexao.cursor()
+
+        sql ="SELECT id, nome FROM usuarios WHERE email = %s AND senha_hash = SHA2(%s, 256)"
+        cursor.execute(sql, (email, senha))
+        usuario = cursor.fetchone()
+
+        if usuario:
+            print("Autenticado: {usuario[1]}")
+            return False, None
+    except mysql.connector.Error as e:
+        print(f"Erro: {e}")
+        return False, None
+    
+    finally:
+        if cursor:
+            cursor.close()
+        if conexao:
+            conexao.close()
