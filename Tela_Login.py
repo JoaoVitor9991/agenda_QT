@@ -1,6 +1,8 @@
 from PySide6.QtCore import QCoreApplication, QMetaObject, QRect
 from PySide6.QtGui import QFont, QPixmap
 from PySide6.QtWidgets import QApplication, QFrame, QLabel, QLineEdit, QMainWindow, QPushButton, QWidget, QMessageBox
+import mysql.connector
+from bancodedados import autenticar_usuario
 
 class Ui_Tela_Login(object):
     def setupUi(self, Tela_Login):
@@ -107,12 +109,15 @@ class Ui_Tela_Login(object):
         senha = self.line_senha.text()
 
         
-        if email == "nbmaster" and senha == "123":
-            QMessageBox.information(None, "Sucesso", "Login realizado com sucesso!")
-            self.close_window()  
-            self.open_contact_screen()  
+        # Verifica no banco se o usuário existe
+        autenticado, nome_usuario = autenticar_usuario(email, senha)
+
+        if autenticado:
+            QMessageBox.information(None, "Sucesso", f"Bem-vindo, {nome_usuario}!")
+            self.contatos()  # Abre a tela de contatos
         else:
             QMessageBox.warning(None, "Erro", "Email ou senha incorretos. Tente novamente.")
+
 
     def close_window(self):
        
