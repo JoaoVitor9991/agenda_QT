@@ -2,10 +2,14 @@ from PySide6.QtCore import QCoreApplication, QMetaObject
 from PySide6.QtGui import QFont
 from PySide6.QtWidgets import QApplication, QMainWindow, QPushButton, QWidget, QFrame, QLineEdit, QLabel, QDateEdit, QTextEdit, QMessageBox
 from bancodedados import salvar_contato 
+
+
 class Ui_tela_add_contato(object):
-    def setupUi(self, tela_add_contato, main_window):
+    def setupUi(self, tela_add_contato, main_window, usuario_id):
         tela_add_contato.setObjectName("tela_add_contato")
         tela_add_contato.resize(800, 600)
+
+        self.usuario_id = usuario_id
         
         self.centralwidget = QWidget(tela_add_contato)
         self.centralwidget.setObjectName("centralwidget")
