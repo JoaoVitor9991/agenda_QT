@@ -1,7 +1,7 @@
 from PySide6.QtCore import QCoreApplication, QMetaObject
 from PySide6.QtGui import QFont
 from PySide6.QtWidgets import QApplication, QMainWindow, QPushButton, QWidget, QFrame, QLineEdit, QLabel, QDateEdit, QTextEdit, QMessageBox
-
+from bancodedados import salvar_contato 
 class Ui_tela_add_contato(object):
     def setupUi(self, tela_add_contato, main_window):
         tela_add_contato.setObjectName("tela_add_contato")
@@ -89,11 +89,24 @@ class Ui_tela_add_contato(object):
         nome = self.line_nome.text()
         contato = self.line_contato.text()
         email = self.line_email.text()
-        data_nascimento = self.dateEdit_Data_nascimento.date().toString("dd/MM/yyyy")
+        data_nascimento = self.dateEdit_Data_nascimento.date().toString("yyyy-MM-dd")  # Formato correto para MySQL
         perfil_rede_social = self.line_perfil_rede_social.text()
         notas = self.textEdit_notas.toPlainText()
-        print(f"Nome: {nome}, Contato: {contato}, Email: {email}, Data Nascimento: {data_nascimento}, Perfil de Rede Social: {perfil_rede_social}, Notas: {notas}")
-        self.voltar_para_contatos(None, None)
+
+    # PEGAR O ID DO USUÁRIO LOGADO (Você precisa passar isso para essa tela ao abrir)
+        usuario_id = self.usuario_id  
+
+        if nome == "":
+             QMessageBox.warning(None, "Erro", "O nome do contato não pode estar vazio.")
+        return
+
+        sucesso = salvar_contato(usuario_id, nome, contato, email, perfil_rede_social, data_nascimento)
+
+        if sucesso:
+             QMessageBox.information(None, "Sucesso", "Contato salvo com sucesso!")
+             self.voltar_para_contatos(None, None)
+        else:
+            QMessageBox.warning(None, "Erro", "Erro ao salvar contato. Tente novamente.")
     
     def voltar_para_contatos(self, tela_add_contato, main_window):
         if tela_add_contato:
