@@ -30,36 +30,12 @@ class Ui_Form(object):
         self.list_cntt.setObjectName(u"list_cntt")
         self.list_cntt.setGeometry(QRect(30, 80, 591, 291))
 
-        self.contatos = ["Abgail", "Bento", "João", "Maria"]
-        y_positions = [90, 130, 170, 210]
+        # Inicialmente, sem contatos
+        self.contatos = []  
         self.labels_contatos = []
         self.labels_editar = []
         self.lines = []
 
-        for i, nome in enumerate(self.contatos):
-            
-            label = QLabel(self.frame_principal_cntt)
-            label.setObjectName(f"label_{nome}")
-            label.setGeometry(QRect(40, y_positions[i], 50, 16))
-            label.setText(nome)
-            self.labels_contatos.append(label)
-
-           
-            line = QFrame(self.frame_principal_cntt)
-            line.setObjectName(f"line_{nome}")
-            line.setGeometry(QRect(40, y_positions[i] + 18, 550, 1))  
-            line.setStyleSheet("background-color: black;")  
-            self.lines.append(line)
-
-            
-            label_editar = QLabel(self.frame_principal_cntt)
-            label_editar.setObjectName(f"label_editar{i+1}")
-            label_editar.setGeometry(QRect(590, y_positions[i], 20, 20))
-            label_editar.setPixmap(QPixmap(u"yy.png"))
-            label_editar.setScaledContents(True)
-            self.labels_editar.append(label_editar)
-
-        
         self.label_add = QLabel(self.frame_principal_cntt)
         self.label_add.setObjectName(u"label_add")
         self.label_add.setGeometry(QRect(580, 40, 31, 31))
@@ -72,7 +48,7 @@ class Ui_Form(object):
         self.retranslateUi(Form)
         QMetaObject.connectSlotsByName(Form)
 
-        
+        # Conecta a ação de edição para todos os contatos
         for i, label_editar in enumerate(self.labels_editar):
             label_editar.mousePressEvent = lambda event, i=i: self.editar_contato(i)
 
@@ -82,27 +58,24 @@ class Ui_Form(object):
 
     def filtrar_contatos(self):
         texto_busca = self.line_buscar_cntt.text().lower()
-        
-        y_offset = 90  
 
+        y_offset = 90
+
+        # Atualiza os contatos visíveis com base na busca
         for i, label in enumerate(self.labels_contatos):
             nome_contato = label.text().lower()
-            
+
             if texto_busca in nome_contato:
-               
                 self.labels_contatos[i].setVisible(True)
                 self.lines[i].setVisible(True)
                 self.labels_editar[i].setVisible(True)
 
-               
                 self.labels_contatos[i].move(40, y_offset)
                 self.lines[i].move(40, y_offset + 18)
                 self.labels_editar[i].move(590, y_offset)
 
-                
-                y_offset += 40  
+                y_offset += 40
             else:
-                
                 self.labels_contatos[i].setVisible(False)
                 self.lines[i].setVisible(False)
                 self.labels_editar[i].setVisible(False)
@@ -110,37 +83,81 @@ class Ui_Form(object):
     def editar_contato(self, i):
         contato = self.contatos[i]
         print(f"Editando contato: {contato}")
-        
-       
+
         contato_info = {
             "nome": contato,
-            "contato": "(11) 99999-9999",  
+            "contato": "(11) 99999-9999",
             "email": "exemplo@email.com",
             "rede_social": "@exemplo",
             "notas": "Notas do contato"
         }
-        
-    
+
         self.tela_editar_contato = QMainWindow()
         self.ui_editar_contato = Ui_EditarContato()
-        self.ui_editar_contato.setupUi(self.tela_editar_contato, contato_info)  
+        self.ui_editar_contato.setupUi(self.tela_editar_contato, contato_info)
         self.tela_editar_contato.show()
 
     def adicionar_contato(self, event):
+        # Adicionando um novo contato
+        novo_contato = "Novo Contato"  # Exemplo de nome de contato
+        self.contatos.append(novo_contato)
+
+        # Atualizando a interface com o novo contato
+        self.atualizar_contatos()
+
+        # Chamando a função que atualiza a busca também
+        self.filtrar_contatos()
+
         self.tela_add_contato = QMainWindow()
         self.ui_add_contato = Ui_tela_add_contato()
-
-    # 🔹 Garante que o usuario_id seja passado
-        self.ui_add_contato.setupUi(self.tela_add_contato, self.tela_add_contato, self.usuario_id)
-    
+        self.ui_add_contato.setupUi(self.tela_add_contato, self.tela_add_contato)
         self.tela_add_contato.show()
         event.accept()
 
+    def atualizar_contatos(self):
+        # Remover todos os widgets antigos
+        for label in self.labels_contatos:
+            label.deleteLater()
+        for line in self.lines:
+            line.deleteLater()
+        for label_editar in self.labels_editar:
+            label_editar.deleteLater()
+
+        # Limpar as listas de widgets
+        self.labels_contatos.clear()
+        self.lines.clear()
+        self.labels_editar.clear()
+
+        # Adicionar novamente os contatos
+        y_positions = [90 + (i * 40) for i in range(len(self.contatos))]
+        for i, nome in enumerate(self.contatos):
+            label = QLabel(self.frame_principal_cntt)
+            label.setObjectName(f"label_{nome}")
+            label.setGeometry(QRect(40, y_positions[i], 50, 16))
+            label.setText(nome)
+            self.labels_contatos.append(label)
+
+            line = QFrame(self.frame_principal_cntt)
+            line.setObjectName(f"line_{nome}")
+            line.setGeometry(QRect(40, y_positions[i] + 18, 550, 1))
+            line.setStyleSheet("background-color: black;")
+            self.lines.append(line)
+
+            label_editar = QLabel(self.frame_principal_cntt)
+            label_editar.setObjectName(f"label_editar{i + 1}")
+            label_editar.setGeometry(QRect(590, y_positions[i], 20, 20))
+            label_editar.setPixmap(QPixmap(u"yy.png"))
+            label_editar.setScaledContents(True)
+            self.labels_editar.append(label_editar)
+
+        # Reatribuir o evento de clique para cada ícone de edição
+        for i, label_editar in enumerate(self.labels_editar):
+            label_editar.mousePressEvent = lambda event, i=i: self.editar_contato(i)
 
 if __name__ == "__main__":
-    app = QApplication([]) 
-    MainWindow = QMainWindow()  
-    ui = Ui_Form()  
-    ui.setupUi(MainWindow)  
-    MainWindow.show()  
-    app.exec()  
+    app = QApplication([])
+    MainWindow = QMainWindow()
+    ui = Ui_Form()
+    ui.setupUi(MainWindow)
+    MainWindow.show()
+    app.exec()
