@@ -32,7 +32,7 @@ def salvar_contato_db(nome, email, contato, data_nascimento, perfil_rede_social,
 
         # Insere o novo contato na tabela
         sql = "INSERT INTO contatos (nome, email, contato, data_nascimento, perfil_rede_social, notas, usuario_id) VALUES (%s, %s, %s, %s, %s, %s, %s)"
-        valores = (nome, email, contato, data_nascimento, perfil_rede_social, notas)
+        valores = (nome, email, contato, data_nascimento, perfil_rede_social, notas, usuario_id)
 
         cursor.execute(sql, valores)
         conexao.commit()
@@ -139,8 +139,8 @@ class Ui_tela_add_contato(object):
         data_nascimento = self.dateEdit_Data_nascimento.date().toString("yyyy-MM-dd")
         perfil_rede_social = self.line_perfil_rede_social.text()
         notas = self.textEdit_notas.toPlainText()
-
-        if salvar_contato_db(nome, email, contato, data_nascimento, perfil_rede_social, notas):
+        usuario_id = 1
+        if salvar_contato_db(nome, email, contato, data_nascimento, perfil_rede_social, notas, usuario_id):
             QMessageBox.information(None, "Sucesso", "Contato salvo com sucesso!")
             self.voltar_para_contatos(None, None)
         else:
