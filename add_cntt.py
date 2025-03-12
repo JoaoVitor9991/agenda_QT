@@ -19,7 +19,7 @@ def conectar():
         return None
 
 # Função para salvar o contato no banco de dados
-def salvar_contato_db(nome, email, contato, data_nascimento, perfil_rede_social, notas):
+def salvar_contato_db(nome, email, contato, data_nascimento, perfil_rede_social, notas, usuario_id=1):
     """Insere um novo contato no banco de dados."""
     conexao = conectar()
     if conexao is None:
@@ -31,7 +31,7 @@ def salvar_contato_db(nome, email, contato, data_nascimento, perfil_rede_social,
         cursor = conexao.cursor()
 
         # Insere o novo contato na tabela
-        sql = "INSERT INTO contatos (nome, email, contato, data_nascimento, perfil_rede_social, notas) VALUES (%s, %s, %s, %s, %s, %s)"
+        sql = "INSERT INTO contatos (nome, email, contato, data_nascimento, perfil_rede_social, notas, usuario_id) VALUES (%s, %s, %s, %s, %s, %s, %s)"
         valores = (nome, email, contato, data_nascimento, perfil_rede_social, notas)
 
         cursor.execute(sql, valores)
