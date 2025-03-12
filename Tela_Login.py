@@ -81,9 +81,9 @@ class Ui_Tela_Login(object):
         self.label = QLabel(self.frame)
         self.label.setObjectName(u"label")
         self.label.setGeometry(QRect(215, 20, 341, 331))
-        self.label.setPixmap(QPixmap("asc.png"))  # Alterar para o caminho correto
-        self.label.setScaledContents(True)  # Permitindo que a imagem se ajuste ao tamanho do QLabel
-        self.label.raise_()  # Garante que a imagem fique no topo da camada visual
+        self.label.setPixmap(QPixmap("asc.png"))  
+        self.label.setScaledContents(True)  
+        self.label.raise_()  
 
         Tela_Login.setCentralWidget(self.centralwidget)
         self.retranslateUi(Tela_Login)
