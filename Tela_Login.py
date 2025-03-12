@@ -135,13 +135,15 @@ class Ui_Tela_Login(object):
         self.window.show()  
 
     def abrir_tela_contatos(self, usuario_id):
-        from contatos import Ui_Form
+        """Abre a tela de contatos e passa o usuário logado."""
+        from contatos import Ui_Form  # Importa a tela de contatos
 
-        self.window = QMainWindow()
-        self.ui = Ui_Form
-        self.ui.setupUi(self.window)
+        self.window = QMainWindow()  
+        self.ui = Ui_Form()  
+        self.ui.setupUi(self.window)  # <-- Agora passando o argumento correto
 
-        self.ui.usuario_id = usuario_id
+        # Passando o usuário logado para a tela de contatos (se precisar)
+        self.ui.usuario_id = usuario_id  
 
         self.window.show()
 
