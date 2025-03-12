@@ -56,7 +56,7 @@ def autenticar_usuario(email, senha):
     conexao = conectar()
     if conexao is None:
         print("⚠ Erro na conexão com o banco de dados.")
-        return False, None
+        return False, None, None
 
     cursor = None
     try:
@@ -69,13 +69,13 @@ def autenticar_usuario(email, senha):
 
         if usuario:
             print(f"✅ Usuário autenticado: {usuario[1]}")
-            return True, usuario[1]  # Retorna True e o nome do usuário
+            return True, usuario[0], usuario[1]  # Retorna True e o nome do usuário
         else:
             print("❌ Email ou senha incorretos.")
-            return False, None
+            return False, None, None
     except mysql.connector.Error as e:
         print(f"❌ Erro ao autenticar usuário: {e}")
-        return False, None
+        return False, None, None
     finally:
         if cursor:
             cursor.close()

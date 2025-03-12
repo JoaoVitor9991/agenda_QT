@@ -134,6 +134,18 @@ class Ui_Tela_Login(object):
         self.ui.setupUi(self.window)  
         self.window.show()  
 
+    def abrir_tela_contatos(self, usuario_id):
+        from contatos import Ui_Form
+
+        self.window = QMainWindow()
+        self.ui = Ui_Form
+        self.ui.setupUi(self.window)
+
+        self.ui.usuario_id = usuario_id
+
+        self.window.show()
+
+
 if __name__ == "__main__":
     app = QApplication([])  
     MainWindow = QMainWindow()  
