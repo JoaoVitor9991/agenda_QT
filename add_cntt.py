@@ -51,6 +51,7 @@ def salvar_contato_db(nome, email, contato, data_nascimento, perfil_rede_social,
 # Classe da interface de adicionar contato
 class Ui_tela_add_contato(object):
     def setupUi(self, tela_add_contato, main_window):
+        self.main_window = main_window
         tela_add_contato.setObjectName("tela_add_contato")
         tela_add_contato.resize(800, 600)
 
@@ -138,20 +139,26 @@ class Ui_tela_add_contato(object):
         data_nascimento = self.dateEdit_Data_nascimento.date().toString("yyyy-MM-dd")
         perfil_rede_social = self.line_perfil_rede_social.text()
         notas = self.textEdit_notas.toPlainText()
-    
+
         usuario_id = getattr(self, "usuario_id", None)
         if usuario_id is None:
             QMessageBox.warning(None, "Erro", "ID do usuário não encontrado")
             return
 
-    # 🔹 Chamada corrigida: agora com TODOS os argumentos
+         # 🔹 Salvar contato no banco de dados
         sucesso = salvar_contato_db(nome, email, telefone, data_nascimento, perfil_rede_social, notas, usuario_id)
 
         if sucesso:
             QMessageBox.information(None, "Sucesso", "Contato salvo com sucesso!")
-            self.voltar_para_contatos(None, None)  # 🔹 Mantém a função para fechar a tela
+
+        if hasattr(self, "main_window"):  # ✅ Verifica se a janela principal existe
+            self.main_window.carregar_contatos()  # 🔄 Atualiza os contatos na agenda
+
+            self.voltar_para_contatos(None, None)  # 🔹 Agora fecha a tela corretamente
+        
         else:
             QMessageBox.warning(None, "Erro", "Falha ao salvar o contato!")
+
 
     def voltar_para_contatos(self, tela_add_contato, main_window):
         if tela_add_contato:
