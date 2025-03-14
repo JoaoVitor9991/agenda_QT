@@ -55,7 +55,7 @@ class Ui_Tela_Login(QWidget):
         self.pushButton_Entrar.setFont(font3)
         self.pushButton_Entrar.setStyleSheet("color: rgb(255, 255, 255); background-color: rgb(0, 0, 255);")
 
-        # Link para Cadastro
+        
         self.link_cadastrar = QLabel("<a href='#'>Cadastre-se</a>", self.frame)
         self.link_cadastrar.setGeometry(80, 70, 121, 16)
         font4 = QFont()
