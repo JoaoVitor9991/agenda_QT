@@ -134,12 +134,16 @@ class Ui_tela_add_contato(object):
 
     def salvar_contato(self):
         nome = self.line_nome.text()
-        contato = self.line_contato.text()
+        telefone = self.line_contato.text()
         email = self.line_email.text()
         data_nascimento = self.dateEdit_Data_nascimento.date().toString("yyyy-MM-dd")
         perfil_rede_social = self.line_perfil_rede_social.text()
         notas = self.textEdit_notas.toPlainText()
-        usuario_id = 1
+        
+        usuario_id = self.usuario_id
+
+        sucesso = salvar_contato_db(nome_contato, email, contato, data_nascimento)
+        
         if salvar_contato_db(nome, email, contato, data_nascimento, perfil_rede_social, notas, usuario_id):
             QMessageBox.information(None, "Sucesso", "Contato salvo com sucesso!")
             self.voltar_para_contatos(None, None)
