@@ -103,13 +103,23 @@ class Ui_Form(object):
         self.tela_editar_contato.show()
 
     def adicionar_contato(self, event):
+        """Abre a tela de adicionar contato sem criar um contato vazio."""
+
+        # Criando a janela para adicionar contato
         self.tela_add_contato = QMainWindow()
-        self.ui_add_contato = Ui_tela_add_contato(self.usuario_id)
+    
+        # Criando a interface da tela de adicionar contato (sem passar argumentos)
+        self.ui_add_contato = Ui_tela_add_contato()
+    
+        # Definindo o ID do usuário dentro do objeto da tela de adicionar contato
+        self.ui_add_contato.usuario_id = self.usuario_id  # ✅ Agora o usuário logado será salvo corretamente
+    
+        # Configurando e exibindo a tela
         self.ui_add_contato.setupUi(self.tela_add_contato, self)
         self.tela_add_contato.show()
- 
+
         event.accept()
- 
+
     def atualizar_contatos(self):
         # Remover todos os widgets antigos
         for label in self.labels_contatos:
