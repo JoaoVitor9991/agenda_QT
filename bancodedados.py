@@ -110,3 +110,20 @@ def salvar_contato(nome, email, telefone, data_nascimento, perfil_rede_social, n
             cursor.close()
         if conexao:
             conexao.close()
+
+
+def obter_contatos(usuario_id):
+    """Retorna os contatos salvos no banco de dados para o usuário logado."""
+    conexao = conectar()
+    if conexao is None:
+        return []
+
+    cursor = conexao.cursor(dictionary=True)
+    sql = "SELECT nome FROM contatos WHERE usuario_id = %s"
+    cursor.execute(sql, (usuario_id,))
+    contatos = cursor.fetchall()
+
+    cursor.close()
+    conexao.close()
+
+    return [contato["nome"] for contato in contatos]

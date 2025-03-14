@@ -5,7 +5,7 @@ from add_cntt import Ui_tela_add_contato
 from PySide6.QtCore import QSortFilterProxyModel, QStringListModel
 from editarcntt import Ui_Form as Ui_EditarContato  # Importando a tela de edição
 from bancodedados import salvar_contato
-
+from bancodedados import obter_contatos
 
 class Ui_Form(object):
     def __init__(self, usuario_id):
@@ -47,12 +47,12 @@ class Ui_Form(object):
         self.label_add.setPixmap(QPixmap(u"xx.png"))
         self.label_add.setScaledContents(True)
         self.label_add.mousePressEvent = self.adicionar_contato
-
+        
         self.line_buscar_cntt.textChanged.connect(self.filtrar_contatos)
-
+        self.carregar_contatos()
         self.retranslateUi(Form)
         QMetaObject.connectSlotsByName(Form)
-
+        
         # Conecta a ação de edição para todos os contatos
         for i, label_editar in enumerate(self.labels_editar):
             label_editar.mousePressEvent = lambda event, i=i: self.editar_contato(i)
@@ -159,11 +159,12 @@ class Ui_Form(object):
         # Reatribuir o evento de clique para cada ícone de edição
         for i, label_editar in enumerate(self.labels_editar):
             label_editar.mousePressEvent = lambda event, i=i: self.editar_contato(i)
+    
 
-if __name__ == "__main__":
-    app = QApplication([])
-    MainWindow = QMainWindow()
-    ui = Ui_Form()
-    ui.setupUi(MainWindow)
-    MainWindow.show()
-    app.exec()
+    def carregar_contatos(self):
+        """Carrega os contatos do banco de dados para a interface."""
+        self.contatos = obter_contatos(self.usuario_id)  # Obtém os contatos do banco
+    
+        self.atualizar_contatos()  # Atualiza a exibição na interface
+
+        
