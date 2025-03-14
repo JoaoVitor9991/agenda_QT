@@ -15,7 +15,7 @@ class Ui_Tela_Login(QWidget):
         self.setObjectName("Tela_Login")
         self.setFixedSize(800, 600)
 
-        # Frame principal
+        
         self.frame = QWidget(self)
         self.frame.setGeometry(0, 0, 800, 600)
         self.frame.setStyleSheet("background-color: rgb(255, 255, 255);")
