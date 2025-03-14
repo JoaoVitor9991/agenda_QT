@@ -4,7 +4,7 @@ from PySide6.QtGui import QFont, QPixmap
 from PySide6.QtWidgets import QApplication, QMainWindow, QLabel, QLineEdit, QPushButton, QWidget, QMessageBox
 from bancodedados import autenticar_usuario
 from contatos import Ui_Form  # Importa a tela de contatos
-from cadastro_proj import Ui_Tela_Cadastro  # Importa a tela de cadastro
+from cadastro_proj import Ui_Tela_Cadastro  
 
 class Ui_Tela_Login(QWidget):
     def __init__(self):
