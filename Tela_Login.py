@@ -126,13 +126,7 @@ class Ui_Tela_Login(object):
         else:
             print("Erro: A janela principal não foi inicializada corretamente.")
 
-    def open_contact_screen(self):
-        
-        from contatos import Ui_Form  
-        self.window = QMainWindow()  
-        self.ui = Ui_Form()  
-        self.ui.setupUi(self.window)  
-        self.window.show()  
+    
 
     def abrir_tela_contatos(self, usuario_id):
         """Abre a tela de contatos e passa o usuário logado."""

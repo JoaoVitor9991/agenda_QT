@@ -157,7 +157,7 @@ class Ui_Tela_Cadastro(object):
         self.pushButton_Voltar.setText(QCoreApplication.translate("Tela_Cadastro", u"Voltar", None))
         self.pushButton_Voltar.clicked.connect(self.voltar_para_login)  # Função para voltar ao login
 
-        Tela_Cadastro.setCentralWidget(self.centralwidget)
+        
         self.retranslateUi(Tela_Cadastro)
         QMetaObject.connectSlotsByName(Tela_Cadastro)
 
