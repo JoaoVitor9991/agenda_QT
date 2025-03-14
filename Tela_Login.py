@@ -78,7 +78,7 @@ class TelaLogin(QMainWindow):
         self.ui = Ui_Tela_Login()
         self.setCentralWidget(self.ui)
 
-        # Conectando botões
+        
         self.ui.pushButton_Entrar.clicked.connect(self.realizar_login)
         self.ui.link_cadastrar.mousePressEvent = self.abrir_tela_cadastro
 
