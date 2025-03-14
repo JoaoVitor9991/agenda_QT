@@ -29,7 +29,7 @@ class Ui_Tela_Login(QWidget):
         font1.setItalic(True)
         self.txt_Login.setFont(font1)
 
-        # Campo de E-mail
+        
         self.txt_email = QLabel("Email:", self.frame)
         self.txt_email.setGeometry(100, 340, 121, 16)
         font2 = QFont()
