@@ -131,7 +131,6 @@ class Ui_tela_add_contato(object):
 
     def retranslateUi(self, tela_add_contato):
         tela_add_contato.setWindowTitle("Adicionar Contato")
-
     def salvar_contato(self):
         nome = self.line_nome.text()
         telefone = self.line_contato.text()
@@ -139,16 +138,20 @@ class Ui_tela_add_contato(object):
         data_nascimento = self.dateEdit_Data_nascimento.date().toString("yyyy-MM-dd")
         perfil_rede_social = self.line_perfil_rede_social.text()
         notas = self.textEdit_notas.toPlainText()
-        
-        usuario_id = self.usuario_id
+    
+        usuario_id = getattr(self, "usuario_id", None)
+        if usuario_id is None:
+            QMessageBox.warning(None, "Erro", "ID do usuário não encontrado")
+            return
 
-        sucesso = salvar_contato_db(nome_contato, email, contato, data_nascimento)
-        
-        if salvar_contato_db(nome, email, contato, data_nascimento, perfil_rede_social, notas, usuario_id):
+    # 🔹 Chamada corrigida: agora com TODOS os argumentos
+        sucesso = salvar_contato_db(nome, email, telefone, data_nascimento, perfil_rede_social, notas, usuario_id)
+
+        if sucesso:
             QMessageBox.information(None, "Sucesso", "Contato salvo com sucesso!")
-            self.voltar_para_contatos(None, None)
+            self.voltar_para_contatos(None, None)  # 🔹 Mantém a função para fechar a tela
         else:
-            QMessageBox.warning(None, "Erro", "Falha ao salvar contato!")
+            QMessageBox.warning(None, "Erro", "Falha ao salvar o contato!")
 
     def voltar_para_contatos(self, tela_add_contato, main_window):
         if tela_add_contato:
