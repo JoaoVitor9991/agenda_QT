@@ -66,7 +66,7 @@ class Ui_Tela_Login(QWidget):
         self.link_cadastrar.setStyleSheet("color: rgb(0, 0, 255);")
         self.link_cadastrar.setOpenExternalLinks(False)
 
-        # Exibindo a imagem corretamente
+        
         self.label = QLabel(self.frame)
         self.label.setGeometry(QRect(215, 20, 341, 331))
         self.label.setPixmap(QPixmap("asc.png"))
