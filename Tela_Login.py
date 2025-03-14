@@ -98,7 +98,7 @@ class TelaLogin(QMainWindow):
     def abrir_tela_contatos(self, usuario_id):
         """Abre a tela de contatos e passa o usuário logado."""
         self.tela_contatos = QMainWindow()
-        self.ui_contatos = Ui_Form(usuario_id)  # ✅ Agora passamos o usuario_id corretamente
+        self.ui_contatos = Ui_Form(usuario_id)  
         self.ui_contatos.setupUi(self.tela_contatos)
         self.tela_contatos.show()
 
