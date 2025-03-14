@@ -10,7 +10,7 @@ from bancodedados import salvar_contato
 class Ui_Form(object):
     def __init__(self, usuario_id):
         self.usuario_id = usuario_id
-        
+
     def setupUi(self, Form):
         if not Form.objectName():
             Form.setObjectName(u"Form")
@@ -102,7 +102,7 @@ class Ui_Form(object):
         self.ui_editar_contato.setupUi(self.tela_editar_contato, contato_info)
         self.tela_editar_contato.show()
 
-    def _contato(self, event):
+    def adicionar_contato(self, event):
         nome_contato = "Novo Contato"  # Aqui pode ser um nome obtido da interface
         email = ""  # Adicione os valores reais coletados da interface
         telefone = ""
@@ -110,7 +110,7 @@ class Ui_Form(object):
         perfil_rede_social = ""
         notas = ""
     
-        usuario_id = 1  # Aqui você deve passar o ID do usuário logado
+        usuario_id = self.usuario_id  # Aqui você deve passar o ID do usuário logado
 
         # 🔹 Tenta salvar no banco de dados
         sucesso = salvar_contato(nome_contato, email, telefone, data_nascimento, perfil_rede_social, notas, usuario_id)
@@ -169,7 +169,7 @@ class Ui_Form(object):
 if __name__ == "__main__":
     app = QApplication([])
     MainWindow = QMainWindow()
-    ui = Ui_Form()
+    ui = Ui_Form(usuario_id)
     ui.setupUi(MainWindow)
     MainWindow.show()
     app.exec()
