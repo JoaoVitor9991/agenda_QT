@@ -109,23 +109,31 @@ class Ui_Form(object):
         data_nascimento = "2000-01-01"
         perfil_rede_social = ""
         notas = ""
-    
+   
         usuario_id = self.usuario_id  # Aqui você deve passar o ID do usuário logado
-
+ 
         # 🔹 Tenta salvar no banco de dados
         sucesso = salvar_contato(nome_contato, email, telefone, data_nascimento, perfil_rede_social, notas, usuario_id)
-
+ 
         if sucesso:
             print("✅ Contato salvo no banco de dados!")
-
+ 
             # Adiciona à lista local para exibição na interface
             self.contatos.append(nome_contato)
             self.atualizar_contatos()
             self.filtrar_contatos()
         else:
             print("❌ Erro ao salvar contato no banco de dados.")
-
+        self.tela_add_contato = QMainWindow()  # Cria uma nova janela
+        self.ui_add_contato = Ui_tela_add_contato()  # Cria a interface da tela de adicionar
+        self.ui_add_contato.setupUi(self.tela_add_contato, self)  # Passa a janela principal para a tela de adicionar contato
+ 
+        # Exibe a tela de adicionar o contato
+        self.tela_add_contato.show()
+               
+ 
         event.accept()
+ 
     def atualizar_contatos(self):
         # Remover todos os widgets antigos
         for label in self.labels_contatos:
@@ -169,7 +177,7 @@ class Ui_Form(object):
 if __name__ == "__main__":
     app = QApplication([])
     MainWindow = QMainWindow()
-    ui = Ui_Form(usuario_id)
+    ui = Ui_Form()
     ui.setupUi(MainWindow)
     MainWindow.show()
     app.exec()
