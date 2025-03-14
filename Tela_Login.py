@@ -85,7 +85,7 @@ class Ui_Tela_Login(object):
         self.label.setScaledContents(True)  
         self.label.raise_()  
 
-        Tela_Login.setCentralWidget(self.centralwidget)
+        
         self.retranslateUi(Tela_Login)
         QMetaObject.connectSlotsByName(Tela_Login)
 

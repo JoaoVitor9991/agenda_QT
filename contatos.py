@@ -4,10 +4,13 @@ from PySide6.QtWidgets import QApplication, QFrame, QLabel, QLineEdit, QListView
 from add_cntt import Ui_tela_add_contato
 from PySide6.QtCore import QSortFilterProxyModel, QStringListModel
 from editarcntt import Ui_Form as Ui_EditarContato  # Importando a tela de edição
-from bancodedados import salvar_usuario
+from bancodedados import salvar_contato
 
 
 class Ui_Form(object):
+    def __init__(self, usuario_id):
+        self.usuario_id = usuario_id
+        
     def setupUi(self, Form):
         if not Form.objectName():
             Form.setObjectName(u"Form")
@@ -99,7 +102,7 @@ class Ui_Form(object):
         self.ui_editar_contato.setupUi(self.tela_editar_contato, contato_info)
         self.tela_editar_contato.show()
 
-    def adicionar_contato(self, event):
+    def _contato(self, event):
         nome_contato = "Novo Contato"  # Aqui pode ser um nome obtido da interface
         email = ""  # Adicione os valores reais coletados da interface
         telefone = ""
@@ -110,7 +113,7 @@ class Ui_Form(object):
         usuario_id = 1  # Aqui você deve passar o ID do usuário logado
 
         # 🔹 Tenta salvar no banco de dados
-        sucesso = salvar_usuario(nome_contato, email, telefone, data_nascimento, perfil_rede_social, notas, usuario_id)
+        sucesso = salvar_contato(nome_contato, email, telefone, data_nascimento, perfil_rede_social, notas, usuario_id)
 
         if sucesso:
             print("✅ Contato salvo no banco de dados!")

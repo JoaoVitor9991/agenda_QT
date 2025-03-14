@@ -1,42 +1,50 @@
 import sys
-from PySide6.QtWidgets import QApplication, QMainWindow, QStackedWidget
+from PySide6.QtWidgets import QApplication, QMainWindow, QStackedWidget, QWidget
 from Tela_Login import Ui_Tela_Login
 from cadastro_proj import Ui_Tela_Cadastro
+
+class LoginScreen(QWidget):
+    def __init__(self, parent=None):
+        super().__init__(parent)
+        self.ui = Ui_Tela_Login()
+        self.ui.setupUi(self)  # ✅ Agora configura um QWidget corretamente
+
+class CadastroScreen(QWidget):
+    def __init__(self, parent=None):
+        super().__init__(parent)
+        self.ui = Ui_Tela_Cadastro()
+        self.ui.setupUi(self)  # ✅ Configurando um QWidget corretamente
 
 class MainWindow(QMainWindow):
     def __init__(self):
         super().__init__()
         self.setWindowTitle("Tela Principal")
 
-        
+        # Criando o QStackedWidget
         self.stacked_widget = QStackedWidget(self)
 
-        
-        self.login_window = Ui_Tela_Login()
-        self.cadastro_window = Ui_Tela_Cadastro()
+        # Criando as telas
+        self.login_window = LoginScreen()
+        self.cadastro_window = CadastroScreen()
 
-       
-        self.login_window.setupUi(self) 
-        self.cadastro_window.setupUi(self)  
+        # Adicionando ao QStackedWidget
+        self.stacked_widget.addWidget(self.login_window)
+        self.stacked_widget.addWidget(self.cadastro_window)
 
-        
-        self.stacked_widget.addWidget(self.login_window.centralwidget)
-        self.stacked_widget.addWidget(self.cadastro_window.centralwidget)
-
-        
+        # Definindo o QStackedWidget como central
         self.setCentralWidget(self.stacked_widget)
 
-        
-        self.login_window.abrir_tela_cadastro = self.show_cadastro_screen
-        self.cadastro_window.voltar_para_login = self.show_login_screen
+        # Conectando os botões para alternar entre as telas
+        self.login_window.ui.botao_cadastro.clicked.connect(self.show_cadastro_screen)
+        self.cadastro_window.ui.botao_voltar.clicked.connect(self.show_login_screen)
 
     def show_cadastro_screen(self):
         """Exibe a tela de cadastro."""
-        self.stacked_widget.setCurrentWidget(self.cadastro_window.centralwidget)
+        self.stacked_widget.setCurrentWidget(self.cadastro_window)
 
     def show_login_screen(self):
         """Exibe a tela de login."""
-        self.stacked_widget.setCurrentWidget(self.login_window.centralwidget)
+        self.stacked_widget.setCurrentWidget(self.login_window)
 
 if __name__ == "__main__":
     app = QApplication(sys.argv)  
