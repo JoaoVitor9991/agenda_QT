@@ -2,7 +2,7 @@ from PySide6.QtCore import QCoreApplication, QMetaObject
 from PySide6.QtGui import QFont, QPixmap
 from PySide6.QtWidgets import QApplication, QFrame, QLabel, QLineEdit, QMainWindow, QPushButton, QSizePolicy, QWidget
 
-# Tela de Cadastro
+
 class Ui_Tela_Cadastro(object):
     def setupUi(self, Tela_Cadastro):
         if not Tela_Cadastro.objectName():
