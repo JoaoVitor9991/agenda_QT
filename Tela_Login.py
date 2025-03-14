@@ -38,7 +38,7 @@ class Ui_Tela_Login(QWidget):
         self.line_email = QLineEdit(self.frame)
         self.line_email.setGeometry(100, 360, 551, 22)
 
-        # Campo de Senha
+        
         self.txt_senha = QLabel("Senha:", self.frame)
         self.txt_senha.setGeometry(100, 400, 121, 16)
         self.txt_senha.setFont(font2)
