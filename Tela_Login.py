@@ -46,7 +46,7 @@ class Ui_Tela_Login(QWidget):
         self.line_senha.setGeometry(100, 420, 551, 22)
         self.line_senha.setEchoMode(QLineEdit.EchoMode.Password)
 
-        # Botão de Login
+        
         self.pushButton_Entrar = QPushButton("Entrar", self.frame)
         self.pushButton_Entrar.setGeometry(320, 480, 131, 51)
         font3 = QFont()
