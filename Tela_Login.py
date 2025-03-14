@@ -20,7 +20,7 @@ class Ui_Tela_Login(QWidget):
         self.frame.setGeometry(0, 0, 800, 600)
         self.frame.setStyleSheet("background-color: rgb(255, 255, 255);")
 
-        # Título "Login"
+        
         self.txt_Login = QLabel("Login", self.frame)
         self.txt_Login.setGeometry(100, 30, 121, 31)
         font1 = QFont()
