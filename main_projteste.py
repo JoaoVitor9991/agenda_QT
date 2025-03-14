@@ -114,7 +114,7 @@ class Ui_Tela_Cadastro(object):
         self.txt_confrimar_senha.setText(QCoreApplication.translate("Tela_Cadastro", u"Confirmação da Senha:", None))
         self.pushButton_Cadastrar.setText(QCoreApplication.translate("Tela_Cadastro", u"Cadastrar", None))
 
-# Tela de Login
+
 class Ui_Tela_Login(object):
     def setupUi(self, Tela_Login):
         if not Tela_Login.objectName():
