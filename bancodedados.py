@@ -81,3 +81,32 @@ def autenticar_usuario(email, senha):
             cursor.close()
         if conexao:
             conexao.close()
+
+def salvar_contato(nome, email, telefone, data_nascimento, perfil_rede_social, notas, usuario_id):
+    """Salva um novo contato no banco de dados vinculado a um usuário."""
+    conexao = conectar()
+    if conexao is None:
+        print("⚠ Erro na conexão com o banco de dados.")
+        return False
+
+    cursor = None
+    try:
+        cursor = conexao.cursor()
+
+        sql = """INSERT INTO contatos (nome, email, telefone, data_nascimento, perfil_rede_social, notas, usuario_id)
+                 VALUES (%s, %s, %s, %s, %s, %s, %s)"""
+        valores = (nome, email, telefone, data_nascimento, perfil_rede_social, notas, usuario_id)
+
+        cursor.execute(sql, valores)
+        conexao.commit()
+
+        print("✅ Contato salvo com sucesso!")
+        return True
+    except mysql.connector.Error as e:
+        print(f"❌ Erro ao salvar contato: {e}")
+        return False
+    finally:
+        if cursor:
+            cursor.close()
+        if conexao:
+            conexao.close()
