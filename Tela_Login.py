@@ -96,11 +96,17 @@ class TelaLogin(QMainWindow):
             QMessageBox.warning(self, "Erro", "Email ou senha incorretos. Tente novamente.")
 
     def abrir_tela_contatos(self, usuario_id):
-        """Abre a tela de contatos e passa o usuário logado."""
+    
+        print(f"DEBUG: Abrindo tela de contatos para o usuário ID {usuario_id}")  # 🔍 Depuração
+
         self.tela_contatos = QMainWindow()
-        self.ui_contatos = Ui_Form(usuario_id)  
+        self.ui_contatos = Ui_Form(usuario_id)
         self.ui_contatos.setupUi(self.tela_contatos)
         self.tela_contatos.show()
+
+    # ✅ Atualiza a lista logo após abrir a tela
+        self.ui_contatos.carregar_contatos()
+
 
     def abrir_tela_cadastro(self, event):
         """Abre a tela de cadastro."""
@@ -108,6 +114,7 @@ class TelaLogin(QMainWindow):
         self.ui_cadastro = Ui_Tela_Cadastro()
         self.ui_cadastro.setupUi(self.tela_cadastro)
         self.tela_cadastro.show()
+    
 
 if __name__ == "__main__":
     app = QApplication(sys.argv)
