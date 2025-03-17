@@ -113,17 +113,17 @@ def salvar_contato(nome, email, telefone, data_nascimento, perfil_rede_social, n
 
 
 def obter_contatos(usuario_id):
-    """Retorna os contatos salvos no banco de dados para o usuário logado."""
+    """Retorna os contatos do usuário logado, incluindo nome e telefone."""
     conexao = conectar()
     if conexao is None:
         return []
 
     cursor = conexao.cursor(dictionary=True)
-    sql = "SELECT nome FROM contatos WHERE usuario_id = %s"
+    sql = "SELECT nome, telefone FROM contatos WHERE usuario_id = %s"
     cursor.execute(sql, (usuario_id,))
     contatos = cursor.fetchall()
 
     cursor.close()
     conexao.close()
 
-    return [contato["nome"] for contato in contatos]
+    return contatos  # ✅ Agora retorna uma lista de dicionários
