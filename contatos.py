@@ -161,10 +161,55 @@ class Ui_Form(object):
             label_editar.mousePressEvent = lambda event, i=i: self.editar_contato(i)
     
 
+    
     def carregar_contatos(self):
-        """Carrega os contatos do banco de dados para a interface."""
+        """Atualiza a lista de contatos na interface gráfica."""
         self.contatos = obter_contatos(self.usuario_id)  # Obtém os contatos do banco
     
-        self.atualizar_contatos()  # Atualiza a exibição na interface
+        # Remove widgets antigos para evitar duplicação
+        for label in self.labels_contatos:
+            label.deleteLater()
+        for line in self.lines:
+            line.deleteLater()
+        for label_editar in self.labels_editar:
+            label_editar.deleteLater()
+
+        self.labels_contatos.clear()
+        self.lines.clear()
+        self.labels_editar.clear()
+
+        # Adiciona os contatos novamente
+        y_offset = 90  # Posição inicial para exibir os contatos
+        for i, contato in enumerate(self.contatos):
+            nome = contato["nome"]
+            telefone = contato["telefone"]
+
+        # Criar um rótulo para exibir o nome e telefone do contato
+        label = QLabel(self.frame_principal_cntt)
+        label.setObjectName(f"label_{nome}")
+        label.setGeometry(QRect(40, y_offset, 200, 16))
+        label.setText(f"{nome} - {telefone}")
+        self.labels_contatos.append(label)
+
+        # Linha de separação entre os contatos
+        line = QFrame(self.frame_principal_cntt)
+        line.setObjectName(f"line_{nome}")
+        line.setGeometry(QRect(40, y_offset + 18, 550, 1))
+        line.setStyleSheet("background-color: black;")
+        self.lines.append(line)
+
+        # Ícone de edição ao lado do contato
+        label_editar = QLabel(self.frame_principal_cntt)
+        label_editar.setObjectName(f"label_editar{i + 1}")
+        label_editar.setGeometry(QRect(590, y_offset, 20, 20))
+        label_editar.setPixmap(QPixmap(u"yy.png"))
+        label_editar.setScaledContents(True)
+        self.labels_editar.append(label_editar)
+
+        y_offset += 40  # Move a próxima linha para baixo
+
+    # Reatribuir evento de clique para editar contatos
+        for i, label_editar in enumerate(self.labels_editar):
+            label_editar.mousePressEvent = lambda event, i=i: self.editar_contato(i)
 
         
