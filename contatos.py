@@ -57,7 +57,7 @@ class Ui_Form(object):
         
             label.setVisible(visivel)
         
-        # Controla a visibilidade do botão de edição correspondente
+        
             if i < len(self.labels_editar):
                 self.labels_editar[i].setVisible(visivel)
         
