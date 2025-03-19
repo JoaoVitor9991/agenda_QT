@@ -132,37 +132,34 @@ class Ui_tela_add_contato(object):
 
     def retranslateUi(self, tela_add_contato):
         tela_add_contato.setWindowTitle("Adicionar Contato")
-    def salvar_contato_db(nome, email, contato, data_nascimento, perfil_rede_social, notas, usuario_id=1):
-        conexao = conectar()
-        if conexao is None:
-            print("⚠ Erro na conexão com o banco de dados.")
-            return False
+    
 
-        cursor = None
-        try:
-            cursor = conexao.cursor()
+    def salvar_contato(self):
+        """Salva o contato no banco de dados."""
+        nome = self.line_nome.text()
+        telefone = self.line_contato.text()
+        email = self.line_email.text()
+        data_nascimento = self.dateEdit_Data_nascimento.date().toString("yyyy-MM-dd")
+        perfil_rede_social = self.line_perfil_rede_social.text()
+        notas = self.textEdit_notas.toPlainText()
 
-        # 🔍 Teste para verificar os dados que serão salvos
-            print(f"💾 Salvando no banco: Nome={nome}, Telefone={contato}, Email={email}")
+        usuario_id = getattr(self, "usuario_id", None)
+        if usuario_id is None:
+            QMessageBox.warning(None, "Erro", "ID do usuário não encontrado")
+            return
 
-            sql = "INSERT INTO contatos (nome, email, telefone, data_nascimento, perfil_rede_social, notas, usuario_id) VALUES (%s, %s, %s, %s, %s, %s, %s)"
-            valores = (nome, email, contato, data_nascimento, perfil_rede_social, notas, usuario_id)
+        print(f"📩 Enviando contato - Nome: {nome}, Telefone: {telefone}, Data de Nascimento: {data_nascimento}")
 
-            cursor.execute(sql, valores)
-            conexao.commit()
+        sucesso = salvar_contato_db(nome, email, telefone, data_nascimento, perfil_rede_social, notas, usuario_id)
 
-            print("✅ Contato salvo com sucesso!")
-            return True
-        except mysql.connector.Error as e:
-            print(f"❌ Erro ao salvar contato: {e}")
-            return False
-        finally:
-            if cursor:
-                cursor.close()
-            if conexao:
-                conexao.close()
-
-
+        if sucesso:
+            QMessageBox.information(None, "Sucesso", "Contato salvo com sucesso!")
+            if self.main_window and hasattr(self.main_window, "carregar_contatos"):
+                self.main_window.carregar_contatos()  # 🔄 Atualiza a lista de contatos na interface
+        
+            self.voltar_para_contatos(None, None)  # 🔹 Fecha a tela após salvar
+        else:
+            QMessageBox.warning(None, "Erro", "Falha ao salvar o contato!")
 
     def voltar_para_contatos(self, tela_add_contato, main_window):
         if tela_add_contato:
