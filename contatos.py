@@ -81,7 +81,7 @@ class Ui_Form(object):
     def carregar_contatos(self):
         self.contatos = obter_contatos(self.usuario_id)
 
-        # Limpa os contatos da interface
+        
         for label in self.labels_contatos:
             label.deleteLater()
         for line in self.lines:
