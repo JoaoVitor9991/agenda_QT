@@ -61,7 +61,7 @@ class Ui_Form(object):
             if i < len(self.labels_editar):
                 self.labels_editar[i].setVisible(visivel)
         
-        # Controla a visibilidade da linha divisória correspondente
+        
             if i < len(self.lines):
                 self.lines[i].setVisible(visivel)
     
