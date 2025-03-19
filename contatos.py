@@ -1,6 +1,6 @@
 from PySide6.QtCore import QMetaObject, QRect, Qt
 from PySide6.QtGui import QPixmap
-from PySide6.QtWidgets import QFrame, QLabel, QLineEdit, QMainWindow, QVBoxLayout, QWidget, QScrollArea
+from PySide6.QtWidgets import QFrame, QLabel, QLineEdit, QMainWindow, QVBoxLayout, QHBoxLayout, QWidget, QScrollArea
 from add_cntt import Ui_tela_add_contato
 from editarcntt import Ui_Form as Ui_EditarContato
 from bancodedados import obter_contatos
@@ -29,10 +29,11 @@ class Ui_Form(object):
         self.line_buscar_cntt.setPlaceholderText("Buscar Contatos...")
         self.scroll_layout.addWidget(self.line_buscar_cntt)
 
-        # Removido o QListView, pois não é usado
+        # Label para adicionar contato
         self.label_add = QLabel(self.scroll_widget)
         self.label_add.setPixmap(QPixmap("xx.png"))
         self.label_add.setScaledContents(True)
+        self.label_add.setFixedSize(32, 32)  # Tamanho fixo de 32x32 pixels
         self.label_add.mousePressEvent = self.adicionar_contato
         self.scroll_layout.addWidget(self.label_add)
 
@@ -61,7 +62,6 @@ class Ui_Form(object):
 
     def carregar_contatos(self):
         self.contatos = obter_contatos(self.usuario_id)
-        
 
         # Limpa os contatos da interface
         for label in self.labels_contatos:
@@ -78,37 +78,45 @@ class Ui_Form(object):
         # Adiciona os contatos na interface
         for i, contato in enumerate(self.contatos):
             nome = contato.get("nome", "Sem Nome")
-            telefone = str(contato.get("telefone", "Sem Telefone"))  # Usa "telefone"
+            telefone = str(contato.get("telefone", "Sem Telefone"))
+
+            # Criar um layout horizontal para cada contato
+            contato_layout = QHBoxLayout()
 
             # Label com nome e telefone
             label = QLabel(self.scroll_widget)
-            label.setObjectName(f"label_{nome}_{i}")  # Adiciona índice para evitar duplicatas
+            label.setObjectName(f"label_{nome}_{i}")
             label.setText(f"{nome} - {telefone}")
-            self.scroll_layout.addWidget(label)
+            contato_layout.addWidget(label)
             self.labels_contatos.append(label)
 
-            # Linha divisória
-            line = QFrame(self.scroll_widget)
-            line.setObjectName(f"line_{nome}_{i}")
-            line.setStyleSheet("background-color: black;")
-            self.scroll_layout.addWidget(line)
-            self.lines.append(line)
-
-            # Botão de edição
+            # Botão de edição ao lado do nome
             label_editar = QLabel(self.scroll_widget)
             label_editar.setObjectName(f"label_editar_{i}")
             label_editar.setPixmap(QPixmap("yy.png"))
             label_editar.setScaledContents(True)
+            label_editar.setFixedSize(24, 24)  # Tamanho fixo de 24x24 pixels
             label_editar.mousePressEvent = lambda event, idx=i: self.editar_contato(idx)
-            self.scroll_layout.addWidget(label_editar)
+            contato_layout.addWidget(label_editar)
             self.labels_editar.append(label_editar)
+
+            # Adiciona o layout horizontal ao layout principal
+            self.scroll_layout.addLayout(contato_layout)
+
+            # Linha divisória abaixo de cada contato
+            line = QFrame(self.scroll_widget)
+            line.setObjectName(f"line_{nome}_{i}")
+            line.setFrameShape(QFrame.HLine)
+            line.setStyleSheet("background-color: black;")
+            self.scroll_layout.addWidget(line)
+            self.lines.append(line)
 
     def editar_contato(self, i):
         contato = self.contatos[i]
         contato_info = {
-            "id": contato.get("id"),  # Inclui o ID para edição
+            "id": contato.get("id"),
             "nome": contato.get("nome", "Sem Nome"),
-            "telefone": contato.get("telefone", "Sem Telefone"),  # Corrige para "telefone"
+            "telefone": contato.get("telefone", "Sem Telefone"),
             "email": contato.get("email", "Sem Email"),
             "rede_social": contato.get("perfil_rede_social", "Sem Rede Social"),
             "notas": contato.get("notas", "Sem Notas")
@@ -117,5 +125,5 @@ class Ui_Form(object):
         self.tela_editar_contato = QMainWindow()
         self.ui_editar_contato = Ui_EditarContato()
         self.ui_editar_contato.setupUi(self.tela_editar_contato, contato_info)
-        self.tela_editar_contato.destroyed.connect(self.carregar_contatos)  # Atualiza ao fechar
+        self.tela_editar_contato.destroyed.connect(self.carregar_contatos)
         self.tela_editar_contato.show()
