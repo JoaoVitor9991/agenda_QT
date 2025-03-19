@@ -146,7 +146,7 @@ class Ui_tela_add_contato(object):
         usuario_id = getattr(self, "usuario_id", None)
         if usuario_id is None:
             QMessageBox.warning(None, "Erro", "ID do usuário não encontrado")
-        return
+            return
 
         print(f"📞 Telefone capturado na interface: '{telefone}'")  # ✅ Para debug
 
