@@ -49,7 +49,7 @@ class Ui_Form(object):
     def filtrar_contatos(self):
         texto_busca = self.line_buscar_cntt.text().lower()
     
-    # Itera sobre todos os contatos e seus widgets associados
+   
         for i, label in enumerate(self.labels_contatos):
         
             visivel = texto_busca in label.text().lower()
