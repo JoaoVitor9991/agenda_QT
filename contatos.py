@@ -98,7 +98,7 @@ class Ui_Form(object):
             nome = contato.get("nome", "Sem Nome")
             telefone = str(contato.get("telefone", "Sem Telefone"))
 
-            # Criar um layout horizontal para cada contato
+           
             contato_layout = QHBoxLayout()
 
             # Label com nome e telefone
