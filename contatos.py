@@ -63,7 +63,7 @@ class Ui_Form(object):
 
     def carregar_contatos(self):
         self.contatos = obter_contatos(self.usuario_id)  # Obtém os contatos do banco
-        print(f"📋 Contatos carregados: {self.contatos}")  # 🔍 Verificar se os números estão vindo do banco
+        
   
 
          
