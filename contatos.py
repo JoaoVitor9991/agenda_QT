@@ -101,7 +101,7 @@ class Ui_Form(object):
            
             contato_layout = QHBoxLayout()
 
-            # Label com nome e telefone
+           
             label = QLabel(self.scroll_widget)
             label.setObjectName(f"label_{nome}_{i}")
             label.setText(f"{nome} - {telefone}")
