@@ -113,7 +113,7 @@ class Ui_Form(object):
             label_editar.setObjectName(f"label_editar_{i}")
             label_editar.setPixmap(QPixmap("yy.png"))
             label_editar.setScaledContents(True)
-            label_editar.setFixedSize(24, 24)  # Tamanho fixo de 24x24 pixels
+            label_editar.setFixedSize(24, 24)  
             label_editar.mousePressEvent = lambda event, idx=i: self.editar_contato(idx)
             contato_layout.addWidget(label_editar)
             self.labels_editar.append(label_editar)
