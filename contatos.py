@@ -93,7 +93,7 @@ class Ui_Form(object):
         self.lines.clear()
         self.labels_editar.clear()
 
-        # Adiciona os contatos na interface
+       
         for i, contato in enumerate(self.contatos):
             nome = contato.get("nome", "Sem Nome")
             telefone = str(contato.get("telefone", "Sem Telefone"))
