@@ -54,7 +54,7 @@ class Ui_Form(object):
         
             visivel = texto_busca in label.text().lower()
         
-        # Controla a visibilidade do label do contato
+        
             label.setVisible(visivel)
         
         # Controla a visibilidade do botão de edição correspondente
