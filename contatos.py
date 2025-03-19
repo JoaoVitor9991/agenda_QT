@@ -108,7 +108,7 @@ class Ui_Form(object):
             contato_layout.addWidget(label)
             self.labels_contatos.append(label)
 
-            # Botão de edição ao lado do nome
+            
             label_editar = QLabel(self.scroll_widget)
             label_editar.setObjectName(f"label_editar_{i}")
             label_editar.setPixmap(QPixmap("yy.png"))
