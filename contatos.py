@@ -113,8 +113,8 @@ class Ui_Form(object):
 
     def editar_contato(self, i):
         contato = self.contatos[i]  # Obtém o contato correto
-        print(f"🛠 Editando contato: {contato}")  # 🔍 Verificar os dados do contato
-        print(f"📞 Telefone carregado: {contato.get('telefone')}")  # 🔍 Verificar o telefone
+        
+       
 
         contato_info = {
             "nome": contato.get("nome", "Sem Nome"),

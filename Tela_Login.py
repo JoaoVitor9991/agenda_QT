@@ -97,7 +97,7 @@ class TelaLogin(QMainWindow):
 
     def abrir_tela_contatos(self, usuario_id):
     
-        print(f"DEBUG: Abrindo tela de contatos para o usuário ID {usuario_id}")  # 🔍 Depuração
+       
 
         self.tela_contatos = QMainWindow()
         self.ui_contatos = Ui_Form(usuario_id)
