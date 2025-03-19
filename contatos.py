@@ -65,7 +65,7 @@ class Ui_Form(object):
             if i < len(self.lines):
                 self.lines[i].setVisible(visivel)
     
-    # Força a atualização do layout da scroll area
+    
         self.scroll_widget.adjustSize()
         self.scroll_area.update()
 
