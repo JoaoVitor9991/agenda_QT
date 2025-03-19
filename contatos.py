@@ -48,8 +48,26 @@ class Ui_Form(object):
 
     def filtrar_contatos(self):
         texto_busca = self.line_buscar_cntt.text().lower()
-        for label in self.labels_contatos:
-            label.setVisible(texto_busca in label.text().lower())
+    
+    # Itera sobre todos os contatos e seus widgets associados
+        for i, label in enumerate(self.labels_contatos):
+        
+            visivel = texto_busca in label.text().lower()
+        
+        # Controla a visibilidade do label do contato
+            label.setVisible(visivel)
+        
+        # Controla a visibilidade do botão de edição correspondente
+            if i < len(self.labels_editar):
+                self.labels_editar[i].setVisible(visivel)
+        
+        # Controla a visibilidade da linha divisória correspondente
+            if i < len(self.lines):
+                self.lines[i].setVisible(visivel)
+    
+    # Força a atualização do layout da scroll area
+        self.scroll_widget.adjustSize()
+        self.scroll_area.update()
 
     def adicionar_contato(self, event):
         self.tela_add_contato = QMainWindow()
