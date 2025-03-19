@@ -71,11 +71,18 @@ class Ui_Form(object):
         
         if contato_info:
             self.lineEdit_nome.setText(contato_info.get("nome", ""))
-            self.lineEdit_Cntt.setText(contato_info.get("telefone", ""))  # 📞 Aqui está a correção!
+            self.lineEdit_Cntt.setText(contato_info.get("contato", ""))
+
+
+            telefone = contato_info.get("contato", "")
+            telefone = telefone.strip() if telefone else ""
+            self.lineEdit_Cntt.setText(telefone) 
+
             self.lineEdit_Email.setText(contato_info.get("email", ""))
             self.lineEdit_RedeSocial.setText(contato_info.get("rede_social", ""))
             self.lineEdit_Notas.setText(contato_info.get("notas", ""))
-        
+
+            print(f"📞 Telefone carregado na edição: {contato_info.get('contato', 'Vazio')}")
         self.retranslateUi(Form)
         QMetaObject.connectSlotsByName(Form)
 

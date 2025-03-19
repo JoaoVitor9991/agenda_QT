@@ -93,9 +93,15 @@ def salvar_contato(nome, email, telefone, data_nascimento, perfil_rede_social, n
     try:
         cursor = conexao.cursor()
 
+        # 🔍 Verifica os dados antes de inserir
+        print(f"📩 Tentando salvar: Nome={nome}, Telefone={telefone}, Data={data_nascimento}")
+
         sql = """INSERT INTO contatos (nome, email, telefone, data_nascimento, perfil_rede_social, notas, usuario_id)
                  VALUES (%s, %s, %s, %s, %s, %s, %s)"""
         valores = (nome, email, telefone, data_nascimento, perfil_rede_social, notas, usuario_id)
+
+        print(f"📝 Query SQL: {sql}")
+        print(f"📊 Valores a serem inseridos: {valores}")  # 🔥 Veja se o telefone está aqui corretamente!
 
         cursor.execute(sql, valores)
         conexao.commit()
@@ -112,6 +118,7 @@ def salvar_contato(nome, email, telefone, data_nascimento, perfil_rede_social, n
             conexao.close()
 
 
+
 def obter_contatos(usuario_id):
     """Retorna apenas os contatos do usuário logado."""
     conexao = conectar()
@@ -119,14 +126,28 @@ def obter_contatos(usuario_id):
         return []
 
     cursor = conexao.cursor(dictionary=True)
-    
-    # 🔥 Filtramos apenas os contatos do usuário que fez login
-    sql = "SELECT nome, telefone, email, perfil_rede_social, notas FROM contatos WHERE usuario_id = %s"
+
+    # 🔥 Ajustando a consulta para garantir que a chave no dicionário tenha o nome correto
+    sql = """
+        SELECT 
+            nome, 
+            IFNULL(telefone, '') AS telefone,  -- ✅ Se for NULL, substitui por string vazia
+            email, 
+            perfil_rede_social, 
+            notas 
+        FROM contatos 
+        WHERE usuario_id = %s
+    """
     cursor.execute(sql, (usuario_id,))
     contatos = cursor.fetchall()
 
     cursor.close()
     conexao.close()
 
+    print(f"📋 Contatos carregados: {contatos}")  # 🔥 Debug para verificar os dados retornados
+
     return contatos  # Retorna os contatos do usuário autenticado
+
+
+    
 

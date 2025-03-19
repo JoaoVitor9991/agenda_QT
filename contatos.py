@@ -61,14 +61,13 @@ class Ui_Form(object):
         self.tela_add_contato.show()
         event.accept()
 
+   
     def carregar_contatos(self):
         self.contatos = obter_contatos(self.usuario_id)  # Obtém os contatos do banco
-        
-  
 
-         
+        print(f"📋 Contatos carregados: {self.contatos}")  # 🔍 Verificar se os contatos estão vindo corretamente
 
-    
+        # Limpa os contatos da interface
         for label in self.labels_contatos:
             label.deleteLater()
         for line in self.lines:
@@ -79,6 +78,16 @@ class Ui_Form(object):
         self.labels_contatos.clear()
         self.lines.clear()
         self.labels_editar.clear()
+
+    # 🔥 Adiciona os contatos na interface novamente
+        for contato in self.contatos:
+            nome = contato.get("nome", "Sem Nome")
+            telefone = str(contato.get("telefone", "Sem Telefone"))  # 🔥 Converte telefone para string para evitar None
+
+            label = QLabel(self.scroll_widget)
+            label.setText(f"{nome} - {telefone}")  # ✅ Agora exibe nome e telefone corretamente
+            self.scroll_layout.addWidget(label)
+            self.labels_contatos.append(label)
 
     # Adicionar contatos novamente
         y_offset = 90  

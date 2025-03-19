@@ -80,7 +80,7 @@ class Ui_tela_add_contato(object):
 
         self.line_contato = QLineEdit(self.frame)
         self.line_contato.setGeometry(50, 150, 700, 25)
-        self.line_contato.setInputMask("(99) 99999-9999")
+        #self.line_contato.setInputMask("(99) 99999-9999")
 
         self.txt_email = QLabel("Email:", self.frame)
         self.txt_email.setFont(font_label)
@@ -134,10 +134,10 @@ class Ui_tela_add_contato(object):
         tela_add_contato.setWindowTitle("Adicionar Contato")
     
 
+    
     def salvar_contato(self):
-        """Salva o contato no banco de dados."""
         nome = self.line_nome.text()
-        telefone = self.line_contato.text()
+        telefone = self.line_contato.text().strip()  # Certifique-se que está pegando corretamente
         email = self.line_email.text()
         data_nascimento = self.dateEdit_Data_nascimento.date().toString("yyyy-MM-dd")
         perfil_rede_social = self.line_perfil_rede_social.text()
@@ -146,7 +146,9 @@ class Ui_tela_add_contato(object):
         usuario_id = getattr(self, "usuario_id", None)
         if usuario_id is None:
             QMessageBox.warning(None, "Erro", "ID do usuário não encontrado")
-            return
+        return
+
+        print(f"📞 Telefone capturado na interface: '{telefone}'")  # ✅ Para debug
 
         print(f"📩 Enviando contato - Nome: {nome}, Telefone: {telefone}, Data de Nascimento: {data_nascimento}")
 
@@ -156,7 +158,6 @@ class Ui_tela_add_contato(object):
             QMessageBox.information(None, "Sucesso", "Contato salvo com sucesso!")
             if self.main_window and hasattr(self.main_window, "carregar_contatos"):
                 self.main_window.carregar_contatos()  # 🔄 Atualiza a lista de contatos na interface
-        
             self.voltar_para_contatos(None, None)  # 🔹 Fecha a tela após salvar
         else:
             QMessageBox.warning(None, "Erro", "Falha ao salvar o contato!")
