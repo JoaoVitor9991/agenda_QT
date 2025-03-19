@@ -118,7 +118,7 @@ class Ui_Form(object):
             contato_layout.addWidget(label_editar)
             self.labels_editar.append(label_editar)
 
-            # Adiciona o layout horizontal ao layout principal
+            
             self.scroll_layout.addLayout(contato_layout)
 
             # Linha divisória abaixo de cada contato
