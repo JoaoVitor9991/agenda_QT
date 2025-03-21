@@ -182,7 +182,7 @@ class Ui_Form(object):  # Mantive o nome como Ui_Form conforme o contatos.py esp
         """)
         self.btn_voltar.clicked.connect(Tela_Editar_Contato.close)
 
-        # Botão Deletar (opcional)
+        
         self.btn_deletar = QPushButton("Deletar", self.frame)
         self.btn_deletar.setGeometry(QRect(130, 510, 100, 40))
         self.btn_deletar.setFont(font3)
