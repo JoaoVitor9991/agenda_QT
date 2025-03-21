@@ -99,14 +99,16 @@ def obter_contatos(usuario_id):
                 IFNULL(telefone, '') AS telefone,
                 email, 
                 perfil_rede_social, 
-                notas 
+                notas,
+                data_nascimento
             FROM contatos 
             WHERE usuario_id = %s
         """
         cursor.execute(sql, (usuario_id,))
         contatos = cursor.fetchall()
         return contatos
-    except mysql.connector.Error:
+    except mysql.connector.Error as e:
+        print(f"Erro ao obter contatos: {e}")
         return []
     finally:
         if cursor:
