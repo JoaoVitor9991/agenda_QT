@@ -1,10 +1,11 @@
 from PySide6.QtCore import QCoreApplication, QMetaObject, QRect
 from PySide6.QtWidgets import (QApplication, QDateEdit, QFrame, QLabel,
-    QLineEdit, QPushButton, QMainWindow, QWidget, QMessageBox, QTextEdit)  # Adicionado QTextEdit
-from bancodedados import atualizar_contato, deletar_contato  # Adicionado deletar_contato
+    QLineEdit, QPushButton, QMainWindow, QWidget, QMessageBox, QTextEdit)
+from bancodedados import atualizar_contato, deletar_contato
 
 class Ui_Form(object):
-    def setupUi(self, Form, contato_info=None):
+    def setupUi(self, Form, contato_info=None, main_window=None):  # Adicionado main_window
+        self.main_window = main_window  # Armazena a referência da tela principal
         if not Form.objectName():
             Form.setObjectName("Form")
         Form.resize(988, 579)
@@ -99,6 +100,8 @@ class Ui_Form(object):
         sucesso = atualizar_contato(self.contato_id, nome, email, telefone, data_nascimento, perfil_rede_social, notas)
         if sucesso:
             QMessageBox.information(None, "Sucesso", "Contato atualizado com sucesso!")
+            if self.main_window and hasattr(self.main_window, "carregar_contatos"):
+                self.main_window.carregar_contatos()  # Atualiza a lista
             Form.close()
         else:
             QMessageBox.warning(None, "Erro", "Falha ao atualizar o contato.")
@@ -110,6 +113,8 @@ class Ui_Form(object):
             sucesso = deletar_contato(self.contato_id)
             if sucesso:
                 QMessageBox.information(None, "Sucesso", "Contato deletado com sucesso!")
+                if self.main_window and hasattr(self.main_window, "carregar_contatos"):
+                    self.main_window.carregar_contatos()  # Atualiza a lista
                 self.frame_editarcntt.parent().close()  # Fecha a janela
             else:
                 QMessageBox.warning(None, "Erro", "Falha ao deletar o contato!")

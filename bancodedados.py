@@ -117,6 +117,29 @@ def salvar_contato(nome, email, telefone, data_nascimento, perfil_rede_social, n
         if conexao:
             conexao.close()
 
+
+def deletar_contato(contato_id):
+    conexao = conectar()
+    if conexao is None:
+        return False
+
+    cursor = None
+    try:
+        cursor = conexao.cursor()
+        sql = "DELETE FROM contatos WHERE id = %s"
+        cursor.execute(sql, (contato_id,))
+        conexao.commit()
+        return True
+    except mysql.connector.Error as e:
+        print(f"Erro ao deletar contato: {e}")
+        return False
+    finally:
+        if cursor:
+            cursor.close()
+        if conexao:
+            conexao.close()
+
+            
 def obter_contatos(usuario_id):
     conexao = conectar()
     if conexao is None:

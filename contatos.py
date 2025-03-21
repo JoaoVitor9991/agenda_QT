@@ -142,6 +142,6 @@ class Ui_Form(object):
 
         self.tela_editar_contato = QMainWindow()
         self.ui_editar_contato = Ui_EditarContato()
-        self.ui_editar_contato.setupUi(self.tela_editar_contato, contato_info)
+        self.ui_editar_contato.setupUi(self.tela_editar_contato, contato_info, self)
         self.tela_editar_contato.destroyed.connect(self.carregar_contatos)
         self.tela_editar_contato.show()
