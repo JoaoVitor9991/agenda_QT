@@ -2,45 +2,7 @@ import mysql.connector
 from PySide6.QtCore import QCoreApplication, QMetaObject
 from PySide6.QtGui import QFont
 from PySide6.QtWidgets import QApplication, QMainWindow, QPushButton, QWidget, QFrame, QLineEdit, QLabel, QDateEdit, QTextEdit, QMessageBox
-
-def conectar():
-    try:
-        conexao = mysql.connector.connect(
-            host="localhost",
-            user="root",
-            password="",
-            database="agenda"
-        )
-        return conexao
-    except mysql.connector.Error as e:
-        print(f"❌ Erro ao conectar ao MySQL: {e}")
-        return None
-
-def salvar_contato_db(nome, email, telefone, data_nascimento, perfil_rede_social, notas, usuario_id=1):
-    """Insere um novo contato no banco de dados."""
-    conexao = conectar()
-    if conexao is None:
-        print("⚠ Erro na conexão com o banco de dados.")
-        return False
-
-    cursor = None
-    try:
-        cursor = conexao.cursor()
-        print(f"📞 Salvando no banco - Nome: {nome}, Telefone: {telefone}, Data: {data_nascimento}")
-        sql = "INSERT INTO contatos (nome, email, telefone, data_nascimento, perfil_rede_social, notas, usuario_id) VALUES (%s, %s, %s, %s, %s, %s, %s)"
-        valores = (nome, email, telefone, data_nascimento, perfil_rede_social, notas, usuario_id)
-        cursor.execute(sql, valores)
-        conexao.commit()
-        print("✅ Contato salvo com sucesso!")
-        return True
-    except mysql.connector.Error as e:
-        print(f"❌ Erro ao salvar contato: {e}")
-        return False
-    finally:
-        if cursor:
-            cursor.close()
-        if conexao:
-            conexao.close()
+from bancodedados import salvar_contato as salvar_contato_db  # Import necessário
 
 class Ui_tela_add_contato(object):
     def setupUi(self, tela_add_contato, main_window):
@@ -128,24 +90,23 @@ class Ui_tela_add_contato(object):
 
     def salvar_contato(self):
         nome = self.line_nome.text()
-        telefone = self.line_contato.text().strip()  # Ajustado para "telefone"
+        telefone = self.line_contato.text().strip()
         email = self.line_email.text()
         data_nascimento = self.dateEdit_Data_nascimento.date().toString("yyyy-MM-dd")
         perfil_rede_social = self.line_perfil_rede_social.text()
         notas = self.textEdit_notas.toPlainText()
 
         usuario_id = getattr(self, "usuario_id", None)
+        print(f"🔍 Usuario ID: {usuario_id}")
         if usuario_id is None:
             QMessageBox.warning(None, "Erro", "ID do usuário não encontrado")
             return
 
-        
         sucesso = salvar_contato_db(nome, email, telefone, data_nascimento, perfil_rede_social, notas, usuario_id)
-
         if sucesso:
             QMessageBox.information(None, "Sucesso", "Contato salvo com sucesso!")
             if self.main_window and hasattr(self.main_window, "carregar_contatos"):
-                self.main_window.carregar_contatos()  # Atualiza a lista na tela principal
+                self.main_window.carregar_contatos()
             self.voltar_para_contatos(None, None)
         else:
             QMessageBox.warning(None, "Erro", "Falha ao salvar o contato!")

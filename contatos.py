@@ -1,9 +1,10 @@
 from PySide6.QtCore import QMetaObject, QRect, Qt
 from PySide6.QtGui import QPixmap
-from PySide6.QtWidgets import QFrame, QLabel, QLineEdit, QMainWindow, QVBoxLayout, QHBoxLayout, QWidget, QScrollArea
+from PySide6.QtWidgets import QFrame, QLabel, QLineEdit, QMainWindow, QVBoxLayout, QHBoxLayout, QWidget, QScrollArea, QMessageBox
 from add_cntt import Ui_tela_add_contato
 from editarcntt import Ui_Form as Ui_EditarContato
 from bancodedados import obter_contatos
+from datetime import datetime
 
 class Ui_Form(object):
     def __init__(self, usuario_id):
@@ -44,8 +45,27 @@ class Ui_Form(object):
 
         self.line_buscar_cntt.textChanged.connect(self.filtrar_contatos)
         self.carregar_contatos()
+        self.verificar_aniversarios()
         QMetaObject.connectSlotsByName(Form)
+    
 
+    def verificar_aniversario(self):
+        hoje = datetime.now()
+        dia_atual = hoje.day
+        mes_atual = hoje.month
+
+        aniversariantes = []
+        for contato in self.contatos:
+            data_nascimento = contato.get("data_nascimento")
+            if data_nascimento:
+                if data_nascimento.day == dia_atual and data_nascimento.month == mes_atual:
+                    aniversariantes.append(contato["nome"])
+
+        if aniversariantes:
+            mensagem = "Hoje é aniversário de:\n" + "\n".join(aniversariantes)          
+            QMessageBox.information(None, "Aniversários", mensagem)  
+
+            
     def filtrar_contatos(self):
         texto_busca = self.line_buscar_cntt.text().lower()
     

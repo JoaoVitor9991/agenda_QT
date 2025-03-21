@@ -62,6 +62,39 @@ def autenticar_usuario(email, senha):
         if conexao:
             conexao.close()
 
+def criar_tabela_contatos():
+    conexao = conectar()
+    if conexao is None:
+        print("Erro ao conectar ao banco.")
+        return
+
+    cursor = None
+    try:
+        cursor = conexao.cursor()
+        sql = """
+            CREATE TABLE IF NOT EXISTS contatos (
+                id INT AUTO_INCREMENT PRIMARY KEY,
+                nome VARCHAR(255),
+                email VARCHAR(255),
+                telefone VARCHAR(20),
+                data_nascimento DATE,
+                perfil_rede_social VARCHAR(255),
+                notas TEXT,
+                usuario_id INT,
+                FOREIGN KEY (usuario_id) REFERENCES usuarios(id)
+            )
+        """
+        cursor.execute(sql)
+        conexao.commit()
+        print("Tabela 'contatos' criada ou já existe.")
+    except mysql.connector.Error as e:
+        print(f"Erro ao criar tabela: {e}")
+    finally:
+        if cursor:
+            cursor.close()
+        if conexao:
+            conexao.close()
+
 def salvar_contato(nome, email, telefone, data_nascimento, perfil_rede_social, notas, usuario_id):
     conexao = conectar()
     if conexao is None:
@@ -141,17 +174,56 @@ def atualizar_contato(contato_id, nome, email, telefone, data_nascimento, perfil
         if conexao:
             conexao.close()
 
+def verificar_contatos(usuario_id):
+    conexao = conectar()
+    if conexao is None:
+        print("Erro ao conectar ao banco.")
+        return
+
+    cursor = None
+    try:
+        cursor = conexao.cursor(dictionary=True)
+        sql = """
+            SELECT nome, data_nascimento 
+            FROM contatos 
+            WHERE usuario_id = %s
+        """
+        cursor.execute(sql, (usuario_id,))
+        contatos = cursor.fetchall()
+        if contatos:
+            print(f"Contatos do usuário {usuario_id}:")
+            for contato in contatos:
+                nome = contato['nome']
+                data = contato['data_nascimento']
+                print(f"Nome: {nome}, Data de Nascimento: {data}")
+        else:
+            print("Nenhum contato encontrado.")
+    except mysql.connector.Error as e:
+        print(f"Erro ao verificar contatos: {e}")
+    finally:
+        if cursor:
+            cursor.close()
+        if conexao:
+            conexao.close()
+
 if __name__ == "__main__":
+    # Criar a tabela (se ainda não existir)
+    criar_tabela_contatos()
+
+    # Salvar um contato de teste
     sucesso = salvar_contato(
-        nome="João Teste",
-        email="joao@teste.com",
-        telefone="(11) 98765-4321",
-        data_nascimento="1990-01-01",
-        perfil_rede_social="@joaoteste",
-        notas="Teste",
+        nome="Maria Teste",
+        email="maria@teste.com",
+        telefone="(11) 91234-5678",
+        data_nascimento="1995-05-15",  # Formato YYYY-MM-DD
+        perfil_rede_social="@maria",
+        notas="Teste de data",
         usuario_id=1
     )
     if sucesso:
-        contatos = obter_contatos(1)
-        for contato in contatos:
-            print(f"Nome: {contato['nome']}, Telefone: {contato['telefone']}")
+        print("Contato salvo com sucesso!")
+    else:
+        print("Erro ao salvar contato.")
+
+    # Verificar os contatos salvos
+    verificar_contatos(1)
