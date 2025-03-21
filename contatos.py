@@ -1,9 +1,10 @@
+import sys
 from PySide6.QtCore import QMetaObject, QRect, Qt
-from PySide6.QtGui import QPixmap
+from PySide6.QtGui import QPixmap, QFont
 from PySide6.QtWidgets import QFrame, QLabel, QLineEdit, QMainWindow, QVBoxLayout, QHBoxLayout, QWidget, QScrollArea, QMessageBox
 from add_cntt import Ui_tela_add_contato
 from editarcntt import Ui_Form as Ui_EditarContato
-from bancodedados import obter_contatos
+from bancodedados import obter_contatos, obter_foto_usuario
 from datetime import datetime
 
 class Ui_Form(object):
@@ -14,8 +15,33 @@ class Ui_Form(object):
         Form.setObjectName("Form")
         Form.resize(988, 579)
 
-        self.scroll_area = QScrollArea(Form)
-        self.scroll_area.setGeometry(QRect(170, 80, 651, 401))
+        # Widget central
+        self.centralwidget = QWidget(Form)
+        self.centralwidget.setStyleSheet("""
+            background: qlineargradient(x1:0, y1:0, x2:1, y2:1, 
+            stop:0 #ECF0F1, stop:1 #BDC3C7);
+        """)
+        Form.setCentralWidget(self.centralwidget)
+
+        # Foto de perfil no topo
+        self.label_foto = QLabel(self.centralwidget)
+        self.label_foto.setGeometry(QRect(444, 10, 100, 100))  # Centralizado no topo (988/2 - 50)
+        self.label_foto.setStyleSheet("border: 1px solid #BDC3C7; border-radius: 50px;")
+        self.label_foto.setAlignment(Qt.AlignCenter)
+        self.label_foto.setScaledContents(True)
+
+        # Carregar foto do banco
+        foto_data = obter_foto_usuario(self.usuario_id)
+        if foto_data:
+            pixmap = QPixmap()
+            pixmap.loadFromData(foto_data)
+            self.label_foto.setPixmap(pixmap)
+        else:
+            self.label_foto.setText("Sem Foto")
+
+        # Área de scroll para contatos
+        self.scroll_area = QScrollArea(self.centralwidget)
+        self.scroll_area.setGeometry(QRect(170, 120, 651, 401))  # Ajustado para dar espaço à foto
         self.scroll_area.setWidgetResizable(True)
 
         self.scroll_widget = QWidget()
@@ -43,7 +69,7 @@ class Ui_Form(object):
         self.lines = []
 
         self.line_buscar_cntt.textChanged.connect(self.filtrar_contatos)
-        self.carregar_contatos()  # Só carrega os contatos aqui, sem verificar aniversários
+        self.carregar_contatos()  # Carrega os contatos
         QMetaObject.connectSlotsByName(Form)
 
     def verificar_aniversarios(self):
@@ -145,3 +171,12 @@ class Ui_Form(object):
         self.ui_editar_contato.setupUi(self.tela_editar_contato, contato_info, self)
         self.tela_editar_contato.destroyed.connect(self.carregar_contatos)
         self.tela_editar_contato.show()
+
+if __name__ == "__main__":
+    from PySide6.QtWidgets import QApplication
+    app = QApplication(sys.argv)
+    Form = QMainWindow()
+    ui = Ui_Form(1)  # Exemplo com ID 1
+    ui.setupUi(Form)
+    Form.show()
+    sys.exit(app.exec())
