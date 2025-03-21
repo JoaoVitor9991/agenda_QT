@@ -1,7 +1,7 @@
 from PySide6.QtCore import QCoreApplication, QMetaObject, QRect
 from PySide6.QtWidgets import (QApplication, QDateEdit, QFrame, QLabel,
-    QLineEdit, QPushButton, QMainWindow, QWidget, QMessageBox)
-from bancodedados import atualizar_contato  # Certifique-se de que isso está importado
+    QLineEdit, QPushButton, QMainWindow, QWidget, QMessageBox, QTextEdit)  # Adicionado QTextEdit
+from bancodedados import atualizar_contato, deletar_contato  # Adicionado deletar_contato
 
 class Ui_Form(object):
     def setupUi(self, Form, contato_info=None):
@@ -50,8 +50,8 @@ class Ui_Form(object):
         self.lineEdit_RedeSocial = QLineEdit(self.frame_editarcntt)
         self.lineEdit_RedeSocial.setGeometry(QRect(20, 280, 600, 30))
 
-        self.lineEdit_Notas = QLineEdit(self.frame_editarcntt)
-        self.lineEdit_Notas.setGeometry(QRect(20, 340, 600, 80))
+        self.textEdit_Notas = QTextEdit(self.frame_editarcntt)
+        self.textEdit_Notas.setGeometry(QRect(20, 340, 600, 100))
 
         # Botões
         self.pushButton_voltar = QPushButton("Cancelar", self.frame_editarcntt)
@@ -67,7 +67,7 @@ class Ui_Form(object):
         self.pushButton_Apagar = QPushButton("Excluir Contato", self.frame_editarcntt)
         self.pushButton_Apagar.setGeometry(QRect(20, 430, 90, 30))
         self.pushButton_Apagar.setStyleSheet("background-color: transparent; border: none; color: rgb(255, 0, 0); font-weight: bold;")
-        self.pushButton_Apagar.clicked.connect(self.apagar_contato)  # Conexão correta
+        self.pushButton_Apagar.clicked.connect(self.apagar_contato)
 
         # Carregar dados do contato
         if contato_info:
@@ -76,8 +76,7 @@ class Ui_Form(object):
             self.lineEdit_Cntt.setText(contato_info.get("telefone", ""))
             self.lineEdit_Email.setText(contato_info.get("email", ""))
             self.lineEdit_RedeSocial.setText(contato_info.get("rede_social", ""))
-            self.lineEdit_Notas.setText(contato_info.get("notas", ""))
-            
+            self.textEdit_Notas.setPlainText(contato_info.get("notas", ""))
 
         self.retranslateUi(Form)
         QMetaObject.connectSlotsByName(Form)
@@ -95,7 +94,7 @@ class Ui_Form(object):
         email = self.lineEdit_Email.text()
         data_nascimento = self.data_Nasc.date().toString("yyyy-MM-dd")
         perfil_rede_social = self.lineEdit_RedeSocial.text()
-        notas = self.lineEdit_Notas.text()
+        notas = self.textEdit_Notas.toPlainText()
 
         sucesso = atualizar_contato(self.contato_id, nome, email, telefone, data_nascimento, perfil_rede_social, notas)
         if sucesso:
@@ -105,13 +104,15 @@ class Ui_Form(object):
             QMessageBox.warning(None, "Erro", "Falha ao atualizar o contato.")
 
     def apagar_contato(self):
-        # Apenas limpa os campos por enquanto; lógica de exclusão pode ser adicionada depois
-        self.lineEdit_nome.clear()
-        self.lineEdit_Cntt.clear()
-        self.lineEdit_Email.clear()
-        self.lineEdit_RedeSocial.clear()
-        self.lineEdit_Notas.clear()
-        self.data_Nasc.clear()
+        resposta = QMessageBox.question(None, "Confirmação", "Tem certeza que deseja deletar este contato?",
+                                        QMessageBox.Yes | QMessageBox.No, QMessageBox.No)
+        if resposta == QMessageBox.Yes:
+            sucesso = deletar_contato(self.contato_id)
+            if sucesso:
+                QMessageBox.information(None, "Sucesso", "Contato deletado com sucesso!")
+                self.frame_editarcntt.parent().close()  # Fecha a janela
+            else:
+                QMessageBox.warning(None, "Erro", "Falha ao deletar o contato!")
 
 if __name__ == "__main__":
     app = QApplication([])

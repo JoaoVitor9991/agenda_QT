@@ -30,11 +30,10 @@ class Ui_Form(object):
         self.line_buscar_cntt.setPlaceholderText("Buscar Contatos...")
         self.scroll_layout.addWidget(self.line_buscar_cntt)
 
-        # Label para adicionar contato
         self.label_add = QLabel(self.scroll_widget)
         self.label_add.setPixmap(QPixmap("xx.png"))
         self.label_add.setScaledContents(True)
-        self.label_add.setFixedSize(32, 32)  # Tamanho fixo de 32x32 pixels
+        self.label_add.setFixedSize(32, 32)
         self.label_add.mousePressEvent = self.adicionar_contato
         self.scroll_layout.addWidget(self.label_add)
 
@@ -44,12 +43,10 @@ class Ui_Form(object):
         self.lines = []
 
         self.line_buscar_cntt.textChanged.connect(self.filtrar_contatos)
-        self.carregar_contatos()
-        self.verificar_aniversarios()
+        self.carregar_contatos()  # Só carrega os contatos aqui, sem verificar aniversários
         QMetaObject.connectSlotsByName(Form)
-    
 
-    def verificar_aniversario(self):
+    def verificar_aniversarios(self):
         hoje = datetime.now()
         dia_atual = hoje.day
         mes_atual = hoje.month
@@ -57,35 +54,23 @@ class Ui_Form(object):
         aniversariantes = []
         for contato in self.contatos:
             data_nascimento = contato.get("data_nascimento")
-            if data_nascimento:
+            if data_nascimento:  # Verifica se a data existe
                 if data_nascimento.day == dia_atual and data_nascimento.month == mes_atual:
                     aniversariantes.append(contato["nome"])
 
         if aniversariantes:
-            mensagem = "Hoje é aniversário de:\n" + "\n".join(aniversariantes)          
-            QMessageBox.information(None, "Aniversários", mensagem)  
+            mensagem = "Hoje é aniversário de:\n" + "\n".join(aniversariantes)
+            QMessageBox.information(None, "Aniversários", mensagem)
 
-            
     def filtrar_contatos(self):
         texto_busca = self.line_buscar_cntt.text().lower()
-    
-   
         for i, label in enumerate(self.labels_contatos):
-        
             visivel = texto_busca in label.text().lower()
-        
-        
             label.setVisible(visivel)
-        
-        
             if i < len(self.labels_editar):
                 self.labels_editar[i].setVisible(visivel)
-        
-        
             if i < len(self.lines):
                 self.lines[i].setVisible(visivel)
-    
-    
         self.scroll_widget.adjustSize()
         self.scroll_area.update()
 
@@ -101,7 +86,6 @@ class Ui_Form(object):
     def carregar_contatos(self):
         self.contatos = obter_contatos(self.usuario_id)
 
-        
         for label in self.labels_contatos:
             label.deleteLater()
         for line in self.lines:
@@ -113,41 +97,37 @@ class Ui_Form(object):
         self.lines.clear()
         self.labels_editar.clear()
 
-       
         for i, contato in enumerate(self.contatos):
             nome = contato.get("nome", "Sem Nome")
             telefone = str(contato.get("telefone", "Sem Telefone"))
 
-           
             contato_layout = QHBoxLayout()
 
-           
             label = QLabel(self.scroll_widget)
             label.setObjectName(f"label_{nome}_{i}")
             label.setText(f"{nome} - {telefone}")
             contato_layout.addWidget(label)
             self.labels_contatos.append(label)
 
-            
             label_editar = QLabel(self.scroll_widget)
             label_editar.setObjectName(f"label_editar_{i}")
             label_editar.setPixmap(QPixmap("yy.png"))
             label_editar.setScaledContents(True)
-            label_editar.setFixedSize(24, 24)  
+            label_editar.setFixedSize(24, 24)
             label_editar.mousePressEvent = lambda event, idx=i: self.editar_contato(idx)
             contato_layout.addWidget(label_editar)
             self.labels_editar.append(label_editar)
 
-            
             self.scroll_layout.addLayout(contato_layout)
 
-            # Linha divisória abaixo de cada contato
             line = QFrame(self.scroll_widget)
             line.setObjectName(f"line_{nome}_{i}")
             line.setFrameShape(QFrame.HLine)
             line.setStyleSheet("background-color: black;")
             self.scroll_layout.addWidget(line)
             self.lines.append(line)
+
+        self.verificar_aniversarios()  # Verifica aniversários após carregar os contatos
 
     def editar_contato(self, i):
         contato = self.contatos[i]
