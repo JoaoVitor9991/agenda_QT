@@ -170,7 +170,7 @@ class Ui_Form(object):  # Mantive o nome como Ui_Form conforme o contatos.py esp
         """)
         self.btn_salvar.clicked.connect(self.salvar_alteracoes)
 
-        # Botão Voltar
+        
         self.btn_voltar = QPushButton("Voltar", self.frame)
         self.btn_voltar.setGeometry(QRect(240, 510, 100, 40))
         self.btn_voltar.setFont(font3)
