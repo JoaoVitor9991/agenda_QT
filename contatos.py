@@ -1,10 +1,10 @@
 import sys
 from PySide6.QtCore import QMetaObject, QRect, Qt
 from PySide6.QtGui import QPixmap, QFont
-from PySide6.QtWidgets import QFrame, QLabel, QLineEdit, QMainWindow, QVBoxLayout, QHBoxLayout, QWidget, QScrollArea, QMessageBox
+from PySide6.QtWidgets import QFrame, QLabel, QLineEdit, QMainWindow, QVBoxLayout, QHBoxLayout, QWidget, QScrollArea, QMessageBox, QPushButton, QFileDialog
 from add_cntt import Ui_tela_add_contato
 from editarcntt import Ui_Form as Ui_EditarContato
-from bancodedados import obter_contatos, obter_foto_usuario
+from bancodedados import obter_contatos, obter_foto_usuario, atualizar_foto_usuario
 from datetime import datetime
 
 class Ui_Form(object):
@@ -46,9 +46,38 @@ class Ui_Form(object):
         else:
             self.label_foto.setText("Sem Foto")
 
+        # Botão para trocar foto
+        self.btn_trocar_foto = QPushButton("Trocar Foto", self.centralwidget)
+        self.btn_trocar_foto.setGeometry(QRect(444, 110, 100, 30))  # Abaixo da foto
+        self.btn_trocar_foto.setFont(QFont("Segoe UI", 10, QFont.Bold))
+        self.btn_trocar_foto.setStyleSheet("""
+            QPushButton {
+                color: rgb(255, 255, 255);
+                background: qlineargradient(
+                    x1: 0, y1: 0, x2: 1, y2: 1,
+                    stop: 0 rgb(100, 150, 255),
+                    stop: 1 rgb(70, 100, 200)
+                );
+                border-radius: 5px;
+                padding: 5px;
+            }
+            QPushButton:hover {
+                background: qlineargradient(
+                    x1: 0, y1: 0, x2: 1, y2: 1,
+                    stop: 0 rgb(120, 170, 255),
+                    stop: 1 rgb(90, 120, 220)
+                );
+            }
+            QPushButton:pressed {
+                background: rgb(50, 80, 180);
+            }
+        """)
+        self.btn_trocar_foto.setCursor(Qt.PointingHandCursor)
+        self.btn_trocar_foto.clicked.connect(self.trocar_foto)
+
         # Área de scroll para contatos
         self.scroll_area = QScrollArea(self.centralwidget)
-        self.scroll_area.setGeometry(QRect(170, 120, 651, 401))  # Ajustado para dar espaço à foto
+        self.scroll_area.setGeometry(QRect(170, 150, 651, 371))  # Ajustado para dar espaço ao botão
         self.scroll_area.setWidgetResizable(True)
         self.scroll_area.setStyleSheet("""
             QScrollArea {
@@ -111,6 +140,23 @@ class Ui_Form(object):
         self.line_buscar_cntt.textChanged.connect(self.filtrar_contatos)
         self.carregar_contatos()  # Carrega os contatos
         QMetaObject.connectSlotsByName(Form)
+
+    def trocar_foto(self):
+        arquivo, _ = QFileDialog.getOpenFileName(self.centralwidget, "Selecionar Foto", "", "Imagens (*.png *.jpg *.jpeg)")
+        if arquivo:
+            # Carregar a nova foto na interface
+            pixmap = QPixmap(arquivo)
+            self.label_foto.setPixmap(pixmap)
+
+            # Ler os dados da nova foto
+            with open(arquivo, "rb") as f:
+                foto_data = f.read()
+
+            # Atualizar a foto no banco de dados
+            if atualizar_foto_usuario(self.usuario_id, foto_data):
+                QMessageBox.information(None, "Sucesso", "Foto atualizada com sucesso!")
+            else:
+                QMessageBox.warning(None, "Erro", "Erro ao atualizar a foto. Tente novamente.")
 
     def verificar_aniversarios(self):
         hoje = datetime.now()
