@@ -1,5 +1,6 @@
 import mysql.connector
 from datetime import datetime
+import sqlite3
 
 def conectar():
     try:
@@ -247,6 +248,20 @@ def deletar_contato(contato_id):
             cursor.close()
         if conexao:
             conexao.close()
+
+
+def atualizar_foto_usuario(usuario_id, foto_data):
+    try:
+        conn = sqlite3.connect('contatos.db')
+        cursor = conn.cursor()
+        cursor.execute("UPDATE usuarios SET foto = ? WHERE id = ?", (foto_data, usuario_id))
+        conn.commit()
+        return True
+    except sqlite3.Error as e:
+        print(f"Erro ao atualizar foto: {e}")
+        return False
+    finally:
+        conn.close()
 
 # Criar tabelas ao iniciar
 if __name__ == "__main__":
