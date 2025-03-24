@@ -251,17 +251,28 @@ def deletar_contato(contato_id):
 
 
 def atualizar_foto_usuario(usuario_id, foto_data):
+    conexao = conectar()
+    if conexao is None:
+        return False
+
+    cursor = None
     try:
-        conn = sqlite3.connect('contatos.db')
-        cursor = conn.cursor()
-        cursor.execute("UPDATE usuarios SET foto = ? WHERE id = ?", (foto_data, usuario_id))
-        conn.commit()
+        cursor = conexao.cursor()
+        sql = "UPDATE usuarios SET foto = %s WHERE id = %s"
+        cursor.execute(sql, (foto_data, usuario_id))
+        if cursor.rowcount == 0:
+            print(f"Usuário com ID {usuario_id} não encontrado.")
+            return False
+        conexao.commit()
         return True
-    except sqlite3.Error as e:
+    except mysql.connector.Error as e:
         print(f"Erro ao atualizar foto: {e}")
         return False
     finally:
-        conn.close()
+        if cursor:
+            cursor.close()
+        if conexao:
+            conexao.close()
 
 # Criar tabelas ao iniciar
 if __name__ == "__main__":
