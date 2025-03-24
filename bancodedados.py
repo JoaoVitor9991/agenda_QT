@@ -274,6 +274,7 @@ def atualizar_foto_usuario(usuario_id, foto_data):
         if conexao:
             conexao.close()
 
+
 # Criar tabelas ao iniciar
 if __name__ == "__main__":
     criar_tabela_usuarios()
