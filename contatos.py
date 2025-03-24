@@ -15,18 +15,25 @@ class Ui_Form(object):
         Form.setObjectName("Form")
         Form.resize(988, 579)
 
-        # Widget central
+        # Widget central com gradiente escuro
         self.centralwidget = QWidget(Form)
         self.centralwidget.setStyleSheet("""
-            background: qlineargradient(x1:0, y1:0, x2:1, y2:1, 
-            stop:0 #ECF0F1, stop:1 #BDC3C7);
+            background: qlineargradient(
+                x1: 0, y1: 0, x2: 1, y2: 1,
+                stop: 0 rgb(20, 20, 30),
+                stop: 1 rgb(50, 60, 80)
+            );
         """)
         Form.setCentralWidget(self.centralwidget)
 
         # Foto de perfil no topo
         self.label_foto = QLabel(self.centralwidget)
         self.label_foto.setGeometry(QRect(444, 10, 100, 100))  # Centralizado no topo (988/2 - 50)
-        self.label_foto.setStyleSheet("border: 1px solid #BDC3C7; border-radius: 50px;")
+        self.label_foto.setStyleSheet("""
+            border: 1px solid rgb(80, 80, 100);
+            border-radius: 50px;
+            background-color: rgb(40, 40, 50);
+        """)
         self.label_foto.setAlignment(Qt.AlignCenter)
         self.label_foto.setScaledContents(True)
 
@@ -43,23 +50,56 @@ class Ui_Form(object):
         self.scroll_area = QScrollArea(self.centralwidget)
         self.scroll_area.setGeometry(QRect(170, 120, 651, 401))  # Ajustado para dar espaço à foto
         self.scroll_area.setWidgetResizable(True)
+        self.scroll_area.setStyleSheet("""
+            QScrollArea {
+                background-color: rgb(40, 40, 50);
+                border: 1px solid rgb(80, 80, 100);
+                border-radius: 5px;
+            }
+        """)
 
         self.scroll_widget = QWidget()
         self.scroll_layout = QVBoxLayout(self.scroll_widget)
         self.scroll_area.setWidget(self.scroll_widget)
 
+        # Título "Contatos"
         self.label_Cntt = QLabel("Contatos", self.scroll_widget)
-        self.label_Cntt.setStyleSheet("font: 700 12pt 'Segoe Print';")
+        font_title = QFont("Segoe UI", 14, QFont.Bold)
+        self.label_Cntt.setFont(font_title)
+        self.label_Cntt.setStyleSheet("""
+            color: rgb(220, 220, 255);
+            background-color: transparent;
+            padding: 5px;
+        """)
         self.scroll_layout.addWidget(self.label_Cntt)
 
+        # Campo de busca
         self.line_buscar_cntt = QLineEdit(self.scroll_widget)
         self.line_buscar_cntt.setPlaceholderText("Buscar Contatos...")
+        self.line_buscar_cntt.setStyleSheet("""
+            QLineEdit {
+                background-color: rgb(40, 40, 50);
+                color: rgb(255, 255, 255);
+                border: 1px solid rgb(80, 80, 100);
+                border-radius: 5px;
+                padding: 5px;
+                font-family: Segoe UI;
+                font-size: 12pt;
+            }
+            QLineEdit:focus {
+                border: 1px solid rgb(100, 150, 255);
+            }
+        """)
         self.scroll_layout.addWidget(self.line_buscar_cntt)
 
+        # Ícone de adicionar
         self.label_add = QLabel(self.scroll_widget)
         self.label_add.setPixmap(QPixmap("xx.png"))
         self.label_add.setScaledContents(True)
         self.label_add.setFixedSize(32, 32)
+        self.label_add.setStyleSheet("""
+            background-color: transparent;
+        """)
         self.label_add.mousePressEvent = self.adicionar_contato
         self.scroll_layout.addWidget(self.label_add)
 
@@ -132,6 +172,13 @@ class Ui_Form(object):
             label = QLabel(self.scroll_widget)
             label.setObjectName(f"label_{nome}_{i}")
             label.setText(f"{nome} - {telefone}")
+            label.setStyleSheet("""
+                color: rgb(255, 255, 255);
+                background-color: transparent;
+                font-family: Segoe UI;
+                font-size: 12pt;
+                padding: 5px;
+            """)
             contato_layout.addWidget(label)
             self.labels_contatos.append(label)
 
@@ -140,6 +187,9 @@ class Ui_Form(object):
             label_editar.setPixmap(QPixmap("yy.png"))
             label_editar.setScaledContents(True)
             label_editar.setFixedSize(24, 24)
+            label_editar.setStyleSheet("""
+                background-color: transparent;
+            """)
             label_editar.mousePressEvent = lambda event, idx=i: self.editar_contato(idx)
             contato_layout.addWidget(label_editar)
             self.labels_editar.append(label_editar)
@@ -149,7 +199,7 @@ class Ui_Form(object):
             line = QFrame(self.scroll_widget)
             line.setObjectName(f"line_{nome}_{i}")
             line.setFrameShape(QFrame.HLine)
-            line.setStyleSheet("background-color: black;")
+            line.setStyleSheet("background-color: rgb(80, 80, 100);")
             self.scroll_layout.addWidget(line)
             self.lines.append(line)
 

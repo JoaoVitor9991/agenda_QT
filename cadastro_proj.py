@@ -9,10 +9,14 @@ class Ui_Tela_Cadastro(object):
             Tela_Cadastro.setObjectName("Tela_Cadastro")
         Tela_Cadastro.resize(800, 600)
 
+        # Widget central com gradiente escuro
         self.centralwidget = QWidget(Tela_Cadastro)
         self.centralwidget.setStyleSheet("""
-            background: qlineargradient(x1:0, y1:0, x2:1, y2:1, 
-            stop:0 #ECF0F1, stop:1 #BDC3C7);
+            background: qlineargradient(
+                x1: 0, y1: 0, x2: 1, y2: 1,
+                stop: 0 rgb(20, 20, 30),
+                stop: 1 rgb(50, 60, 80)
+            );
         """)
         Tela_Cadastro.setCentralWidget(self.centralwidget)
 
@@ -31,12 +35,19 @@ class Ui_Tela_Cadastro(object):
         self.frame.setGeometry(QRect(150, 50, 500, 650))  # Aumentei a altura do frame
         font = QFont("Segoe UI", 12)
         self.frame.setFont(font)
-        self.frame.setStyleSheet("background-color: #FFFFFF; border-radius: 10px;")
+        self.frame.setStyleSheet("""
+            background-color: rgb(40, 40, 50);
+            border-radius: 10px;
+        """)
 
         # Foto de perfil (inicialmente vazia)
         self.label_foto = QLabel(self.frame)
         self.label_foto.setGeometry(QRect(200, 20, 100, 100))
-        self.label_foto.setStyleSheet("border: 1px solid #BDC3C7; border-radius: 50px;")
+        self.label_foto.setStyleSheet("""
+            border: 1px solid rgb(80, 80, 100);
+            border-radius: 50px;
+            background-color: rgb(40, 40, 50);
+        """)
         self.label_foto.setAlignment(Qt.AlignCenter)
         self.label_foto.setScaledContents(True)
         self.foto_data = None
@@ -46,10 +57,28 @@ class Ui_Tela_Cadastro(object):
         self.btn_selecionar_foto.setGeometry(QRect(200, 130, 100, 30))
         self.btn_selecionar_foto.setFont(QFont("Segoe UI", 10, QFont.Bold))
         self.btn_selecionar_foto.setStyleSheet("""
-            background-color: #2C3E50;
-            color: white;
-            border-radius: 5px;
+            QPushButton {
+                color: rgb(255, 255, 255);
+                background: qlineargradient(
+                    x1: 0, y1: 0, x2: 1, y2: 1,
+                    stop: 0 rgb(100, 150, 255),
+                    stop: 1 rgb(70, 100, 200)
+                );
+                border-radius: 5px;
+                padding: 5px;
+            }
+            QPushButton:hover {
+                background: qlineargradient(
+                    x1: 0, y1: 0, x2: 1, y2: 1,
+                    stop: 0 rgb(120, 170, 255),
+                    stop: 1 rgb(90, 120, 220)
+                );
+            }
+            QPushButton:pressed {
+                background: rgb(50, 80, 180);
+            }
         """)
+        self.btn_selecionar_foto.setCursor(Qt.PointingHandCursor)
         self.btn_selecionar_foto.clicked.connect(self.selecionar_foto)
 
         # Título
@@ -57,7 +86,10 @@ class Ui_Tela_Cadastro(object):
         self.txt_Criar_Conta.setGeometry(QRect(0, 170, 500, 40))
         font1 = QFont("Segoe UI", 18, QFont.Bold)
         self.txt_Criar_Conta.setFont(font1)
-        self.txt_Criar_Conta.setStyleSheet("color: #2C3E50;")
+        self.txt_Criar_Conta.setStyleSheet("""
+            color: rgb(220, 220, 255);
+            background-color: transparent;
+        """)
         self.txt_Criar_Conta.setAlignment(Qt.AlignCenter)
 
         # Campo Nome
@@ -65,100 +97,130 @@ class Ui_Tela_Cadastro(object):
         self.txt_nome.setGeometry(QRect(50, 220, 100, 20))
         font2 = QFont("Segoe UI", 12)
         self.txt_nome.setFont(font2)
-        self.txt_nome.setStyleSheet("color: #34495E;")
+        self.txt_nome.setStyleSheet("color: rgb(200, 200, 200);")
         self.line_nome = QLineEdit(self.frame)
         self.line_nome.setGeometry(QRect(50, 240, 400, 40))
         self.line_nome.setStyleSheet("""
-            background-color: #FFFFFF;
-            border: 1px solid #BDC3C7;
-            border-radius: 5px;
-            padding: 5px;
-            font-family: Segoe UI;
-            font-size: 12pt;
+            QLineEdit {
+                background-color: rgb(40, 40, 50);
+                color: rgb(255, 255, 255);
+                border: 1px solid rgb(80, 80, 100);
+                border-radius: 5px;
+                padding: 5px;
+                font-family: Segoe UI;
+                font-size: 12pt;
+            }
+            QLineEdit:focus {
+                border: 1px solid rgb(100, 150, 255);
+            }
         """)
         self.asterisco_nome = QLabel("*", self.frame)
         self.asterisco_nome.setGeometry(QRect(150, 220, 10, 20))
         self.asterisco_nome.setFont(font2)
-        self.asterisco_nome.setStyleSheet("color: #E74C3C;")
+        self.asterisco_nome.setStyleSheet("color: rgb(255, 100, 100);")
 
         # Campo Email
         self.txt_email = QLabel("Email:", self.frame)
         self.txt_email.setGeometry(QRect(50, 290, 100, 20))
         self.txt_email.setFont(font2)
-        self.txt_email.setStyleSheet("color: #34495E;")
+        self.txt_email.setStyleSheet("color: rgb(200, 200, 200);")
         self.line_email = QLineEdit(self.frame)
         self.line_email.setGeometry(QRect(50, 310, 400, 40))
         self.line_email.setStyleSheet("""
-            background-color: #FFFFFF;
-            border: 1px solid #BDC3C7;
-            border-radius: 5px;
-            padding: 5px;
-            font-family: Segoe UI;
-            font-size: 12pt;
+            QLineEdit {
+                background-color: rgb(40, 40, 50);
+                color: rgb(255, 255, 255);
+                border: 1px solid rgb(80, 80, 100);
+                border-radius: 5px;
+                padding: 5px;
+                font-family: Segoe UI;
+                font-size: 12pt;
+            }
+            QLineEdit:focus {
+                border: 1px solid rgb(100, 150, 255);
+            }
         """)
         self.asterisco_email = QLabel("*", self.frame)
         self.asterisco_email.setGeometry(QRect(150, 290, 10, 20))
         self.asterisco_email.setFont(font2)
-        self.asterisco_email.setStyleSheet("color: #E74C3C;")
+        self.asterisco_email.setStyleSheet("color: rgb(255, 100, 100);")
 
         # Campo Contato
         self.txt_contato = QLabel("Contato:", self.frame)
         self.txt_contato.setGeometry(QRect(50, 360, 100, 20))
         self.txt_contato.setFont(font2)
-        self.txt_contato.setStyleSheet("color: #34495E;")
+        self.txt_contato.setStyleSheet("color: rgb(200, 200, 200);")
         self.line_contato = QLineEdit(self.frame)
         self.line_contato.setGeometry(QRect(50, 380, 400, 40))
         self.line_contato.setInputMask("(99) 99999-9999")
         self.line_contato.setStyleSheet("""
-            background-color: #FFFFFF;
-            border: 1px solid #BDC3C7;
-            border-radius: 5px;
-            padding: 5px;
-            font-family: Segoe UI;
-            font-size: 12pt;
+            QLineEdit {
+                background-color: rgb(40, 40, 50);
+                color: rgb(255, 255, 255);
+                border: 1px solid rgb(80, 80, 100);
+                border-radius: 5px;
+                padding: 5px;
+                font-family: Segoe UI;
+                font-size: 12pt;
+            }
+            QLineEdit:focus {
+                border: 1px solid rgb(100, 150, 255);
+            }
         """)
 
         # Campo Senha
         self.txt_senha = QLabel("Senha:", self.frame)
         self.txt_senha.setGeometry(QRect(50, 430, 100, 20))
         self.txt_senha.setFont(font2)
-        self.txt_senha.setStyleSheet("color: #34495E;")
+        self.txt_senha.setStyleSheet("color: rgb(200, 200, 200);")
         self.line_senha = QLineEdit(self.frame)
         self.line_senha.setGeometry(QRect(50, 450, 400, 40))
         self.line_senha.setEchoMode(QLineEdit.Password)
         self.line_senha.setStyleSheet("""
-            background-color: #FFFFFF;
-            border: 1px solid #BDC3C7;
-            border-radius: 5px;
-            padding: 5px;
-            font-family: Segoe UI;
-            font-size: 12pt;
+            QLineEdit {
+                background-color: rgb(40, 40, 50);
+                color: rgb(255, 255, 255);
+                border: 1px solid rgb(80, 80, 100);
+                border-radius: 5px;
+                padding: 5px;
+                font-family: Segoe UI;
+                font-size: 12pt;
+            }
+            QLineEdit:focus {
+                border: 1px solid rgb(100, 150, 255);
+            }
         """)
         self.asterisco_senha = QLabel("*", self.frame)
         self.asterisco_senha.setGeometry(QRect(150, 430, 10, 20))
         self.asterisco_senha.setFont(font2)
-        self.asterisco_senha.setStyleSheet("color: #E74C3C;")
+        self.asterisco_senha.setStyleSheet("color: rgb(255, 100, 100);")
 
         # Campo Confirmação de Senha
         self.txt_confrimar_senha = QLabel("Confirmar Senha:", self.frame)
         self.txt_confrimar_senha.setGeometry(QRect(50, 500, 150, 20))
         self.txt_confrimar_senha.setFont(font2)
-        self.txt_confrimar_senha.setStyleSheet("color: #34495E;")
+        self.txt_confrimar_senha.setStyleSheet("color: rgb(200, 200, 200);")
         self.line_Confirmar_senha = QLineEdit(self.frame)
         self.line_Confirmar_senha.setGeometry(QRect(50, 520, 400, 40))
         self.line_Confirmar_senha.setEchoMode(QLineEdit.Password)
         self.line_Confirmar_senha.setStyleSheet("""
-            background-color: #FFFFFF;
-            border: 1px solid #BDC3C7;
-            border-radius: 5px;
-            padding: 5px;
-            font-family: Segoe UI;
-            font-size: 12pt;
+            QLineEdit {
+                background-color: rgb(40, 40, 50);
+                color: rgb(255, 255, 255);
+                border: 1px solid rgb(80, 80, 100);
+                border-radius: 5px;
+                padding: 5px;
+                font-family: Segoe UI;
+                font-size: 12pt;
+            }
+            QLineEdit:focus {
+                border: 1px solid rgb(100, 150, 255);
+            }
         """)
         self.asterisco_conf_senha = QLabel("*", self.frame)
         self.asterisco_conf_senha.setGeometry(QRect(200, 500, 10, 20))
         self.asterisco_conf_senha.setFont(font2)
-        self.asterisco_conf_senha.setStyleSheet("color: #E74C3C;")
+        self.asterisco_conf_senha.setStyleSheet("color: rgb(255, 100, 100);")
 
         # Botão Cadastrar
         self.pushButton_Cadastrar = QPushButton("Cadastrar", self.frame)
@@ -166,10 +228,26 @@ class Ui_Tela_Cadastro(object):
         font3 = QFont("Segoe UI", 12, QFont.Bold)
         self.pushButton_Cadastrar.setFont(font3)
         self.pushButton_Cadastrar.setStyleSheet("""
-            background-color: #2C3E50;
-            color: white;
-            border-radius: 5px;
-            padding: 5px;
+            QPushButton {
+                color: rgb(255, 255, 255);
+                background: qlineargradient(
+                    x1: 0, y1: 0, x2: 1, y2: 1,
+                    stop: 0 rgb(100, 150, 255),
+                    stop: 1 rgb(70, 100, 200)
+                );
+                border-radius: 8px;
+                padding: 5px;
+            }
+            QPushButton:hover {
+                background: qlineargradient(
+                    x1: 0, y1: 0, x2: 1, y2: 1,
+                    stop: 0 rgb(120, 170, 255),
+                    stop: 1 rgb(90, 120, 220)
+                );
+            }
+            QPushButton:pressed {
+                background: rgb(50, 80, 180);
+            }
         """)
         self.pushButton_Cadastrar.setCursor(Qt.PointingHandCursor)
         self.pushButton_Cadastrar.clicked.connect(lambda: self.realizar_cadastro(Tela_Cadastro))
@@ -179,10 +257,26 @@ class Ui_Tela_Cadastro(object):
         self.pushButton_Voltar.setGeometry(QRect(240, 570, 100, 40))
         self.pushButton_Voltar.setFont(font3)
         self.pushButton_Voltar.setStyleSheet("""
-            background-color: #E74C3C;
-            color: white;
-            border-radius: 5px;
-            padding: 5px;
+            QPushButton {
+                color: rgb(255, 255, 255);
+                background: qlineargradient(
+                    x1: 0, y1: 0, x2: 1, y2: 1,
+                    stop: 0 rgb(255, 100, 100),
+                    stop: 1 rgb(200, 70, 70)
+                );
+                border-radius: 8px;
+                padding: 5px;
+            }
+            QPushButton:hover {
+                background: qlineargradient(
+                    x1: 0, y1: 0, x2: 1, y2: 1,
+                    stop: 0 rgb(255, 120, 120),
+                    stop: 1 rgb(220, 90, 90)
+                );
+            }
+            QPushButton:pressed {
+                background: rgb(180, 50, 50);
+            }
         """)
         self.pushButton_Voltar.setCursor(Qt.PointingHandCursor)
         self.pushButton_Voltar.clicked.connect(lambda: self.voltar_para_login(Tela_Cadastro))
@@ -191,11 +285,15 @@ class Ui_Tela_Cadastro(object):
         self.txt_jtemconta = QLabel("Já tem conta?", self.frame)
         self.txt_jtemconta.setGeometry(QRect(180, 620, 100, 20))
         self.txt_jtemconta.setFont(font2)
-        self.txt_jtemconta.setStyleSheet("color: #34495E;")
+        self.txt_jtemconta.setStyleSheet("color: rgb(200, 200, 200);")
         self.link_entrar = QLabel("<a href='#'>Entrar</a>", self.frame)
         self.link_entrar.setGeometry(QRect(280, 620, 100, 20))
         self.link_entrar.setFont(font2)
-        self.link_entrar.setStyleSheet("color: #2C3E50; text-decoration: underline;")
+        self.link_entrar.setStyleSheet("""
+            color: rgb(220, 220, 255);
+            text-decoration: underline;
+            background-color: transparent;
+        """)
         self.link_entrar.mousePressEvent = self.abrir_tela_login
 
         self.retranslateUi(Tela_Cadastro)
@@ -257,23 +355,153 @@ class Ui_Tela_Cadastro(object):
                 QMessageBox.warning(None, "Erro", "Erro ao cadastrar! Verifique os dados.")
 
     def limpar_bordas(self):
-        self.line_nome.setStyleSheet("background-color: #FFFFFF; border: 1px solid #BDC3C7; border-radius: 5px; padding: 5px; font-family: Segoe UI; font-size: 12pt;")
-        self.line_email.setStyleSheet("background-color: #FFFFFF; border: 1px solid #BDC3C7; border-radius: 5px; padding: 5px; font-family: Segoe UI; font-size: 12pt;")
-        self.line_contato.setStyleSheet("background-color: #FFFFFF; border: 1px solid #BDC3C7; border-radius: 5px; padding: 5px; font-family: Segoe UI; font-size: 12pt;")
-        self.line_senha.setStyleSheet("background-color: #FFFFFF; border: 1px solid #BDC3C7; border-radius: 5px; padding: 5px; font-family: Segoe UI; font-size: 12pt;")
-        self.line_Confirmar_senha.setStyleSheet("background-color: #FFFFFF; border: 1px solid #BDC3C7; border-radius: 5px; padding: 5px; font-family: Segoe UI; font-size: 12pt;")
+        self.line_nome.setStyleSheet("""
+            QLineEdit {
+                background-color: rgb(40, 40, 50);
+                color: rgb(255, 255, 255);
+                border: 1px solid rgb(80, 80, 100);
+                border-radius: 5px;
+                padding: 5px;
+                font-family: Segoe UI;
+                font-size: 12pt;
+            }
+            QLineEdit:focus {
+                border: 1px solid rgb(100, 150, 255);
+            }
+        """)
+        self.line_email.setStyleSheet("""
+            QLineEdit {
+                background-color: rgb(40, 40, 50);
+                color: rgb(255, 255, 255);
+                border: 1px solid rgb(80, 80, 100);
+                border-radius: 5px;
+                padding: 5px;
+                font-family: Segoe UI;
+                font-size: 12pt;
+            }
+            QLineEdit:focus {
+                border: 1px solid rgb(100, 150, 255);
+            }
+        """)
+        self.line_contato.setStyleSheet("""
+            QLineEdit {
+                background-color: rgb(40, 40, 50);
+                color: rgb(255, 255, 255);
+                border: 1px solid rgb(80, 80, 100);
+                border-radius: 5px;
+                padding: 5px;
+                font-family: Segoe UI;
+                font-size: 12pt;
+            }
+            QLineEdit:focus {
+                border: 1px solid rgb(100, 150, 255);
+            }
+        """)
+        self.line_senha.setStyleSheet("""
+            QLineEdit {
+                background-color: rgb(40, 40, 50);
+                color: rgb(255, 255, 255);
+                border: 1px solid rgb(80, 80, 100);
+                border-radius: 5px;
+                padding: 5px;
+                font-family: Segoe UI;
+                font-size: 12pt;
+            }
+            QLineEdit:focus {
+                border: 1px solid rgb(100, 150, 255);
+            }
+        """)
+        self.line_Confirmar_senha.setStyleSheet("""
+            QLineEdit {
+                background-color: rgb(40, 40, 50);
+                color: rgb(255, 255, 255);
+                border: 1px solid rgb(80, 80, 100);
+                border-radius: 5px;
+                padding: 5px;
+                font-family: Segoe UI;
+                font-size: 12pt;
+            }
+            QLineEdit:focus {
+                border: 1px solid rgb(100, 150, 255);
+            }
+        """)
 
     def validar_campos_vazios(self, nome, email, contato, senha, confirmar_senha):
         if nome == "":
-            self.line_nome.setStyleSheet("border: 1px solid #E74C3C; border-radius: 5px; padding: 5px;")
+            self.line_nome.setStyleSheet("""
+                QLineEdit {
+                    background-color: rgb(40, 40, 50);
+                    color: rgb(255, 255, 255);
+                    border: 1px solid rgb(255, 100, 100);
+                    border-radius: 5px;
+                    padding: 5px;
+                    font-family: Segoe UI;
+                    font-size: 12pt;
+                }
+                QLineEdit:focus {
+                    border: 1px solid rgb(100, 150, 255);
+                }
+            """)
         if email == "":
-            self.line_email.setStyleSheet("border: 1px solid #E74C3C; border-radius: 5px; padding: 5px;")
+            self.line_email.setStyleSheet("""
+                QLineEdit {
+                    background-color: rgb(40, 40, 50);
+                    color: rgb(255, 255, 255);
+                    border: 1px solid rgb(255, 100, 100);
+                    border-radius: 5px;
+                    padding: 5px;
+                    font-family: Segoe UI;
+                    font-size: 12pt;
+                }
+                QLineEdit:focus {
+                    border: 1px solid rgb(100, 150, 255);
+                }
+            """)
         if contato == "":
-            self.line_contato.setStyleSheet("border: 1px solid #E74C3C; border-radius: 5px; padding: 5px;")
+            self.line_contato.setStyleSheet("""
+                QLineEdit {
+                    background-color: rgb(40, 40, 50);
+                    color: rgb(255, 255, 255);
+                    border: 1px solid rgb(255, 100, 100);
+                    border-radius: 5px;
+                    padding: 5px;
+                    font-family: Segoe UI;
+                    font-size: 12pt;
+                }
+                QLineEdit:focus {
+                    border: 1px solid rgb(100, 150, 255);
+                }
+            """)
         if senha == "":
-            self.line_senha.setStyleSheet("border: 1px solid #E74C3C; border-radius: 5px; padding: 5px;")
+            self.line_senha.setStyleSheet("""
+                QLineEdit {
+                    background-color: rgb(40, 40, 50);
+                    color: rgb(255, 255, 255);
+                    border: 1px solid rgb(255, 100, 100);
+                    border-radius: 5px;
+                    padding: 5px;
+                    font-family: Segoe UI;
+                    font-size: 12pt;
+                }
+                QLineEdit:focus {
+                    border: 1px solid rgb(100, 150, 255);
+                }
+            """)
         if confirmar_senha == "":
-            self.line_Confirmar_senha.setStyleSheet("border: 1px solid #E74C3C; border-radius: 5px; padding: 5px;")
+            self.line_Confirmar_senha.setStyleSheet("""
+                QLineEdit {
+                    background-color: rgb(40, 40, 50);
+                    color: rgb(255, 255, 255);
+                    border: 1px solid rgb(255, 100, 100);
+                    border-radius: 5px;
+                    padding: 5px;
+                    font-family: Segoe UI;
+                    font-size: 12pt;
+                }
+                QLineEdit:focus {
+                    border: 1px solid rgb(100, 150, 255);
+                }
+            """)
 
 if __name__ == "__main__":
     app = QApplication([])

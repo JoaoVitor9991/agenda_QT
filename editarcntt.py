@@ -2,20 +2,23 @@ import sys
 from PySide6.QtCore import QRect, Qt
 from PySide6.QtGui import QFont
 from PySide6.QtWidgets import QApplication, QMainWindow, QWidget, QFrame, QLabel, QLineEdit, QPushButton, QMessageBox, QScrollArea
-from bancodedados import atualizar_contato, deletar_contato, conectar  # Adicionado 'conectar' aqui
+from bancodedados import atualizar_contato, deletar_contato, conectar
 
-class Ui_Form(object):  # Mantive o nome como Ui_Form conforme o contatos.py espera
+class Ui_Form(object):
     def setupUi(self, Tela_Editar_Contato, contato_info, tela_contatos):
         self.contato_info = contato_info
         self.tela_contatos = tela_contatos
         Tela_Editar_Contato.setObjectName("Tela_Editar_Contato")
         Tela_Editar_Contato.resize(800, 600)
 
-        # Widget central com gradiente
+        # Widget central com gradiente escuro
         self.centralwidget = QWidget(Tela_Editar_Contato)
         self.centralwidget.setStyleSheet("""
-            background: qlineargradient(x1:0, y1:0, x2:1, y2:1, 
-            stop:0 #ECF0F1, stop:1 #BDC3C7);
+            background: qlineargradient(
+                x1: 0, y1: 0, x2: 1, y2: 1,
+                stop: 0 rgb(20, 20, 30),
+                stop: 1 rgb(50, 60, 80)
+            );
         """)
         Tela_Editar_Contato.setCentralWidget(self.centralwidget)
 
@@ -28,10 +31,13 @@ class Ui_Form(object):  # Mantive o nome como Ui_Form conforme o contatos.py esp
         self.scroll_widget.setMinimumHeight(700)
         self.scroll_area.setWidget(self.scroll_widget)
 
-        # Frame central
+        # Frame central com fundo escuro
         self.frame = QFrame(self.scroll_widget)
         self.frame.setGeometry(QRect(150, 50, 500, 600))
-        self.frame.setStyleSheet("background-color: #FFFFFF; border-radius: 10px;")
+        self.frame.setStyleSheet("""
+            background-color: rgb(40, 40, 50);
+            border-radius: 10px;
+        """)
         font = QFont("Segoe UI", 12)
         self.frame.setFont(font)
 
@@ -40,7 +46,10 @@ class Ui_Form(object):  # Mantive o nome como Ui_Form conforme o contatos.py esp
         self.txt_editar_contato.setGeometry(QRect(0, 20, 500, 40))
         font1 = QFont("Segoe UI", 18, QFont.Bold)
         self.txt_editar_contato.setFont(font1)
-        self.txt_editar_contato.setStyleSheet("color: #2C3E50;")
+        self.txt_editar_contato.setStyleSheet("""
+            color: rgb(220, 220, 255);
+            background-color: transparent;
+        """)
         self.txt_editar_contato.setAlignment(Qt.AlignCenter)
 
         # Campo Nome
@@ -48,16 +57,22 @@ class Ui_Form(object):  # Mantive o nome como Ui_Form conforme o contatos.py esp
         self.txt_nome.setGeometry(QRect(50, 80, 100, 20))
         font2 = QFont("Segoe UI", 12)
         self.txt_nome.setFont(font2)
-        self.txt_nome.setStyleSheet("color: #34495E;")
+        self.txt_nome.setStyleSheet("color: rgb(200, 200, 200);")
         self.line_nome = QLineEdit(self.frame)
         self.line_nome.setGeometry(QRect(50, 100, 400, 40))
         self.line_nome.setStyleSheet("""
-            background-color: #FFFFFF;
-            border: 1px solid #BDC3C7;
-            border-radius: 5px;
-            padding: 5px;
-            font-family: Segoe UI;
-            font-size: 12pt;
+            QLineEdit {
+                background-color: rgb(40, 40, 50);
+                color: rgb(255, 255, 255);
+                border: 1px solid rgb(80, 80, 100);
+                border-radius: 5px;
+                padding: 5px;
+                font-family: Segoe UI;
+                font-size: 12pt;
+            }
+            QLineEdit:focus {
+                border: 1px solid rgb(100, 150, 255);
+            }
         """)
         self.line_nome.setText(self.contato_info["nome"])
 
@@ -65,17 +80,23 @@ class Ui_Form(object):  # Mantive o nome como Ui_Form conforme o contatos.py esp
         self.txt_telefone = QLabel("Telefone:", self.frame)
         self.txt_telefone.setGeometry(QRect(50, 150, 100, 20))
         self.txt_telefone.setFont(font2)
-        self.txt_telefone.setStyleSheet("color: #34495E;")
+        self.txt_telefone.setStyleSheet("color: rgb(200, 200, 200);")
         self.line_telefone = QLineEdit(self.frame)
         self.line_telefone.setGeometry(QRect(50, 170, 400, 40))
         self.line_telefone.setInputMask("(99) 99999-9999")
         self.line_telefone.setStyleSheet("""
-            background-color: #FFFFFF;
-            border: 1px solid #BDC3C7;
-            border-radius: 5px;
-            padding: 5px;
-            font-family: Segoe UI;
-            font-size: 12pt;
+            QLineEdit {
+                background-color: rgb(40, 40, 50);
+                color: rgb(255, 255, 255);
+                border: 1px solid rgb(80, 80, 100);
+                border-radius: 5px;
+                padding: 5px;
+                font-family: Segoe UI;
+                font-size: 12pt;
+            }
+            QLineEdit:focus {
+                border: 1px solid rgb(100, 150, 255);
+            }
         """)
         self.line_telefone.setText(self.contato_info["telefone"])
 
@@ -83,16 +104,22 @@ class Ui_Form(object):  # Mantive o nome como Ui_Form conforme o contatos.py esp
         self.txt_email = QLabel("Email:", self.frame)
         self.txt_email.setGeometry(QRect(50, 220, 100, 20))
         self.txt_email.setFont(font2)
-        self.txt_email.setStyleSheet("color: #34495E;")
+        self.txt_email.setStyleSheet("color: rgb(200, 200, 200);")
         self.line_email = QLineEdit(self.frame)
         self.line_email.setGeometry(QRect(50, 240, 400, 40))
         self.line_email.setStyleSheet("""
-            background-color: #FFFFFF;
-            border: 1px solid #BDC3C7;
-            border-radius: 5px;
-            padding: 5px;
-            font-family: Segoe UI;
-            font-size: 12pt;
+            QLineEdit {
+                background-color: rgb(40, 40, 50);
+                color: rgb(255, 255, 255);
+                border: 1px solid rgb(80, 80, 100);
+                border-radius: 5px;
+                padding: 5px;
+                font-family: Segoe UI;
+                font-size: 12pt;
+            }
+            QLineEdit:focus {
+                border: 1px solid rgb(100, 150, 255);
+            }
         """)
         self.line_email.setText(self.contato_info["email"])
 
@@ -100,16 +127,22 @@ class Ui_Form(object):  # Mantive o nome como Ui_Form conforme o contatos.py esp
         self.txt_rede_social = QLabel("Perfil Rede Social:", self.frame)
         self.txt_rede_social.setGeometry(QRect(50, 290, 150, 20))
         self.txt_rede_social.setFont(font2)
-        self.txt_rede_social.setStyleSheet("color: #34495E;")
+        self.txt_rede_social.setStyleSheet("color: rgb(200, 200, 200);")
         self.line_rede_social = QLineEdit(self.frame)
         self.line_rede_social.setGeometry(QRect(50, 310, 400, 40))
         self.line_rede_social.setStyleSheet("""
-            background-color: #FFFFFF;
-            border: 1px solid #BDC3C7;
-            border-radius: 5px;
-            padding: 5px;
-            font-family: Segoe UI;
-            font-size: 12pt;
+            QLineEdit {
+                background-color: rgb(40, 40, 50);
+                color: rgb(255, 255, 255);
+                border: 1px solid rgb(80, 80, 100);
+                border-radius: 5px;
+                padding: 5px;
+                font-family: Segoe UI;
+                font-size: 12pt;
+            }
+            QLineEdit:focus {
+                border: 1px solid rgb(100, 150, 255);
+            }
         """)
         self.line_rede_social.setText(self.contato_info["rede_social"])
 
@@ -117,16 +150,22 @@ class Ui_Form(object):  # Mantive o nome como Ui_Form conforme o contatos.py esp
         self.txt_notas = QLabel("Notas:", self.frame)
         self.txt_notas.setGeometry(QRect(50, 360, 100, 20))
         self.txt_notas.setFont(font2)
-        self.txt_notas.setStyleSheet("color: #34495E;")
+        self.txt_notas.setStyleSheet("color: rgb(200, 200, 200);")
         self.line_notas = QLineEdit(self.frame)
         self.line_notas.setGeometry(QRect(50, 380, 400, 40))
         self.line_notas.setStyleSheet("""
-            background-color: #FFFFFF;
-            border: 1px solid #BDC3C7;
-            border-radius: 5px;
-            padding: 5px;
-            font-family: Segoe UI;
-            font-size: 12pt;
+            QLineEdit {
+                background-color: rgb(40, 40, 50);
+                color: rgb(255, 255, 255);
+                border: 1px solid rgb(80, 80, 100);
+                border-radius: 5px;
+                padding: 5px;
+                font-family: Segoe UI;
+                font-size: 12pt;
+            }
+            QLineEdit:focus {
+                border: 1px solid rgb(100, 150, 255);
+            }
         """)
         self.line_notas.setText(self.contato_info["notas"])
 
@@ -134,17 +173,23 @@ class Ui_Form(object):  # Mantive o nome como Ui_Form conforme o contatos.py esp
         self.txt_data_nascimento = QLabel("Data de Nascimento:", self.frame)
         self.txt_data_nascimento.setGeometry(QRect(50, 430, 150, 20))
         self.txt_data_nascimento.setFont(font2)
-        self.txt_data_nascimento.setStyleSheet("color: #34495E;")
+        self.txt_data_nascimento.setStyleSheet("color: rgb(200, 200, 200);")
         self.line_data_nascimento = QLineEdit(self.frame)
         self.line_data_nascimento.setGeometry(QRect(50, 450, 400, 40))
         self.line_data_nascimento.setInputMask("9999-99-99")
         self.line_data_nascimento.setStyleSheet("""
-            background-color: #FFFFFF;
-            border: 1px solid #BDC3C7;
-            border-radius: 5px;
-            padding: 5px;
-            font-family: Segoe UI;
-            font-size: 12pt;
+            QLineEdit {
+                background-color: rgb(40, 40, 50);
+                color: rgb(255, 255, 255);
+                border: 1px solid rgb(80, 80, 100);
+                border-radius: 5px;
+                padding: 5px;
+                font-family: Segoe UI;
+                font-size: 12pt;
+            }
+            QLineEdit:focus {
+                border: 1px solid rgb(100, 150, 255);
+            }
         """)
         # Preencher data de nascimento (se existir no banco)
         conexao = conectar()
@@ -163,11 +208,28 @@ class Ui_Form(object):  # Mantive o nome como Ui_Form conforme o contatos.py esp
         font3 = QFont("Segoe UI", 12, QFont.Bold)
         self.btn_salvar.setFont(font3)
         self.btn_salvar.setStyleSheet("""
-            background-color: #2C3E50;
-            color: white;
-            border-radius: 5px;
-            padding: 5px;
+            QPushButton {
+                color: rgb(255, 255, 255);
+                background: qlineargradient(
+                    x1: 0, y1: 0, x2: 1, y2: 1,
+                    stop: 0 rgb(100, 150, 255),
+                    stop: 1 rgb(70, 100, 200)
+                );
+                border-radius: 8px;
+                padding: 5px;
+            }
+            QPushButton:hover {
+                background: qlineargradient(
+                    x1: 0, y1: 0, x2: 1, y2: 1,
+                    stop: 0 rgb(120, 170, 255),
+                    stop: 1 rgb(90, 120, 220)
+                );
+            }
+            QPushButton:pressed {
+                background: rgb(50, 80, 180);
+            }
         """)
+        self.btn_salvar.setCursor(Qt.PointingHandCursor)
         self.btn_salvar.clicked.connect(self.salvar_alteracoes)
 
         # Botão Voltar
@@ -175,23 +237,57 @@ class Ui_Form(object):  # Mantive o nome como Ui_Form conforme o contatos.py esp
         self.btn_voltar.setGeometry(QRect(240, 510, 100, 40))
         self.btn_voltar.setFont(font3)
         self.btn_voltar.setStyleSheet("""
-            background-color: #E74C3C;
-            color: white;
-            border-radius: 5px;
-            padding: 5px;
+            QPushButton {
+                color: rgb(255, 255, 255);
+                background: qlineargradient(
+                    x1: 0, y1: 0, x2: 1, y2: 1,
+                    stop: 0 rgb(255, 100, 100),
+                    stop: 1 rgb(200, 70, 70)
+                );
+                border-radius: 8px;
+                padding: 5px;
+            }
+            QPushButton:hover {
+                background: qlineargradient(
+                    x1: 0, y1: 0, x2: 1, y2: 1,
+                    stop: 0 rgb(255, 120, 120),
+                    stop: 1 rgb(220, 90, 90)
+                );
+            }
+            QPushButton:pressed {
+                background: rgb(180, 50, 50);
+            }
         """)
+        self.btn_voltar.setCursor(Qt.PointingHandCursor)
         self.btn_voltar.clicked.connect(Tela_Editar_Contato.close)
 
-        
+        # Botão Deletar
         self.btn_deletar = QPushButton("Deletar", self.frame)
         self.btn_deletar.setGeometry(QRect(130, 510, 100, 40))
         self.btn_deletar.setFont(font3)
         self.btn_deletar.setStyleSheet("""
-            background-color: #7F8C8D;
-            color: white;
-            border-radius: 5px;
-            padding: 5px;
+            QPushButton {
+                color: rgb(255, 255, 255);
+                background: qlineargradient(
+                    x1: 0, y1: 0, x2: 1, y2: 1,
+                    stop: 0 rgb(150, 150, 150),
+                    stop: 1 rgb(100, 100, 100)
+                );
+                border-radius: 8px;
+                padding: 5px;
+            }
+            QPushButton:hover {
+                background: qlineargradient(
+                    x1: 0, y1: 0, x2: 1, y2: 1,
+                    stop: 0 rgb(170, 170, 170),
+                    stop: 1 rgb(120, 120, 120)
+                );
+            }
+            QPushButton:pressed {
+                background: rgb(80, 80, 80);
+            }
         """)
+        self.btn_deletar.setCursor(Qt.PointingHandCursor)
         self.btn_deletar.clicked.connect(self.deletar_contato)
 
     def salvar_alteracoes(self):
