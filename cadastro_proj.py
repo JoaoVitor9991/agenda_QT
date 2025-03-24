@@ -294,7 +294,7 @@ class Ui_Tela_Cadastro(object):
             text-decoration: underline;
             background-color: transparent;
         """)
-        self.link_entrar.mousePressEvent = self.abrir_tela_login
+        self.link_entrar.mousePressEvent = lambda event: self.abrir_tela_login(Tela_Cadastro)
 
         self.retranslateUi(Tela_Cadastro)
         QMetaObject.connectSlotsByName(Tela_Cadastro)
@@ -320,18 +320,14 @@ class Ui_Tela_Cadastro(object):
             with open(arquivo, "rb") as f:
                 self.foto_data = f.read()
 
-    def abrir_tela_login(self, event):
-        from Tela_Login import Ui_Tela_Login
-        self.window = QMainWindow()
-        self.ui = Ui_Tela_Login()
-        self.ui.setupUi()
-        self.window.setCentralWidget(self.ui)
-        self.window.show()
-        self.frame.parent().parent().parent().close()  # Fecha a tela de cadastro
+    def abrir_tela_login(self, Tela_Cadastro):
+        from Tela_Login import TelaLogin
+        self.tela_login = TelaLogin()
+        self.tela_login.show()
+        Tela_Cadastro.close()  # Fecha a tela de cadastro
 
     def voltar_para_login(self, Tela_Cadastro):
-        self.abrir_tela_login(None)
-        Tela_Cadastro.close()
+        self.abrir_tela_login(Tela_Cadastro)
 
     def realizar_cadastro(self, Tela_Cadastro):
         nome = self.line_nome.text()
