@@ -168,13 +168,25 @@ class Ui_Form(object):
         self.date_nascimento = QDateEdit(self.scroll_widget)
         self.date_nascimento.setFixedHeight(40)
         self.date_nascimento.setCalendarPopup(True)
-        if contato_info.get("data_nascimento") and isinstance(contato_info["data_nascimento"], str):
+        # Definir uma data mínima para evitar a data padrão "01/01/2000"
+        self.date_nascimento.setMinimumDate(QDate(1900, 1, 1))
+        # Tornar o campo opcional (permitir "sem data")
+        self.date_nascimento.setSpecialValueText("Sem data")
+        self.date_nascimento.setMinimumDate(QDate(1, 1, 1))  # Permite "limpar" a data
+        # Definir a data com base no contato_info
+        data_nascimento = contato_info.get("data_nascimento", "")
+        if data_nascimento:
             try:
-                date = QDate.fromString(contato_info["data_nascimento"], "yyyy-MM-dd")
+                date = QDate.fromString(data_nascimento, "yyyy-MM-dd")
                 if date.isValid():
                     self.date_nascimento.setDate(date)
-            except ValueError:
-                print(f"Data de nascimento inválida: {contato_info['data_nascimento']}")
+                else:
+                    self.date_nascimento.setDate(QDate(1, 1, 1))  # "Sem data"
+            except ValueError as e:
+                print(f"Erro ao converter data de nascimento: {data_nascimento}, erro: {e}")
+                self.date_nascimento.setDate(QDate(1, 1, 1))  # "Sem data"
+        else:
+            self.date_nascimento.setDate(QDate(1, 1, 1))  # "Sem data"
         self.date_nascimento.setStyleSheet("""
             QDateEdit {
                 background-color: rgb(40, 40, 50);
@@ -314,7 +326,9 @@ class Ui_Form(object):
         nome = self.line_nome.text()
         email = self.line_email.text()
         telefone = self.line_telefone.text()
-        data_nascimento = self.date_nascimento.date().toString("yyyy-MM-dd")
+        # Verificar se a data é "Sem data" (QDate(1, 1, 1)) e tratar como None
+        data_nascimento = self.date_nascimento.date()
+        data_nascimento_str = None if data_nascimento == QDate(1, 1, 1) else data_nascimento.toString("yyyy-MM-dd")
         perfil_rede_social = self.line_rede_social.text()
         notas = self.line_notas.toPlainText()
 
@@ -336,7 +350,7 @@ class Ui_Form(object):
             """)
             return
 
-        if atualizar_contato(self.contato_info["id"], nome, email, telefone, data_nascimento, perfil_rede_social, notas):
+        if atualizar_contato(self.contato_info["id"], nome, email, telefone, data_nascimento_str, perfil_rede_social, notas):
             QMessageBox.information(None, "Sucesso", "Contato atualizado com sucesso!")
             self.tela_contatos.carregar_contatos()
             self.tela_editar_contato.close()  # Fecha a janela após salvar

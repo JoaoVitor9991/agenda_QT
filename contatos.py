@@ -167,6 +167,7 @@ class Ui_Form(object):
         for contato in self.contatos:
             data_nascimento = contato.get("data_nascimento")
             if data_nascimento:  # Verifica se a data existe
+                # data_nascimento é um objeto datetime.date, então podemos acessar .day e .month diretamente
                 if data_nascimento.day == dia_atual and data_nascimento.month == mes_atual:
                     aniversariantes.append(contato["nome"])
 
@@ -253,13 +254,18 @@ class Ui_Form(object):
 
     def editar_contato(self, i):
         contato = self.contatos[i]
+        # Converter data_nascimento (datetime.date) para string no formato "YYYY-MM-DD"
+        data_nascimento = contato.get("data_nascimento")
+        data_nascimento_str = data_nascimento.strftime("%Y-%m-%d") if data_nascimento else ""
+        
         contato_info = {
             "id": contato.get("id"),
             "nome": contato.get("nome", "Sem Nome"),
             "telefone": contato.get("telefone", "Sem Telefone"),
             "email": contato.get("email", "Sem Email"),
             "rede_social": contato.get("perfil_rede_social", "Sem Rede Social"),
-            "notas": contato.get("notas", "Sem Notas")
+            "notas": contato.get("notas", "Sem Notas"),
+            "data_nascimento": data_nascimento_str
         }
 
         self.tela_editar_contato = QMainWindow()
