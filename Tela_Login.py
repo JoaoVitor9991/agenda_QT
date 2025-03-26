@@ -1,6 +1,6 @@
 import sys
 from PySide6.QtCore import Qt
-from PySide6.QtGui import QFont, QPixmap
+from PySide6.QtGui import QFont, QPixmap, QIcon
 from PySide6.QtWidgets import QApplication, QMainWindow, QLabel, QLineEdit, QPushButton, QWidget, QMessageBox, QVBoxLayout
 from bancodedados import autenticar_usuario
 from contatos import Ui_Form
@@ -55,8 +55,8 @@ class Ui_Tela_Login(QWidget):
         font2 = QFont("Segoe UI", 12)
         self.txt_email.setFont(font2)
         self.txt_email.setStyleSheet("""
-            color: rgb(0, 0, 0);  # Letras pretas
-            background-color: transparent;  # Fundo transparente
+            color: rgb(0, 0, 0);
+            background-color: transparent;
         """)
         self.main_layout.addWidget(self.txt_email, alignment=Qt.AlignLeft)
 
@@ -69,7 +69,7 @@ class Ui_Tela_Login(QWidget):
                 border: 1px solid rgb(80, 80, 100);
                 border-radius: 5px;
                 padding: 5px;
-                font-family: Segoe UI;
+                font-family: "Segoe UI";
                 font-size: 12pt;
             }
             QLineEdit:focus {
@@ -82,8 +82,8 @@ class Ui_Tela_Login(QWidget):
         self.txt_senha = QLabel("Senha:")
         self.txt_senha.setFont(font2)
         self.txt_senha.setStyleSheet("""
-            color: rgb(0, 0, 0);  # Letras pretas
-            background-color: transparent;  # Fundo transparente
+            color: rgb(0, 0, 0);
+            background-color: transparent;
         """)
         self.main_layout.addWidget(self.txt_senha, alignment=Qt.AlignLeft)
 
@@ -97,7 +97,7 @@ class Ui_Tela_Login(QWidget):
                 border: 1px solid rgb(80, 80, 100);
                 border-radius: 5px;
                 padding: 5px;
-                font-family: Segoe UI;
+                font-family: "Segoe UI";
                 font-size: 12pt;
             }
             QLineEdit:focus {
@@ -145,7 +145,6 @@ class Ui_Tela_Login(QWidget):
                 color: rgb(255, 220, 100);
                 background-color: transparent;
                 border: none;
-                text-align: center;
             }
             QPushButton:hover {
                 color: rgb(255, 200, 80);
@@ -166,6 +165,9 @@ class TelaLogin(QMainWindow):
         self.setCentralWidget(self.ui)
         self.ui.pushButton_Entrar.clicked.connect(self.realizar_login)
         self.ui.link_cadastrar.clicked.connect(self.abrir_tela_cadastro)
+        # Definir título e ícone da janela principal
+        self.setWindowTitle("Agenda de Contatos")
+        self.setWindowIcon(QIcon("icone.ico"))  # Substitua "icone.ico" pelo caminho do seu ícone
 
     def realizar_login(self):
         email = self.ui.line_email.text()
@@ -187,6 +189,9 @@ class TelaLogin(QMainWindow):
         self.tela_contatos = QMainWindow()
         self.ui_contatos = Ui_Form(usuario_id)
         self.ui_contatos.setupUi(self.tela_contatos)
+        # Definir título e ícone para a janela de contatos
+        self.tela_contatos.setWindowTitle("Agenda de Contatos")
+        self.tela_contatos.setWindowIcon(QIcon("agenda.png"))  # Substitua pelo seu ícone
         self.tela_contatos.show()
         self.ui_contatos.carregar_contatos()
 
@@ -196,11 +201,15 @@ class TelaLogin(QMainWindow):
         self.ui_cadastro = Ui_Tela_Cadastro()
         self.ui_cadastro.setupUi(self.tela_cadastro)
         self.tela_cadastro.setCentralWidget(self.ui_cadastro.centralwidget)
+        # Definir título e ícone para a janela de cadastro
+        self.tela_cadastro.setWindowTitle("Agenda de Contatos")
+        self.tela_cadastro.setWindowIcon(QIcon("icone.ico"))  # Substitua pelo seu ícone
         self.tela_cadastro.show()
         self.close()
 
 if __name__ == "__main__":
     app = QApplication(sys.argv)
+    app.setStyle("Fusion")
     main_window = TelaLogin()
     main_window.show()
     sys.exit(app.exec())

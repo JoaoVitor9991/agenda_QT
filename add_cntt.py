@@ -1,5 +1,5 @@
 from PySide6.QtCore import Qt, QDate
-from PySide6.QtGui import QFont, QPixmap
+from PySide6.QtGui import QFont, QPixmap, QIcon
 from PySide6.QtWidgets import (QMainWindow, QWidget, QFrame, QLabel, QLineEdit, QPushButton, 
                                QDateEdit, QTextEdit, QMessageBox, QScrollArea, QVBoxLayout, 
                                QHBoxLayout, QFileDialog)
@@ -16,7 +16,8 @@ class Ui_tela_add_contato(object):
 
         tela_add_contato.setObjectName("tela_add_contato")
         tela_add_contato.resize(800, 600)
-
+        tela_add_contato.setWindowTitle("Agenda de Contatos")
+        tela_add_contato.setWindowIcon(QIcon("icone.ico"))
         self.centralwidget = QWidget(tela_add_contato)
         self.centralwidget.setStyleSheet("""
             background: qlineargradient(

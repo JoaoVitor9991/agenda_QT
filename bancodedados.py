@@ -54,8 +54,12 @@ def criar_tabela_contatos():
     cursor = None
     try:
         cursor = conexao.cursor()
+        # Dropar a tabela existente (cuidado: isso apaga todos os contatos existentes!)
+        cursor.execute("DROP TABLE IF EXISTS contatos")
+        
+        # Criar a tabela com todas as colunas necessárias
         sql = """
-            CREATE TABLE IF NOT EXISTS contatos (
+            CREATE TABLE contatos (
                 id INT AUTO_INCREMENT PRIMARY KEY,
                 usuario_id INT,
                 nome VARCHAR(255),
@@ -64,12 +68,13 @@ def criar_tabela_contatos():
                 perfil_rede_social VARCHAR(255),
                 notas TEXT,
                 data_nascimento DATE,
+                foto BLOB,
                 FOREIGN KEY (usuario_id) REFERENCES usuarios(id)
             )
         """
         cursor.execute(sql)
         conexao.commit()
-        print("Tabela 'contatos' criada ou já existe.")
+        print("Tabela 'contatos' recriada com sucesso.")
     except mysql.connector.Error as e:
         print(f"Erro ao criar tabela contatos: {e}")
     finally:
@@ -88,15 +93,20 @@ def salvar_usuario(nome, email, contato, senha, foto=None):
         cursor = conexao.cursor()
         cursor.execute("SELECT id FROM usuarios WHERE email = %s", (email,))
         if cursor.fetchone():
+            print(f"Erro: Email {email} já está registrado.")
             return False
 
         sql = "INSERT INTO usuarios (nome, email, contato, senha_hash, foto) VALUES (%s, %s, %s, SHA2(%s, 256), %s)"
         valores = (nome, email, contato, senha, foto)
         cursor.execute(sql, valores)
         conexao.commit()
+        print(f"Usuário {nome} salvo com sucesso.")
         return True
     except mysql.connector.Error as e:
         print(f"Erro ao salvar usuario: {e}")
+        return False
+    except Exception as e:
+        print(f"Erro inesperado ao salvar usuario: {e}")
         return False
     finally:
         if cursor:
@@ -147,7 +157,7 @@ def obter_foto_usuario(usuario_id):
         if conexao:
             conexao.close()
 
-def salvar_contato(nome, email, telefone, data_nascimento, perfil_rede_social, notas, usuario_id):
+def usuario_existe(usuario_id):
     conexao = conectar()
     if conexao is None:
         return False
@@ -155,14 +165,57 @@ def salvar_contato(nome, email, telefone, data_nascimento, perfil_rede_social, n
     cursor = None
     try:
         cursor = conexao.cursor()
-        sql = """INSERT INTO contatos (nome, email, telefone, data_nascimento, perfil_rede_social, notas, usuario_id)
-                 VALUES (%s, %s, %s, %s, %s, %s, %s)"""
-        valores = (nome, email, telefone, data_nascimento, perfil_rede_social, notas, usuario_id)
+        cursor.execute("SELECT id FROM usuarios WHERE id = %s", (usuario_id,))
+        return cursor.fetchone() is not None
+    except mysql.connector.Error as e:
+        print(f"Erro ao verificar usuario: {e}")
+        return False
+    finally:
+        if cursor:
+            cursor.close()
+        if conexao:
+            conexao.close()
+
+def validar_data_nascimento(data_nascimento):
+    if data_nascimento is None:
+        return None
+    try:
+        # Se data_nascimento for uma string, converte para o formato YYYY-MM-DD
+        if isinstance(data_nascimento, str) and data_nascimento.strip():
+            return datetime.strptime(data_nascimento, "%Y-%m-%d").date()
+        return data_nascimento
+    except ValueError as e:
+        print(f"Erro ao validar data de nascimento: {e}")
+        return None
+
+def salvar_contato(nome, email, telefone, data_nascimento, perfil_rede_social, notas, usuario_id, foto=None):
+    conexao = conectar()
+    if conexao is None:
+        print("Erro: Não foi possível conectar ao banco de dados.")
+        return False
+
+    cursor = None
+    try:
+        if not usuario_existe(usuario_id):
+            print(f"Erro: Usuário com ID {usuario_id} não existe.")
+            return False
+
+        data_nascimento = validar_data_nascimento(data_nascimento)
+        print(f"Tentando salvar contato com: nome={nome}, email={email}, telefone={telefone}, data_nascimento={data_nascimento}, usuario_id={usuario_id}, foto={'Sim' if foto else 'Não'}")
+        
+        cursor = conexao.cursor()
+        sql = """INSERT INTO contatos (nome, email, telefone, data_nascimento, perfil_rede_social, notas, usuario_id, foto)
+                 VALUES (%s, %s, %s, %s, %s, %s, %s, %s)"""
+        valores = (nome, email, telefone, data_nascimento, perfil_rede_social, notas, usuario_id, foto)
         cursor.execute(sql, valores)
         conexao.commit()
+        print(f"Contato {nome} salvo com sucesso.")
         return True
     except mysql.connector.Error as e:
-        print(f"Erro ao salvar contato: {e}")
+        print(f"Erro MySQL ao salvar contato: {e} (Erro código: {e.errno})")
+        return False
+    except Exception as e:
+        print(f"Erro inesperado ao salvar contato: {type(e).__name__} - {e}")
         return False
     finally:
         if cursor:
@@ -186,7 +239,8 @@ def obter_contatos(usuario_id):
                 email, 
                 perfil_rede_social, 
                 notas,
-                data_nascimento
+                data_nascimento,
+                foto
             FROM contatos 
             WHERE usuario_id = %s
         """
@@ -202,25 +256,32 @@ def obter_contatos(usuario_id):
         if conexao:
             conexao.close()
 
-def atualizar_contato(contato_id, nome, email, telefone, data_nascimento, perfil_rede_social, notas):
+def atualizar_contato(contato_id, nome, email, telefone, data_nascimento, perfil_rede_social, notas, foto=None):
     conexao = conectar()
     if conexao is None:
         return False
 
     cursor = None
     try:
+        data_nascimento = validar_data_nascimento(data_nascimento)
+        print(f"Tentando atualizar contato ID {contato_id} com: nome={nome}, email={email}, telefone={telefone}, data_nascimento={data_nascimento}")
+        
         cursor = conexao.cursor()
         sql = """
             UPDATE contatos 
-            SET nome=%s, email=%s, telefone=%s, data_nascimento=%s, perfil_rede_social=%s, notas=%s 
+            SET nome=%s, email=%s, telefone=%s, data_nascimento=%s, perfil_rede_social=%s, notas=%s, foto=%s 
             WHERE id=%s
         """
-        valores = (nome, email, telefone, data_nascimento, perfil_rede_social, notas, contato_id)
+        valores = (nome, email, telefone, data_nascimento, perfil_rede_social, notas, foto, contato_id)
         cursor.execute(sql, valores)
         conexao.commit()
+        print(f"Contato ID {contato_id} atualizado com sucesso.")
         return True
     except mysql.connector.Error as e:
-        print(f"Erro ao atualizar contato: {e}")
+        print(f"Erro MySQL ao atualizar contato: {e} (Erro código: {e.errno})")
+        return False
+    except Exception as e:
+        print(f"Erro inesperado ao atualizar contato: {type(e).__name__} - {e}")
         return False
     finally:
         if cursor:
@@ -239,6 +300,7 @@ def deletar_contato(contato_id):
         sql = "DELETE FROM contatos WHERE id = %s"
         cursor.execute(sql, (contato_id,))
         conexao.commit()
+        print(f"Contato ID {contato_id} deletado com sucesso.")
         return True
     except mysql.connector.Error as e:
         print(f"Erro ao deletar contato: {e}")
@@ -248,7 +310,6 @@ def deletar_contato(contato_id):
             cursor.close()
         if conexao:
             conexao.close()
-
 
 def atualizar_foto_usuario(usuario_id, foto_data):
     conexao = conectar()
@@ -264,6 +325,7 @@ def atualizar_foto_usuario(usuario_id, foto_data):
             print(f"Usuário com ID {usuario_id} não encontrado.")
             return False
         conexao.commit()
+        print(f"Foto do usuário ID {usuario_id} atualizada com sucesso.")
         return True
     except mysql.connector.Error as e:
         print(f"Erro ao atualizar foto: {e}")
@@ -274,6 +336,25 @@ def atualizar_foto_usuario(usuario_id, foto_data):
         if conexao:
             conexao.close()
 
+def obter_foto_contato(contato_id):
+    conexao = conectar()
+    if conexao is None:
+        return None
+
+    cursor = None
+    try:
+        cursor = conexao.cursor()
+        cursor.execute("SELECT foto FROM contatos WHERE id = %s", (contato_id,))
+        resultado = cursor.fetchone()
+        return resultado[0] if resultado else None
+    except mysql.connector.Error as e:
+        print(f"Erro ao obter foto do contato: {e}")
+        return None
+    finally:
+        if cursor:
+            cursor.close()
+        if conexao:
+            conexao.close()
 
 # Criar tabelas ao iniciar
 if __name__ == "__main__":
