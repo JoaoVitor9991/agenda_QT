@@ -203,7 +203,7 @@ class TelaLogin(QMainWindow):
         self.tela_cadastro.setCentralWidget(self.ui_cadastro.centralwidget)
         # Definir título e ícone para a janela de cadastro
         self.tela_cadastro.setWindowTitle("Agenda de Contatos")
-        self.tela_cadastro.setWindowIcon(QIcon("icone.ico"))  # Substitua pelo seu ícone
+        self.tela_cadastro.setWindowIcon(QIcon("agenda.png"))  # Substitua pelo seu ícone
         self.tela_cadastro.show()
         self.close()
 

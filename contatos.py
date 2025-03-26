@@ -16,7 +16,8 @@ class Ui_Form(object):
     def setupUi(self, Form):
         Form.setObjectName("Form")
         Form.resize(988, 579)
-
+        Form.setWindowTitle("Agenda de Contatos")
+        Form.setWindowIcon(QIcon("agenda.png"))
         # Widget central com gradiente escuro
         self.centralwidget = QWidget(Form)
         self.centralwidget.setStyleSheet("""
@@ -212,8 +213,13 @@ class Ui_Form(object):
         event.accept()
 
     def carregar_contatos(self):
+        # Obter contatos do banco
         self.contatos = obter_contatos(self.usuario_id)
+    
+    # Debugging: verificar se há duplicatas nos dados brutos
+        print("Contatos carregados do banco:", [(c["id"], c["nome"]) for c in self.contatos])
 
+    # Limpar widgets antigos completamente
         for label in self.labels_contatos:
             label.deleteLater()
         for line in self.lines:
@@ -225,11 +231,12 @@ class Ui_Form(object):
         self.lines.clear()
         self.labels_editar.clear()
 
+        # Adicionar contatos à interface
         for i, contato in enumerate(self.contatos):
             nome = contato.get("nome", "Sem Nome")
             telefone = str(contato.get("telefone", "Sem Telefone"))
 
-            # Layout para cada contato (foto + nome/telefone + botão editar)
+            # Layout para cada contato
             contato_layout = QHBoxLayout()
             contato_layout.setAlignment(Qt.AlignLeft)
             contato_layout.setSpacing(10)
@@ -241,16 +248,23 @@ class Ui_Form(object):
                 border: 1px solid rgb(80, 80, 100);
                 border-radius: 20px;
                 background-color: rgb(40, 40, 50);
-            """)
+        """)
             label_foto_contato.setAlignment(Qt.AlignCenter)
             label_foto_contato.setScaledContents(True)
 
-            # Carregar a foto do contato (se existir)
+            # Carregar a foto do contato com tratamento de erro
             foto_data = contato.get("foto")
             if foto_data:
-                pixmap = QPixmap()
-                pixmap.loadFromData(foto_data)
-                label_foto_contato.setPixmap(pixmap)
+                try:
+                    pixmap = QPixmap()
+                    if pixmap.loadFromData(foto_data):
+                        label_foto_contato.setPixmap(pixmap)
+                    else:
+                        label_foto_contato.setText("Foto Inválida")
+                        print(f"Erro: Não foi possível carregar a foto do contato {nome}")
+                except Exception as e:
+                    label_foto_contato.setText("Foto Corrompida")
+                    print(f"Erro ao carregar foto do contato {nome}: {e}")
             else:
                 label_foto_contato.setText("Sem Foto")
 
@@ -266,7 +280,7 @@ class Ui_Form(object):
                 font-family: Segoe UI;
                 font-size: 12pt;
                 padding: 5px;
-            """)
+        """)
             contato_layout.addWidget(label)
             self.labels_contatos.append(label)
 
@@ -278,7 +292,7 @@ class Ui_Form(object):
             label_editar.setFixedSize(24, 24)
             label_editar.setStyleSheet("""
                 background-color: transparent;
-            """)
+        """)
             label_editar.mousePressEvent = lambda event, idx=i: self.editar_contato(idx)
             contato_layout.addWidget(label_editar)
             self.labels_editar.append(label_editar)
@@ -294,6 +308,7 @@ class Ui_Form(object):
             self.lines.append(line)
 
         self.verificar_aniversarios()  # Verifica aniversários após carregar os contatos
+
 
     def editar_contato(self, i):
         contato = self.contatos[i]
