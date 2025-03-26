@@ -1,7 +1,9 @@
 import sys
-from PySide6.QtCore import QMetaObject, QRect, Qt
+from PySide6.QtCore import QMetaObject, Qt
 from PySide6.QtGui import QPixmap, QFont
-from PySide6.QtWidgets import QFrame, QLabel, QLineEdit, QMainWindow, QVBoxLayout, QHBoxLayout, QWidget, QScrollArea, QMessageBox, QPushButton, QFileDialog
+from PySide6.QtWidgets import (QFrame, QLabel, QLineEdit, QMainWindow, QVBoxLayout, 
+                               QHBoxLayout, QWidget, QScrollArea, QMessageBox, QPushButton, 
+                               QFileDialog, QApplication)
 from add_cntt import Ui_tela_add_contato
 from editarcntt import Ui_Form as Ui_EditarContato
 from bancodedados import obter_contatos, obter_foto_usuario, atualizar_foto_usuario
@@ -26,9 +28,17 @@ class Ui_Form(object):
         """)
         Form.setCentralWidget(self.centralwidget)
 
-        # Foto de perfil no topo
-        self.label_foto = QLabel(self.centralwidget)
-        self.label_foto.setGeometry(QRect(444, 10, 100, 100))  # Centralizado no topo (988/2 - 50)
+        # Layout principal (vertical)
+        self.main_layout = QVBoxLayout(self.centralwidget)
+        self.main_layout.setContentsMargins(20, 20, 20, 20)
+        self.main_layout.setSpacing(10)
+
+        # Foto de perfil e botão "Trocar Foto" (layout horizontal)
+        self.foto_layout = QHBoxLayout()
+        self.foto_layout.setAlignment(Qt.AlignCenter)
+
+        self.label_foto = QLabel()
+        self.label_foto.setFixedSize(100, 100)
         self.label_foto.setStyleSheet("""
             border: 1px solid rgb(80, 80, 100);
             border-radius: 50px;
@@ -46,9 +56,10 @@ class Ui_Form(object):
         else:
             self.label_foto.setText("Sem Foto")
 
-        # Botão para trocar foto
-        self.btn_trocar_foto = QPushButton("Trocar Foto", self.centralwidget)
-        self.btn_trocar_foto.setGeometry(QRect(444, 110, 100, 30))  # Abaixo da foto
+        self.foto_layout.addWidget(self.label_foto)
+
+        self.btn_trocar_foto = QPushButton("Trocar Foto")
+        self.btn_trocar_foto.setFixedSize(100, 30)
         self.btn_trocar_foto.setFont(QFont("Segoe UI", 10, QFont.Bold))
         self.btn_trocar_foto.setStyleSheet("""
             QPushButton {
@@ -74,10 +85,12 @@ class Ui_Form(object):
         """)
         self.btn_trocar_foto.setCursor(Qt.PointingHandCursor)
         self.btn_trocar_foto.clicked.connect(self.trocar_foto)
+        self.foto_layout.addWidget(self.btn_trocar_foto)
+
+        self.main_layout.addLayout(self.foto_layout)
 
         # Área de scroll para contatos
-        self.scroll_area = QScrollArea(self.centralwidget)
-        self.scroll_area.setGeometry(QRect(170, 150, 651, 371))  # Ajustado para dar espaço ao botão
+        self.scroll_area = QScrollArea()
         self.scroll_area.setWidgetResizable(True)
         self.scroll_area.setStyleSheet("""
             QScrollArea {
@@ -89,10 +102,11 @@ class Ui_Form(object):
 
         self.scroll_widget = QWidget()
         self.scroll_layout = QVBoxLayout(self.scroll_widget)
+        self.scroll_layout.setAlignment(Qt.AlignTop)
         self.scroll_area.setWidget(self.scroll_widget)
 
         # Título "Contatos"
-        self.label_Cntt = QLabel("Contatos", self.scroll_widget)
+        self.label_Cntt = QLabel("Contatos")
         font_title = QFont("Segoe UI", 14, QFont.Bold)
         self.label_Cntt.setFont(font_title)
         self.label_Cntt.setStyleSheet("""
@@ -103,7 +117,7 @@ class Ui_Form(object):
         self.scroll_layout.addWidget(self.label_Cntt)
 
         # Campo de busca
-        self.line_buscar_cntt = QLineEdit(self.scroll_widget)
+        self.line_buscar_cntt = QLineEdit()
         self.line_buscar_cntt.setPlaceholderText("Buscar Contatos...")
         self.line_buscar_cntt.setStyleSheet("""
             QLineEdit {
@@ -122,7 +136,7 @@ class Ui_Form(object):
         self.scroll_layout.addWidget(self.line_buscar_cntt)
 
         # Ícone de adicionar
-        self.label_add = QLabel(self.scroll_widget)
+        self.label_add = QLabel()
         self.label_add.setPixmap(QPixmap("xx.png"))
         self.label_add.setScaledContents(True)
         self.label_add.setFixedSize(32, 32)
@@ -131,6 +145,8 @@ class Ui_Form(object):
         """)
         self.label_add.mousePressEvent = self.adicionar_contato
         self.scroll_layout.addWidget(self.label_add)
+
+        self.main_layout.addWidget(self.scroll_area)
 
         self.contatos = []
         self.labels_contatos = []
@@ -167,7 +183,6 @@ class Ui_Form(object):
         for contato in self.contatos:
             data_nascimento = contato.get("data_nascimento")
             if data_nascimento:  # Verifica se a data existe
-                # data_nascimento é um objeto datetime.date, então podemos acessar .day e .month diretamente
                 if data_nascimento.day == dia_atual and data_nascimento.month == mes_atual:
                     aniversariantes.append(contato["nome"])
 
@@ -214,9 +229,35 @@ class Ui_Form(object):
             nome = contato.get("nome", "Sem Nome")
             telefone = str(contato.get("telefone", "Sem Telefone"))
 
+            # Layout para cada contato (foto + nome/telefone + botão editar)
             contato_layout = QHBoxLayout()
+            contato_layout.setAlignment(Qt.AlignLeft)
+            contato_layout.setSpacing(10)
 
-            label = QLabel(self.scroll_widget)
+            # Foto do contato
+            label_foto_contato = QLabel()
+            label_foto_contato.setFixedSize(40, 40)
+            label_foto_contato.setStyleSheet("""
+                border: 1px solid rgb(80, 80, 100);
+                border-radius: 20px;
+                background-color: rgb(40, 40, 50);
+            """)
+            label_foto_contato.setAlignment(Qt.AlignCenter)
+            label_foto_contato.setScaledContents(True)
+
+            # Carregar a foto do contato (se existir)
+            foto_data = contato.get("foto")
+            if foto_data:
+                pixmap = QPixmap()
+                pixmap.loadFromData(foto_data)
+                label_foto_contato.setPixmap(pixmap)
+            else:
+                label_foto_contato.setText("Sem Foto")
+
+            contato_layout.addWidget(label_foto_contato)
+
+            # Nome e telefone
+            label = QLabel()
             label.setObjectName(f"label_{nome}_{i}")
             label.setText(f"{nome} - {telefone}")
             label.setStyleSheet("""
@@ -229,7 +270,8 @@ class Ui_Form(object):
             contato_layout.addWidget(label)
             self.labels_contatos.append(label)
 
-            label_editar = QLabel(self.scroll_widget)
+            # Botão editar
+            label_editar = QLabel()
             label_editar.setObjectName(f"label_editar_{i}")
             label_editar.setPixmap(QPixmap("yy.png"))
             label_editar.setScaledContents(True)
@@ -243,7 +285,8 @@ class Ui_Form(object):
 
             self.scroll_layout.addLayout(contato_layout)
 
-            line = QFrame(self.scroll_widget)
+            # Linha separadora
+            line = QFrame()
             line.setObjectName(f"line_{nome}_{i}")
             line.setFrameShape(QFrame.HLine)
             line.setStyleSheet("background-color: rgb(80, 80, 100);")
@@ -254,7 +297,6 @@ class Ui_Form(object):
 
     def editar_contato(self, i):
         contato = self.contatos[i]
-        # Converter data_nascimento (datetime.date) para string no formato "YYYY-MM-DD"
         data_nascimento = contato.get("data_nascimento")
         data_nascimento_str = data_nascimento.strftime("%Y-%m-%d") if data_nascimento else ""
         
@@ -265,7 +307,8 @@ class Ui_Form(object):
             "email": contato.get("email", "Sem Email"),
             "rede_social": contato.get("perfil_rede_social", "Sem Rede Social"),
             "notas": contato.get("notas", "Sem Notas"),
-            "data_nascimento": data_nascimento_str
+            "data_nascimento": data_nascimento_str,
+            "foto": contato.get("foto")  # Passar a foto para a tela de edição
         }
 
         self.tela_editar_contato = QMainWindow()
@@ -275,7 +318,6 @@ class Ui_Form(object):
         self.tela_editar_contato.show()
 
 if __name__ == "__main__":
-    from PySide6.QtWidgets import QApplication
     app = QApplication(sys.argv)
     Form = QMainWindow()
     ui = Ui_Form(1)  # Exemplo com ID 1
