@@ -1,7 +1,7 @@
 import sys
-from PySide6.QtCore import QMetaObject, QRect, Qt
+from PySide6.QtCore import Qt
 from PySide6.QtGui import QFont, QPixmap
-from PySide6.QtWidgets import QApplication, QMainWindow, QLabel, QLineEdit, QPushButton, QWidget, QMessageBox
+from PySide6.QtWidgets import QApplication, QMainWindow, QLabel, QLineEdit, QPushButton, QWidget, QMessageBox, QVBoxLayout
 from bancodedados import autenticar_usuario
 from contatos import Ui_Form
 
@@ -12,33 +12,22 @@ class Ui_Tela_Login(QWidget):
 
     def setupUi(self):
         self.setObjectName("Tela_Login")
-        self.setFixedSize(800, 600)
+        self.setMinimumSize(800, 600)  # Permite redimensionamento com tamanho mínimo
 
-        # Frame principal com gradiente moderno
-        self.frame = QWidget(self)
-        self.frame.setGeometry(0, 0, 800, 600)
-        self.frame.setStyleSheet("""
-            background: qlineargradient(
-                x1: 0, y1: 0, x2: 1, y2: 1,
-                stop: 0 rgb(20, 20, 30),
-                stop: 1 rgb(50, 60, 80)
-            );
-        """)
+        # Layout principal (vertical)
+        self.main_layout = QVBoxLayout(self)
+        self.main_layout.setContentsMargins(20, 20, 20, 20)
+        self.main_layout.setSpacing(20)
 
-        # Label para foto
-        self.label_foto = QLabel(self.frame)
-        self.label_foto.setGeometry(QRect(350, 100, 100, 100))
-        self.label_foto.setStyleSheet("""
-            border: 1px solid rgb(80, 80, 100);
-            border-radius: 50px;
-            background-color: rgb(40, 40, 50);
+        # Garantir que o fundo da tela seja um azul forte
+        self.setStyleSheet("""
+            QWidget#Tela_Login {
+                background: rgb(0, 51, 102);  # Azul forte
+            }
         """)
-        self.label_foto.setAlignment(Qt.AlignCenter)
-        self.label_foto.setScaledContents(True)
 
         # Título "Bem-vindo!"
-        self.txt_Login = QLabel("Bem-vindo!", self.frame)
-        self.txt_Login.setGeometry(QRect(100, 30, 600, 35))
+        self.txt_Login = QLabel("Bem-vindo!")
         font1 = QFont("Segoe UI", 20, QFont.Bold)
         self.txt_Login.setFont(font1)
         self.txt_Login.setStyleSheet("""
@@ -46,15 +35,33 @@ class Ui_Tela_Login(QWidget):
             background-color: transparent;
         """)
         self.txt_Login.setAlignment(Qt.AlignCenter)
+        self.txt_Login.setFixedSize(600, 35)
+        self.main_layout.addWidget(self.txt_Login, alignment=Qt.AlignCenter)
+
+        # Label para foto
+        self.label_foto = QLabel()
+        self.label_foto.setFixedSize(100, 100)
+        self.label_foto.setStyleSheet("""
+            border: 1px solid rgb(80, 80, 100);
+            border-radius: 50px;
+            background-color: rgb(40, 40, 50);
+        """)
+        self.label_foto.setAlignment(Qt.AlignCenter)
+        self.label_foto.setScaledContents(True)
+        self.main_layout.addWidget(self.label_foto, alignment=Qt.AlignCenter)
 
         # Campo Email
-        self.txt_email = QLabel("Email:", self.frame)
-        self.txt_email.setGeometry(QRect(150, 230, 50, 14))
+        self.txt_email = QLabel("Email:")
         font2 = QFont("Segoe UI", 12)
         self.txt_email.setFont(font2)
-        self.txt_email.setStyleSheet("color: rgb(200, 200, 200);")
-        self.line_email = QLineEdit(self.frame)
-        self.line_email.setGeometry(QRect(150, 250, 500, 40))
+        self.txt_email.setStyleSheet("""
+            color: rgb(0, 0, 0);  # Letras pretas
+            background-color: transparent;  # Fundo transparente
+        """)
+        self.main_layout.addWidget(self.txt_email, alignment=Qt.AlignLeft)
+
+        self.line_email = QLineEdit()
+        self.line_email.setFixedSize(500, 40)
         self.line_email.setStyleSheet("""
             QLineEdit {
                 background-color: rgb(40, 40, 50);
@@ -69,14 +76,19 @@ class Ui_Tela_Login(QWidget):
                 border: 1px solid rgb(100, 150, 255);
             }
         """)
+        self.main_layout.addWidget(self.line_email, alignment=Qt.AlignCenter)
 
         # Campo Senha
-        self.txt_senha = QLabel("Senha:", self.frame)
-        self.txt_senha.setGeometry(QRect(150, 310, 50, 14))
+        self.txt_senha = QLabel("Senha:")
         self.txt_senha.setFont(font2)
-        self.txt_senha.setStyleSheet("color: rgb(200, 200, 200);")
-        self.line_senha = QLineEdit(self.frame)
-        self.line_senha.setGeometry(QRect(150, 330, 500, 40))
+        self.txt_senha.setStyleSheet("""
+            color: rgb(0, 0, 0);  # Letras pretas
+            background-color: transparent;  # Fundo transparente
+        """)
+        self.main_layout.addWidget(self.txt_senha, alignment=Qt.AlignLeft)
+
+        self.line_senha = QLineEdit()
+        self.line_senha.setFixedSize(500, 40)
         self.line_senha.setEchoMode(QLineEdit.EchoMode.Password)
         self.line_senha.setStyleSheet("""
             QLineEdit {
@@ -92,10 +104,11 @@ class Ui_Tela_Login(QWidget):
                 border: 1px solid rgb(100, 150, 255);
             }
         """)
+        self.main_layout.addWidget(self.line_senha, alignment=Qt.AlignCenter)
 
         # Botão Entrar
-        self.pushButton_Entrar = QPushButton("Entrar", self.frame)
-        self.pushButton_Entrar.setGeometry(QRect(350, 400, 100, 40))
+        self.pushButton_Entrar = QPushButton("Entrar")
+        self.pushButton_Entrar.setFixedSize(100, 40)
         font3 = QFont("Segoe UI", 12, QFont.Bold)
         self.pushButton_Entrar.setFont(font3)
         self.pushButton_Entrar.setStyleSheet("""
@@ -121,10 +134,10 @@ class Ui_Tela_Login(QWidget):
             }
         """)
         self.pushButton_Entrar.setCursor(Qt.PointingHandCursor)
+        self.main_layout.addWidget(self.pushButton_Entrar, alignment=Qt.AlignCenter)
 
-        # Link Cadastre-se (usando QPushButton para garantir que a cor mude)
-        self.link_cadastrar = QPushButton("Cadastre-se", self.frame)
-        self.link_cadastrar.setGeometry(QRect(350, 450, 100, 20))
+        # Link Cadastre-se
+        self.link_cadastrar = QPushButton("Cadastre-se")
         font4 = QFont("Segoe UI", 10)
         self.link_cadastrar.setFont(font4)
         self.link_cadastrar.setStyleSheet("""
@@ -139,7 +152,12 @@ class Ui_Tela_Login(QWidget):
                 text-decoration: underline;
             }
         """)
+        self.link_cadastrar.setFixedSize(100, 20)
         self.link_cadastrar.setCursor(Qt.PointingHandCursor)
+        self.main_layout.addWidget(self.link_cadastrar, alignment=Qt.AlignCenter)
+
+        # Adicionar um espaço extra no final
+        self.main_layout.addStretch()
 
 class TelaLogin(QMainWindow):
     def __init__(self):
