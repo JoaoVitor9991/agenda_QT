@@ -1,5 +1,5 @@
 from PySide6.QtCore import QRect, Qt, QDate
-from PySide6.QtGui import QFont, QPixmap
+from PySide6.QtGui import QFont, QPixmap, QIcon
 from PySide6.QtWidgets import (QMainWindow, QWidget, QFrame, QLabel, QLineEdit, QPushButton, 
                                QDateEdit, QTextEdit, QMessageBox, QScrollArea, QVBoxLayout, QHBoxLayout, QFileDialog)
 from bancodedados import atualizar_contato, deletar_contato
@@ -13,7 +13,8 @@ class Ui_Form(object):
 
         tela_editar_contato.setObjectName("tela_editar_contato")
         tela_editar_contato.resize(800, 600)
-
+        tela_editar_contato.setWindowTitle("Agenda de Contatos")
+        tela_editar_contato.setWindowIcon(QIcon("agenda.png"))
         self.centralwidget = QWidget(tela_editar_contato)
         self.centralwidget.setStyleSheet("""
             background: qlineargradient(

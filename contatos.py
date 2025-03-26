@@ -1,6 +1,6 @@
 import sys
 from PySide6.QtCore import QMetaObject, Qt
-from PySide6.QtGui import QPixmap, QFont
+from PySide6.QtGui import QPixmap, QFont,QIcon
 from PySide6.QtWidgets import (QFrame, QLabel, QLineEdit, QMainWindow, QVBoxLayout, 
                                QHBoxLayout, QWidget, QScrollArea, QMessageBox, QPushButton, 
                                QFileDialog, QApplication)
