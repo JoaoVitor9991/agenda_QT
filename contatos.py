@@ -213,13 +213,22 @@ class Ui_Form(object):
         event.accept()
 
     def carregar_contatos(self):
+        # Recarregar a foto do usuário no topo para evitar sobrescrição
+        foto_data_usuario = obter_foto_usuario(self.usuario_id)
+        if foto_data_usuario:
+            pixmap = QPixmap()
+            pixmap.loadFromData(foto_data_usuario)
+            self.label_foto.setPixmap(pixmap)
+        else:
+            self.label_foto.setText("Sem Foto")
+
         # Obter contatos do banco
         self.contatos = obter_contatos(self.usuario_id)
     
-    # Debugging: verificar se há duplicatas nos dados brutos
+        # Debugging: verificar se há duplicatas nos dados brutos
         print("Contatos carregados do banco:", [(c["id"], c["nome"]) for c in self.contatos])
 
-    # Limpar widgets antigos completamente
+        # Limpar widgets antigos completamente
         for label in self.labels_contatos:
             label.deleteLater()
         for line in self.lines:
@@ -308,7 +317,6 @@ class Ui_Form(object):
             self.lines.append(line)
 
         self.verificar_aniversarios()  # Verifica aniversários após carregar os contatos
-
 
     def editar_contato(self, i):
         contato = self.contatos[i]
