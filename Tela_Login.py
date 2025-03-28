@@ -142,7 +142,7 @@ class Ui_Tela_Login(QWidget):
         self.link_cadastrar.setFont(font4)
         self.link_cadastrar.setStyleSheet("""
             QPushButton {
-                color: rgb(255, 220, 100);
+                color: black;
                 background-color: transparent;
                 border: none;
             }
