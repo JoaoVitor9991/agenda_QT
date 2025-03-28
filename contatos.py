@@ -1,6 +1,6 @@
 import sys
 from PySide6.QtCore import QMetaObject, Qt
-from PySide6.QtGui import QPixmap, QFont,QIcon
+from PySide6.QtGui import QPixmap, QFont, QIcon
 from PySide6.QtWidgets import (QFrame, QLabel, QLineEdit, QMainWindow, QVBoxLayout, 
                                QHBoxLayout, QWidget, QScrollArea, QMessageBox, QPushButton, 
                                QFileDialog, QApplication)
@@ -48,7 +48,7 @@ class Ui_Form(object):
         self.label_foto.setAlignment(Qt.AlignCenter)
         self.label_foto.setScaledContents(True)
 
-        # Carregar foto do banco
+        # Carregar foto do banco (apenas do usuário)
         foto_data = obter_foto_usuario(self.usuario_id)
         if foto_data:
             pixmap = QPixmap()
@@ -224,7 +224,7 @@ class Ui_Form(object):
 
         # Obter contatos do banco
         self.contatos = obter_contatos(self.usuario_id)
-    
+
         # Debugging: verificar se há duplicatas nos dados brutos
         print("Contatos carregados do banco:", [(c["id"], c["nome"]) for c in self.contatos])
 
@@ -250,35 +250,6 @@ class Ui_Form(object):
             contato_layout.setAlignment(Qt.AlignLeft)
             contato_layout.setSpacing(10)
 
-            # Foto do contato
-            label_foto_contato = QLabel()
-            label_foto_contato.setFixedSize(40, 40)
-            label_foto_contato.setStyleSheet("""
-                border: 1px solid rgb(80, 80, 100);
-                border-radius: 20px;
-                background-color: rgb(40, 40, 50);
-        """)
-            label_foto_contato.setAlignment(Qt.AlignCenter)
-            label_foto_contato.setScaledContents(True)
-
-            # Carregar a foto do contato com tratamento de erro
-            foto_data = contato.get("foto")
-            if foto_data:
-                try:
-                    pixmap = QPixmap()
-                    if pixmap.loadFromData(foto_data):
-                        label_foto_contato.setPixmap(pixmap)
-                    else:
-                        label_foto_contato.setText("Foto Inválida")
-                        print(f"Erro: Não foi possível carregar a foto do contato {nome}")
-                except Exception as e:
-                    label_foto_contato.setText("Foto Corrompida")
-                    print(f"Erro ao carregar foto do contato {nome}: {e}")
-            else:
-                label_foto_contato.setText("Sem Foto")
-
-            contato_layout.addWidget(label_foto_contato)
-
             # Nome e telefone
             label = QLabel()
             label.setObjectName(f"label_{nome}_{i}")
@@ -289,7 +260,7 @@ class Ui_Form(object):
                 font-family: Segoe UI;
                 font-size: 12pt;
                 padding: 5px;
-        """)
+            """)
             contato_layout.addWidget(label)
             self.labels_contatos.append(label)
 
@@ -301,7 +272,7 @@ class Ui_Form(object):
             label_editar.setFixedSize(24, 24)
             label_editar.setStyleSheet("""
                 background-color: transparent;
-        """)
+            """)
             label_editar.mousePressEvent = lambda event, idx=i: self.editar_contato(idx)
             contato_layout.addWidget(label_editar)
             self.labels_editar.append(label_editar)
@@ -331,7 +302,6 @@ class Ui_Form(object):
             "rede_social": contato.get("perfil_rede_social", "Sem Rede Social"),
             "notas": contato.get("notas", "Sem Notas"),
             "data_nascimento": data_nascimento_str,
-            "foto": contato.get("foto")  # Passar a foto para a tela de edição
         }
 
         self.tela_editar_contato = QMainWindow()

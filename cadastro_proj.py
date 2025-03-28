@@ -7,6 +7,8 @@ from bancodedados import salvar_usuario
 
 class Ui_Tela_Cadastro(object):
     def setupUi(self, Tela_Cadastro):
+        self.foto_data = None  # Garante que a variável existe mesmo se o usuário não selecionar foto
+
         if not Tela_Cadastro.objectName():
             Tela_Cadastro.setObjectName("Tela_Cadastro")
         Tela_Cadastro.resize(800, 600)

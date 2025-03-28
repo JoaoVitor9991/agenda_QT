@@ -1,13 +1,12 @@
 import mysql.connector
 from datetime import datetime
-import sqlite3
 
 def conectar():
     try:
         conexao = mysql.connector.connect(
             host="localhost",
             user="root",
-            password="",  # Ajuste conforme sua configuração
+            password="",
             database="agenda"
         )
         return conexao
@@ -54,10 +53,7 @@ def criar_tabela_contatos():
     cursor = None
     try:
         cursor = conexao.cursor()
-        # Dropar a tabela existente (cuidado: isso apaga todos os contatos existentes!)
         cursor.execute("DROP TABLE IF EXISTS contatos")
-        
-        # Criar a tabela com todas as colunas necessárias
         sql = """
             CREATE TABLE contatos (
                 id INT AUTO_INCREMENT PRIMARY KEY,
@@ -68,7 +64,6 @@ def criar_tabela_contatos():
                 perfil_rede_social VARCHAR(255),
                 notas TEXT,
                 data_nascimento DATE,
-                foto BLOB,
                 FOREIGN KEY (usuario_id) REFERENCES usuarios(id)
             )
         """
@@ -126,7 +121,7 @@ def autenticar_usuario(email, senha):
         cursor.execute(sql, (email, senha))
         usuario = cursor.fetchone()
         if usuario:
-            return True, usuario[0], usuario[1], usuario[2]  # id, nome, foto
+            return True, usuario[0], usuario[1], usuario[2]
         return False, None, None, None
     except mysql.connector.Error as e:
         print(f"Erro ao autenticar usuario: {e}")
@@ -180,7 +175,6 @@ def validar_data_nascimento(data_nascimento):
     if data_nascimento is None:
         return None
     try:
-        # Se data_nascimento for uma string, converte para o formato YYYY-MM-DD
         if isinstance(data_nascimento, str) and data_nascimento.strip():
             return datetime.strptime(data_nascimento, "%Y-%m-%d").date()
         return data_nascimento
@@ -201,12 +195,14 @@ def salvar_contato(nome, email, telefone, data_nascimento, perfil_rede_social, n
             return False
 
         data_nascimento = validar_data_nascimento(data_nascimento)
-        print(f"Tentando salvar contato com: nome={nome}, email={email}, telefone={telefone}, data_nascimento={data_nascimento}, usuario_id={usuario_id}, foto={'Sim' if foto else 'Não'}")
-        
+        print(f"Tentando salvar contato com: nome={nome}, email={email}, telefone={telefone}, data_nascimento={data_nascimento}, usuario_id={usuario_id}")
+
         cursor = conexao.cursor()
-        sql = """INSERT INTO contatos (nome, email, telefone, data_nascimento, perfil_rede_social, notas, usuario_id, foto)
-                 VALUES (%s, %s, %s, %s, %s, %s, %s, %s)"""
-        valores = (nome, email, telefone, data_nascimento, perfil_rede_social, notas, usuario_id, foto)
+        sql = """
+            INSERT INTO contatos (nome, email, telefone, data_nascimento, perfil_rede_social, notas, usuario_id)
+            VALUES (%s, %s, %s, %s, %s, %s, %s)
+        """
+        valores = (nome, email, telefone, data_nascimento, perfil_rede_social, notas, usuario_id)
         cursor.execute(sql, valores)
         conexao.commit()
         print(f"Contato {nome} salvo com sucesso.")
@@ -239,8 +235,7 @@ def obter_contatos(usuario_id):
                 email, 
                 perfil_rede_social, 
                 notas,
-                data_nascimento,
-                foto
+                data_nascimento
             FROM contatos 
             WHERE usuario_id = %s
         """
@@ -265,14 +260,14 @@ def atualizar_contato(contato_id, nome, email, telefone, data_nascimento, perfil
     try:
         data_nascimento = validar_data_nascimento(data_nascimento)
         print(f"Tentando atualizar contato ID {contato_id} com: nome={nome}, email={email}, telefone={telefone}, data_nascimento={data_nascimento}")
-        
+
         cursor = conexao.cursor()
         sql = """
             UPDATE contatos 
-            SET nome=%s, email=%s, telefone=%s, data_nascimento=%s, perfil_rede_social=%s, notas=%s, foto=%s 
+            SET nome=%s, email=%s, telefone=%s, data_nascimento=%s, perfil_rede_social=%s, notas=%s
             WHERE id=%s
         """
-        valores = (nome, email, telefone, data_nascimento, perfil_rede_social, notas, foto, contato_id)
+        valores = (nome, email, telefone, data_nascimento, perfil_rede_social, notas, contato_id)
         cursor.execute(sql, valores)
         conexao.commit()
         print(f"Contato ID {contato_id} atualizado com sucesso.")
@@ -336,27 +331,6 @@ def atualizar_foto_usuario(usuario_id, foto_data):
         if conexao:
             conexao.close()
 
-def obter_foto_contato(contato_id):
-    conexao = conectar()
-    if conexao is None:
-        return None
-
-    cursor = None
-    try:
-        cursor = conexao.cursor()
-        cursor.execute("SELECT foto FROM contatos WHERE id = %s", (contato_id,))
-        resultado = cursor.fetchone()
-        return resultado[0] if resultado else None
-    except mysql.connector.Error as e:
-        print(f"Erro ao obter foto do contato: {e}")
-        return None
-    finally:
-        if cursor:
-            cursor.close()
-        if conexao:
-            conexao.close()
-
-# Criar tabelas ao iniciar
 if __name__ == "__main__":
     criar_tabela_usuarios()
     criar_tabela_contatos()
