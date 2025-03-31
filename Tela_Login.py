@@ -50,8 +50,20 @@ class Ui_Tela_Login(QWidget):
         """)
         self.label_foto.setAlignment(Qt.AlignCenter)
         self.label_foto.setScaledContents(True)
-        self.label_foto.setText("Sem Foto")
+        self.label_foto.setText("agendafoto.png")
+        caminho_imagem = "agendafoto.png"  # Ajuste o caminho se necessário!
+        pixmap = QPixmap(caminho_imagem)
+        if not pixmap.isNull():
+            self.label_foto.setPixmap(pixmap)
+        else:
+            self.label_foto.setText("Erro ao carregar imagem")
+            print(f"Erro: Não foi possível carregar {caminho_imagem}")
+
         self.frame_layout.addWidget(self.label_foto, alignment=Qt.AlignHCenter)
+
+
+        self.frame_layout.addWidget(self.label_foto, alignment=Qt.AlignHCenter)
+
  
         # Título "Bem-vindo!"
         self.txt_Login = QLabel("Bem-vindo!", self.frame)
