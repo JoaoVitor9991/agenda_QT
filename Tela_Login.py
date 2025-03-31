@@ -31,7 +31,7 @@ class Ui_Tela_Login(QWidget):
         font1 = QFont("Segoe UI", 20, QFont.Bold)
         self.txt_Login.setFont(font1)
         self.txt_Login.setStyleSheet("""
-            color: rgb(220, 220, 255);
+            color: rgb(Black);
             background-color: transparent;
         """)
         self.txt_Login.setAlignment(Qt.AlignCenter)
