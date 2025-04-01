@@ -4,6 +4,7 @@ from PySide6.QtWidgets import (QMainWindow, QWidget, QFrame, QLabel, QLineEdit, 
                                QDateEdit, QTextEdit, QMessageBox, QScrollArea, QVBoxLayout, 
                                QHBoxLayout)
 from bancodedados import salvar_contato
+from datetime import datetime
 
 class Ui_tela_add_contato(object):
     def __init__(self):
@@ -249,6 +250,17 @@ class Ui_tela_add_contato(object):
 
         if salvar_contato(nome, email, telefone, data_nascimento_str, perfil_rede_social, notas, self.usuario_id, None):
             QMessageBox.information(None, "Sucesso", "Contato salvo com sucesso!")
+            
+            # Verificar se o contato salvo faz aniversário hoje
+            hoje = datetime.now()
+            dia_atual = hoje.day
+            mes_atual = hoje.month
+            if data_nascimento_str:
+                data_nasc = datetime.strptime(data_nascimento_str, "%Y-%m-%d")
+                if data_nasc.day == dia_atual and data_nasc.month == mes_atual:
+                    if not self.tela_contatos.mensagem_aniversario_exibida:
+                        self.tela_contatos.exibir_mensagem_aniversario([nome])
+
             self.tela_contatos.carregar_contatos()
             self.tela_add_contato.close()
         else:
