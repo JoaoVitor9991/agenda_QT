@@ -381,6 +381,44 @@ class Ui_Tela_Cadastro(object):
         self.pushButton_Cadastrar.setText("Cadastrar")
         self.pushButton_Voltar.setText("Voltar")
 
+    def show_custom_message(self, title, text, icon=QMessageBox.Information):
+        msg = QMessageBox(self.centralwidget)
+        msg.setWindowTitle(title)
+        msg.setText(text)
+        msg.setIcon(icon)
+        msg.setStyleSheet("""
+            QMessageBox {
+                background-color: rgb(40, 40, 50);
+                border: 1px solid rgb(80, 80, 100);
+                border-radius: 8px;
+                color: rgb(220, 220, 255);
+                font-family: Segoe UI;
+                font-size: 12pt;
+            }
+            QMessageBox QLabel {
+                color: rgb(220, 220, 255);
+                padding: 5px;
+            }
+            QMessageBox QPushButton {
+                background-color: rgb(100, 150, 255);
+                color: rgb(255, 255, 255);
+                border: none;
+                border-radius: 5px;
+                padding: 8px 15px;
+                min-width: 80px;
+                font-family: Segoe UI;
+                font-size: 10pt;
+                font-weight: bold;
+            }
+            QMessageBox QPushButton:hover {
+                background-color: rgb(120, 170, 255);
+            }
+            QMessageBox QPushButton:pressed {
+                background-color: rgb(80, 130, 220);
+            }
+        """)
+        msg.exec()
+
     def selecionar_foto(self):
         arquivo, _ = QFileDialog.getOpenFileName(self.frame, "Selecionar Foto", "", "Imagens (*.png *.jpg *.jpeg)")
         if arquivo:
@@ -408,16 +446,35 @@ class Ui_Tela_Cadastro(object):
         self.limpar_bordas()
 
         if senha != confirmar_senha:
-            QMessageBox.warning(None, "Erro", "As senhas não coincidem.")
+            self.show_custom_message("Erro", "As senhas não coincidem.", QMessageBox.Warning)
+            return
         elif nome == "" or email == "" or senha == "":
-            QMessageBox.warning(None, "Erro", "Preencha todos os campos obrigatórios.")
+            self.show_custom_message("Erro", "Preencha todos os campos obrigatórios.", QMessageBox.Warning)
             self.validar_campos_vazios(nome, email, contato, senha, confirmar_senha)
+            return
+        elif "@" not in email:
+            self.show_custom_message("Erro", "O email deve conter o símbolo '@'.", QMessageBox.Warning)
+            self.line_email.setStyleSheet("""
+                QLineEdit {
+                    background-color: rgb(40, 40, 50);
+                    color: rgb(255, 255, 255);
+                    border: 1px solid rgb(255, 100, 100);
+                    border-radius: 5px;
+                    padding: 5px;
+                    font-family: Segoe UI;
+                    font-size: 12pt;
+                }
+                QLineEdit:focus {
+                    border: 1px solid rgb(100, 150, 255);
+                }
+            """)
+            return
         else:
             if salvar_usuario(nome, email, contato, senha, self.foto_data):
-                QMessageBox.information(None, "Sucesso", "Cadastro realizado com sucesso!")
+                self.show_custom_message("Sucesso", "Cadastro realizado com sucesso!", QMessageBox.Information)
                 self.voltar_para_login(Tela_Cadastro)
             else:
-                QMessageBox.warning(None, "Erro", "Erro ao cadastrar! Verifique os dados.")
+                self.show_custom_message("Erro", "Erro ao cadastrar! Verifique os dados.", QMessageBox.Warning)
 
     def limpar_bordas(self):
         self.line_nome.setStyleSheet("""

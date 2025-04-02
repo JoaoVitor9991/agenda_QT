@@ -1,7 +1,7 @@
-from PySide6.QtCore import Qt, QDate
+from PySide6.QtCore import Qt
 from PySide6.QtGui import QFont, QIcon
 from PySide6.QtWidgets import (QMainWindow, QWidget, QFrame, QLabel, QLineEdit, QPushButton, 
-                               QDateEdit, QTextEdit, QMessageBox, QScrollArea, QVBoxLayout, 
+                               QTextEdit, QMessageBox, QScrollArea, QVBoxLayout, 
                                QHBoxLayout)
 from bancodedados import salvar_contato
 from datetime import datetime
@@ -132,41 +132,30 @@ class Ui_tela_add_contato(object):
         self.line_telefone.setStyleSheet(self.line_nome.styleSheet())
         self.scroll_widget_layout.addWidget(self.line_telefone)
 
-        self.txt_data_nascimento = QLabel("Data de Nascimento:")
+        self.txt_data_nascimento = QLabel("Data de Nascimento (dd/mm/aaaa):")
         self.txt_data_nascimento.setFont(font2)
         self.txt_data_nascimento.setStyleSheet("color: rgb(200, 200, 200);")
         self.scroll_widget_layout.addWidget(self.txt_data_nascimento)
 
-        self.date_nascimento = QDateEdit()
-        self.date_nascimento.setFixedHeight(40)
-        self.date_nascimento.setCalendarPopup(True)
-        self.date_nascimento.setMinimumDate(QDate(1, 1, 1))
-        self.date_nascimento.setDate(QDate(1, 1, 1))
-        self.date_nascimento.setStyleSheet("""
-    QDateEdit {
-        background-color: rgb(40, 40, 50);
-        color: white;
-        border: 1px solid rgb(80, 80, 100);
-        border-radius: 5px;
-        padding: 5px;
-        font-family: Segoe UI;
-        font-size: 12pt;
-    }
-    QDateEdit:focus {
-        border: 1px solid rgb(100, 150, 255);
-    }
-    QCalendarWidget QAbstractItemView {
-        background-color: rgb(40, 40, 50);
-        color: white;
-        selection-background-color: rgb(100, 150, 255);
-        selection-color: white;
-    }
-    QCalendarWidget QWidget {
-        alternate-background-color: rgb(40, 40, 50);
-    }
-""")
-
-        self.scroll_widget_layout.addWidget(self.date_nascimento)
+        self.line_data_nascimento = QLineEdit()
+        self.line_data_nascimento.setFixedHeight(40)
+        self.line_data_nascimento.setInputMask("99/99/9999")
+        self.line_data_nascimento.setPlaceholderText("Ex: 02/04/1990")
+        self.line_data_nascimento.setStyleSheet("""
+            QLineEdit {
+                background-color: rgb(40, 40, 50);
+                color: rgb(255, 255, 255);
+                border: 1px solid rgb(80, 80, 100);
+                border-radius: 5px;
+                padding: 5px;
+                font-family: Segoe UI;
+                font-size: 12pt;
+            }
+            QLineEdit:focus {
+                border: 1px solid rgb(100, 150, 255);
+            }
+        """)
+        self.scroll_widget_layout.addWidget(self.line_data_nascimento)
 
         self.txt_rede_social = QLabel("Rede Social:")
         self.txt_rede_social.setFont(font2)
@@ -238,8 +227,7 @@ class Ui_tela_add_contato(object):
         nome = self.line_nome.text()
         email = self.line_email.text()
         telefone = self.line_telefone.text()
-        data_nascimento = self.date_nascimento.date()
-        data_nascimento_str = None if data_nascimento == QDate(1, 1, 1) else data_nascimento.toString("yyyy-MM-dd")
+        data_nascimento_str = self.line_data_nascimento.text()
         perfil_rede_social = self.line_rede_social.text()
         notas = self.line_notas.toPlainText()
 
@@ -248,15 +236,23 @@ class Ui_tela_add_contato(object):
             self.line_nome.setStyleSheet(self.line_nome.styleSheet().replace("rgb(80, 80, 100)", "rgb(255, 100, 100)"))
             return
 
-        if salvar_contato(nome, email, telefone, data_nascimento_str, perfil_rede_social, notas, self.usuario_id, None):
+        data_nascimento_formatada = None
+        if data_nascimento_str and data_nascimento_str != "__/__/____":
+            try:
+                data_nasc = datetime.strptime(data_nascimento_str, "%d/%m/%Y")
+                data_nascimento_formatada = data_nasc.strftime("%Y-%m-%d")
+            except ValueError:
+                QMessageBox.warning(None, "Erro", "Data de nascimento inválida. Use o formato dd/mm/aaaa.")
+                return
+
+        if salvar_contato(nome, email, telefone, data_nascimento_formatada, perfil_rede_social, notas, self.usuario_id, None):
             QMessageBox.information(None, "Sucesso", "Contato salvo com sucesso!")
             
-            # Verificar se o contato salvo faz aniversário hoje
             hoje = datetime.now()
             dia_atual = hoje.day
             mes_atual = hoje.month
-            if data_nascimento_str:
-                data_nasc = datetime.strptime(data_nascimento_str, "%Y-%m-%d")
+            if data_nascimento_formatada:
+                data_nasc = datetime.strptime(data_nascimento_formatada, "%Y-%m-%d")
                 if data_nasc.day == dia_atual and data_nasc.month == mes_atual:
                     if not self.tela_contatos.mensagem_aniversario_exibida:
                         self.tela_contatos.exibir_mensagem_aniversario([nome])
